@@ -1,65 +1,60 @@
-<footer class="bg-gray-800 text-gray-300 dark:bg-gray-900 shadow-inner">
+<footer class="bg-blue-100 dark:bg-blue-950 text-gray-800 dark:text-gray-200 border-t border-blue-200 dark:border-blue-800 shadow-inner">
     <div class="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
 
-            <div class="md:col-span-1 lg:col-span-2 space-y-4 flex items-start gap-4">
-                <img class="h-10vh w-auto"
+            {{-- Logo & Deskripsi --}}
+            <div class="md:col-span-1 lg:col-span-2 flex items-start gap-4">
+                <img class="h-30 w-auto rounded-md shadow-sm"
                     src="{{ asset('images/logo-placeholder.jpg') }}"
-                    alt="Logo {{ config('app.name', 'Laravel') }}">
-
-                <p class="text-gray-400 text-md max-w-md">
-                    Sistem Informasi Manajemen Desa (VillageLaravel) hadir untuk membantu digitalisasi dan mempermudah pengelolaan data administrasi di tingkat desa.
+                    alt="Logo {{ config('app.name', 'VillageLaravel') }}">
+                <p class="text-gray-700 dark:text-gray-300 text-md max-w-md leading-relaxed">
+                    Sistem Informasi Manajemen Desa <strong>(VillageLaravel)</strong> hadir untuk membantu digitalisasi
+                    dan mempermudah pengelolaan data administrasi di tingkat desa.
                 </p>
             </div>
 
+            {{-- Tautan Cepat --}}
             <div>
-                <h3 class="text-sm font-semibold text-gray-200 uppercase tracking-wider">Tautan Cepat</h3>
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider">
+                    Tautan Cepat
+                </h3>
                 <ul class="mt-4 space-y-2">
-                    <li>
-                        <a href="{{ route('home') }}" class="text-base text-gray-400 hover:text-white transition">Home</a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-base text-gray-400 hover:text-white transition">Tentang Kami</a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-base text-gray-400 hover:text-white transition">Layanan</a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-base text-gray-400 hover:text-white transition">Kontak</a>
-                    </li>
+                    <li><a href="{{ route('home') }}" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Home</a></li>
+                    <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Tentang Kami</a></li>
+                    <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Layanan</a></li>
+                    <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Kontak</a></li>
                 </ul>
             </div>
 
+            {{-- Lainnya --}}
             <div>
-                <h3 class="text-sm font-semibold text-gray-200 uppercase tracking-wider">Lainnya</h3>
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider">
+                    Lainnya
+                </h3>
                 <ul class="mt-4 space-y-2">
-                    <li>
-                        <a href="{{ route('login') }}" class="text-base text-gray-400 hover:text-white transition">Login Aparat</a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-base text-gray-400 hover:text-white transition">Kebijakan Privasi</a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-base text-gray-400 hover:text-white transition">Syarat & Ketentuan</a>
-                    </li>
+                    <li><a href="{{ route('login') }}" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Login Aparat</a></li>
+                    <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Kebijakan Privasi</a></li>
+                    <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Syarat & Ketentuan</a></li>
                 </ul>
             </div>
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
+
+            {{-- Login/Register --}}
+            <div class="hidden sm:flex sm:flex-col sm:gap-2">
                 @auth
-                <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-400 underline">Dashboard</a>
+                    <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Dashboard</a>
                 @else
-                <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-400 underline">Log in</a>
-
-                @if (Route::has('register'))
-                <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-400 underline">Register</a>
-                @endif
+                    <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-5">Log in</a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-5"> Register</a>
+                    @endif
                 @endauth
             </div>
         </div>
 
-        <div class="mt-12 border-t border-gray-700 pt-8 text-center">
-            <p class="text-gray-500 text-sm">
-                &copy; {{ date('Y') }} {{ config('app.name', 'VillageLaravel') }}. All rights reserved.
+        {{-- Copyright --}}
+        <div class="mt-12 border-t border-blue-200 dark:border-blue-800 pt-6 text-center">
+            <p class="text-gray-700 dark:text-gray-400 text-sm">
+                &copy; {{ date('Y') }} <strong>{{ config('app.name', 'VillageLaravel') }}</strong>. Semua hak dilindungi.
             </p>
         </div>
     </div>
