@@ -26,7 +26,7 @@
             <div class="flex items-center space-x-8">
                 <a href="{{ route('home') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Home</a>
                 <a href="{{ route('profil_desa') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Profil Desa</a>
-                <a href="{{ route('Infografis') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Infografis</a>
+                <a href="{{ route('Infografis.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Infografis</a>
                 <a href="{{ route('Listing') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Listing</a>
                 <a href="{{ route('IDM') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">IDM</a>
                 <a href="{{ route('Berita') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Berita</a>
