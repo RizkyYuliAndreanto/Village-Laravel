@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Database\Seeders\ApbdesSeeder;
 use Database\Seeders\StatistikDesaSeeder;
+use Database\Seeders\UmurSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             StatistikDesaSeeder::class,
             ApbdesSeeder::class,
+            UmurSeeder::class,
         ]);
     }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\DemografiPenduduk;
 use App\Models\TahunData;
+use Illuminate\Http\Request;
+use App\Models\UmurStatistik;
+use App\Models\DemografiPenduduk;
+use Illuminate\Support\Facades\DB;
 
 class InfografisController extends Controller
 {
@@ -13,6 +14,10 @@ class InfografisController extends Controller
     {
         // === 1. LOGIKA STATISTIK ===
         $tahunDataTerbaru = TahunData::orderByDesc('tahun')->first();
+        $umurData = collect();
+    if ($tahunDataTerbaru) {
+        $umurData = UmurStatistik::where('tahun_id', $tahunDataTerbaru->id_tahun)->first();
+    }
 
 $totalPenduduk = $totalLaki = $totalPerempuan = $pendudukSementara = $mutasiPenduduk = 0;
 
@@ -68,6 +73,7 @@ if ($tahunDataTerbaru) {
         // === 3. KIRIM KE VIEW ===
         return view('Infografis.index', compact(
             'tahunDataTerbaru',
+            'umurData',
             'totalPenduduk',
             'totalLaki',
             'totalPerempuan',
