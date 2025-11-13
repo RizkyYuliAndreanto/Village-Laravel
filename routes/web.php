@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileDesaController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [ProfileDesaController::class, 'index'])->name('profile_desa');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
