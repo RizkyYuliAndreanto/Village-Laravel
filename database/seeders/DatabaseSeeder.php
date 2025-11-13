@@ -22,5 +22,11 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => bcrypt('password'),
         ]);
+
+        // Run UMKM related seeders
+        $this->call([
+            KategoriUmkmSeeder::class,
+            UmkmSeeder::class,
+        ]);
     }
 }

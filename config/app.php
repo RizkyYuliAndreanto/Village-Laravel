@@ -5,6 +5,7 @@ return [
     /*
     |--------------------------------------------------------------------------
     | Application Name
+    
     |--------------------------------------------------------------------------
     |
     | This value is the name of your application, which will be used when the
@@ -101,7 +102,7 @@ return [
 
     'previous_keys' => [
         ...array_filter(
-            explode(',', (string) env('APP_PREVIOUS_KEYS', ''))
+            explode(',', env('APP_PREVIOUS_KEYS', ''))
         ),
     ],
 
