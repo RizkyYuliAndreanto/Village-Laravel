@@ -6,7 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileDesaController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/', [ProfileDesaController::class, 'index'])->name('profile_desa');
+Route::get('/profil-desa', [ProfileDesaController::class, 'index'])->name('index');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
