@@ -41,6 +41,10 @@ class UmurStatistik extends Model
         'umur_50_plus' => 'integer',
     ];
 
+    // Custom timestamps
+    const CREATED_AT = 'create_at';
+    const UPDATED_AT = 'updated_at';
+
     // Relasi belongs to tahun_data
     public function tahunData()
     {

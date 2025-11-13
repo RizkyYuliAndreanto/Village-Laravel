@@ -57,13 +57,9 @@ class TahunData extends Model
         return $this->hasMany(WajibPilihStatistik::class, 'tahun_id', 'id_tahun');
     }
 
-    public function pendapatan()
+   
+    public function dusunStatistik()
     {
-        return $this->hasMany(Pendapatan::class, 'tahun_id', 'id_tahun');
-    }
-
-    public function pengeluaran()
-    {
-        return $this->hasMany(Pengeluaran::class, 'tahun_id', 'id_tahun');
+        return $this->hasMany(DusunStatistik::class, 'tahun_id', 'id_tahun');
     }
 }
