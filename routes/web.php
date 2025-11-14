@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\UmkmController;
 use App\Http\Controllers\Frontend\BeritaController;
 use App\Http\Controllers\Frontend\StrukturOrganisasiController;
@@ -14,9 +15,7 @@ use App\Http\Controllers\Frontend\TestUmkmController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/frontend', [HomeController::class, 'index'])->name('home');
 
 /*
 |--------------------------------------------------------------------------
