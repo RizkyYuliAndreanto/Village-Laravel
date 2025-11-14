@@ -25,5 +25,8 @@
         @include('layouts.partials.footer')
 
     </div>
+
+    {{-- Stack untuk script khusus halaman (seperti Chart.js) --}}
+    @stack('scripts')
 </body>
 </html>

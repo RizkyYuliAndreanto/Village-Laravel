@@ -27,6 +27,10 @@ class DatabaseSeeder extends Seeder
             StatistikDesaSeeder::class,
             ApbdesSeeder::class,
             UmurSeeder::class,
+            PendidikanStatistikSeeder::class,
+            PekerjaanStatistikSeeder::class,
+            WajibPilihStatistikSeeder::class,
+            PerkawinanStatistikSeeder::class,
         ]);
     }
 }
