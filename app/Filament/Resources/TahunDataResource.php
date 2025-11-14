@@ -77,7 +77,7 @@ class TahunDataResource extends Resource
                 Forms\Components\Section::make('Preview Data Terkait')
                     ->description('Informasi jumlah data yang terkait dengan tahun ini')
                     ->schema([
-                        Forms\Components\Grid::make(4)
+                        Forms\Components\Grid::make(4) // UBAH dari 3 jadi 4
                             ->schema([
                                 Forms\Components\Placeholder::make('demografi_count')
                                     ->label('Data Demografi')
@@ -96,13 +96,12 @@ class TahunDataResource extends Resource
                                         return $total . ' record';
                                     }),
 
-                                Forms\Components\Placeholder::make('keuangan_count')
-                                    ->label('Data Keuangan')
+                                // TAMBAHKAN INI
+                                Forms\Components\Placeholder::make('apbdes_count')
+                                    ->label('Laporan APBDes')
                                     ->content(function ($record) {
-                                        if (!$record) return '0 record';
-                                        $total = $record->pendapatan()->count() +
-                                            $record->pengeluaran()->count();
-                                        return $total . ' record';
+                                        if (!$record) return '0 laporan';
+                                        return $record->laporanApbdes()->count() . ' laporan';
                                     }),
 
                                 Forms\Components\Placeholder::make('dusun_count')
@@ -172,12 +171,12 @@ class TahunDataResource extends Resource
                         (int) explode(' ', $state)[0] > 0 ? 'success' : 'gray'
                     ),
 
-                Tables\Columns\TextColumn::make('keuangan_count')
-                    ->label('Data Keuangan')
+                // TAMBAHKAN INI setelah statistik_count:
+                Tables\Columns\TextColumn::make('apbdes_count')
+                    ->label('Laporan APBDes')
                     ->getStateUsing(function ($record): string {
-                        $total = $record->pendapatan()->count() +
-                            $record->pengeluaran()->count();
-                        return $total . ' record';
+                        $count = $record->laporanApbdes()->count();
+                        return $count . ' laporan';
                     })
                     ->badge()
                     ->color(
@@ -251,11 +250,12 @@ class TahunDataResource extends Resource
                             ->orWhereHas('wajibPilihStatistik');
                     })),
 
-                Tables\Filters\Filter::make('has_keuangan')
-                    ->label('Memiliki Data Keuangan')
-                    ->query(fn(Builder $query): Builder => $query->where(function ($query) {
-                        $query->whereHas('pendapatan')->orWhereHas('pengeluaran');
-                    })),
+                // HAPUS BAGIAN INI (Line 267-271)
+                // Tables\Filters\Filter::make('has_keuangan')
+                //     ->label('Memiliki Data Keuangan')
+                //     ->query(fn(Builder $query): Builder => $query->where(function ($query) {
+                //         $query->whereHas('pendapatan')->orWhereHas('pengeluaran');
+                //     })),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -299,26 +299,6 @@ class TahunDataResource extends Resource
         return 'Master Data';
     }
 
-    public static function canViewAny(): bool
-    {
-        return true;
-    }
-
-    public static function canCreate(): bool
-    {
-        return true;
-    }
-
-    public static function canView($record): bool
-    {
-        return true;
-    }
-
-    public static function canEdit($record): bool
-    {
-        return true;
-    }
-
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
     {
         // Prevent deletion if there are related records
@@ -330,8 +310,7 @@ class TahunDataResource extends Resource
             $record->pendidikanStatistik()->exists() ||
             $record->perkawinanStatistik()->exists() ||
             $record->wajibPilihStatistik()->exists() ||
-            $record->pendapatan()->exists() ||
-            $record->pengeluaran()->exists()
+            $record->laporanApbdes()->exists() // TAMBAHKAN INI
         ) {
             return false;
         }

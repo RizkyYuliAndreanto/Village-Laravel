@@ -21,7 +21,7 @@ class TahunData extends Model
         'tahun' => 'integer',
     ];
 
-    // Relasi one-to-many dengan tabel lain
+    // Relasi one-to-many
     public function demografiPenduduk()
     {
         return $this->hasMany(DemografiPenduduk::class, 'tahun_id', 'id_tahun');
@@ -57,9 +57,14 @@ class TahunData extends Model
         return $this->hasMany(WajibPilihStatistik::class, 'tahun_id', 'id_tahun');
     }
 
-   
     public function dusunStatistik()
     {
         return $this->hasMany(DusunStatistik::class, 'tahun_id', 'id_tahun');
+    }
+
+    // TAMBAHKAN INI - Relasi ke Laporan APBDes
+    public function laporanApbdes()
+    {
+        return $this->hasMany(LaporanApbdes::class, 'tahun_id', 'id_tahun');
     }
 }
