@@ -15,7 +15,7 @@ use App\Http\Controllers\Frontend\TestUmkmController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/frontend', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 /*
 |--------------------------------------------------------------------------

@@ -14,7 +14,7 @@
 
     <div class="flex flex-wrap justify-center items-center space-x-10 border-b border-gray-300 pb-3">
 
-      <a href="{{ route('infografis.index') }}"
+      <a href="#"
          class="flex flex-col items-center font-semibold relative group 
                 {{ request()->routeIs('infografis.index') ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white' }}">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24"
@@ -27,7 +27,7 @@
           class="absolute bottom-[-6px] w-full h-0.5 transition {{ request()->routeIs('infografis.index') ? 'bg-red-600' : 'bg-transparent group-hover:bg-red-500' }}"></span>
       </a>
 
-      <a href="{{ route('infografis.apbdes') }}"
+      <a href="#"
          class="flex flex-col items-center font-semibold relative group 
                 {{ request()->routeIs('infografis.apbdes') ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white' }}">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24"
@@ -42,7 +42,7 @@
           class="absolute bottom-[-6px] w-full h-0.5 transition {{ request()->routeIs('infografis.apbdes') ? 'bg-red-600' : 'bg-transparent group-hover:bg-red-500' }}"></span>
       </a>
 
-      <a href="{{ route('infografis.stunting') }}"
+      <a href="#"
          class="flex flex-col items-center font-semibold relative group 
                 {{ request()->routeIs('infografis.stunting') ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white' }}">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24"
@@ -55,7 +55,7 @@
           class="absolute bottom-[-6px] w-full h-0.5 transition {{ request()->routeIs('infografis.stunting') ? 'bg-red-600' : 'bg-transparent group-hover:bg-red-500' }}"></span>
       </a>
 
-      <a href="{{ route('infografis.bansos') }}"
+      <a href="#"
          class="flex flex-col items-center font-semibold relative group 
                 {{ request()->routeIs('infografis.bansos') ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white' }}">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24"
@@ -68,7 +68,7 @@
           class="absolute bottom-[-6px] w-full h-0.5 transition {{ request()->routeIs('infografis.bansos') ? 'bg-red-600' : 'bg-transparent group-hover:bg-red-500' }}"></span>
       </a>
 
-      <a href="{{ route('infografis.idm') }}"
+      <a href="#"
          class="flex flex-col items-center font-semibold relative group 
                 {{ request()->routeIs('infografis.idm') ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white' }}">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24"
@@ -81,7 +81,7 @@
           class="absolute bottom-[-6px] w-full h-0.5 transition {{ request()->routeIs('infografis.idm') ? 'bg-red-600' : 'bg-transparent group-hover:bg-red-500' }}"></span>
       </a>
 
-      <a href="{{ route('infografis.sdg') }}"
+      <a href="#"
          class="flex flex-col items-center font-semibold relative group 
                 {{ request()->routeIs('infografis.sdg') ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white' }}">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24"

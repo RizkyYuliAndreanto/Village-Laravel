@@ -32,7 +32,7 @@
                     Lainnya
                 </h3>
                 <ul class="mt-4 space-y-2">
-                    <li><a href="{{ route('login') }}" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Login Aparat</a></li>
+                    <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Login Aparat</a></li>
                     <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Kebijakan Privasi</a></li>
                     <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Syarat & Ketentuan</a></li>
                 </ul>
@@ -43,9 +43,9 @@
                 @auth
                     <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Dashboard</a>
                 @else
-                    <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-5">Log in</a>
+                    <a href="#" class="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-5">Log in</a>
                     @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-5"> Register</a>
+                        <a href="#" class="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-5"> Register</a>
                     @endif
                 @endauth
             </div>

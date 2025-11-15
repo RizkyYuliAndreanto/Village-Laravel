@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('frontend.layouts.main')
 
 @section('content')
 
@@ -20,7 +20,7 @@
     </p>
 
     <!-- Tombol -->
-    <a href="{{ route('register') }}"
+    <a href="#"
       class="inline-block bg-white text-indigo-700 font-semibold py-3 px-8 rounded-lg shadow-lg 
              hover:bg-indigo-50 hover:scale-105 transform transition duration-200">
       Mulai Sekarang
@@ -93,11 +93,11 @@
       Sistem digital yang mempermudah pengelolaan data dan informasi kependudukan untuk pelayanan publik yang efektif dan efisien.
     </p>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <x-stat-box :value="$totalPenduduk" label="Penduduk" />
-      <x-stat-box :value="$totalLaki" label="Laki-Laki" />
-      <x-stat-box :value="$totalPerempuan" label="Perempuan" />
-      <x-stat-box :value="$pendudukSementara" label="Penduduk Sementara" />
-      <x-stat-box :value="$mutasiPenduduk" label="Mutasi Penduduk" />
+      <x-stat-box  label="Penduduk" />
+      <x-stat-box  label="Laki-Laki" />
+      <x-stat-box  label="Perempuan" />
+      <x-stat-box  label="Penduduk Sementara" />
+      <x-stat-box  label="Mutasi Penduduk" />
     </div>
   </div>
 </section>
@@ -106,41 +106,40 @@
 <section class="min-h-screen flex flex-col justify-center py-10 bg-gray-100 dark:bg-gray-900 border border-red">
   <div class="container mx-auto px-6 text-center border border-red">
     <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-      APBD Desa Tahun {{ $apbdesTahun ? $apbdesTahun->tahun : date('Y') }}
+      APBD Desa Tahun
     </h2>
     <p class="text-lg text-gray-700 dark:text-gray-300 mb-12">
       Akses cepat dan transparan terhadap APB Desa serta proyek pembangunan.
     </p>
 
-    @if ($apbdesTahun)
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-gray-100">Pendapatan Desa</h3>
         <p class="text-2xl font-bold text-green-600 mb-4">
-          Rp {{ number_format($apbdesTahun->total_pendapatan, 0, ',', '.') }}
+          Rp 
         </p>
         <div class="mb-4">
           <div class="flex justify-between text-sm text-gray-700 dark:text-gray-300 mb-1">
             <span>Realisasi</span>
-            <span>{{ number_format($persenRealisasiPendapatan, 2) }}%</span>
+            <span>%</span>
           </div>
           <div class="w-full bg-gray-300 rounded-full h-2">
-            <div class="bg-green-600 h-2 rounded-full" style="width: {{ $persenRealisasiPendapatan }}%"></div>
+            <div class="bg-green-600 h-2 rounded-full"></div>
           </div>
         </div>
       </div>
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-gray-100">Belanja Desa</h3>
         <p class="text-2xl font-bold text-red-600 mb-4">
-          Rp {{ number_format($apbdesTahun->total_pengeluaran, 0, ',', '.') }}
+          Rp
         </p>
         <div class="mb-4">
           <div class="flex justify-between text-sm text-gray-700 dark:text-gray-300 mb-1">
             <span>Realisasi</span>
-            <span>{{ number_format($persenRealisasiPengeluaran, 2) }}%</span>
+            <span>%</span>
           </div>
           <div class="w-full bg-gray-300 rounded-full h-2">
-            <div class="bg-red-600 h-2 rounded-full" style="width: {{ $persenRealisasiPengeluaran }}%"></div>
+            <div class="bg-red-600 h-2 rounded-full"></div>
           </div>
         </div>
       </div>
@@ -151,11 +150,9 @@
         Lihat Data Lengkap →
       </a>
     </div>
-    @else
     <p class="text-center text-lg text-gray-700 dark:text-gray-300">
       Data APBDes belum tersedia untuk ditampilkan.
     </p>
-    @endif
   </div>
 </section>
 
