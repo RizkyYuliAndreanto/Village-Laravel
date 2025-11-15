@@ -34,14 +34,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 @foreach($beritaTerkait as $item)
-                    <a href="{{ route('berita.show', $item->id) }}"
-                       class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow hover:shadow-lg transition">
-
-                        <h4 class="font-bold dark:text-white">{{ $item->judul }}</h4>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                            {{ $item->created_at->translatedFormat('d M Y') }}
-                        </p>
-                    </a>
+                <x-frontend.components.berita-card :item="$item" type="simple" />
                 @endforeach
             </div>
         </div>
@@ -51,14 +44,7 @@
             <h3 class="text-xl font-bold mb-4 dark:text-white">Berita Terbaru</h3>
 
             @foreach($beritaTerbaru as $item)
-                <a href="{{ route('berita.show', $item->id) }}" class="block mb-4">
-                    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow hover:shadow-lg transition">
-                        <h4 class="font-semibold">{{ $item->judul }}</h4>
-                        <span class="text-gray-500 text-sm">
-                            {{ $item->created_at->translatedFormat('d M Y') }}
-                        </span>
-                    </div>
-                </a>
+            <x-frontend.components.berita-card :item="$item" type="simple" />
             @endforeach
         </div>
 

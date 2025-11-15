@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
+use Str;
 use App\Models\Umkm;
 use App\Models\KategoriUmkm;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 /**
  * Frontend UmkmController - Untuk menampilkan data UMKM di website publik
@@ -118,7 +119,7 @@ class UmkmController extends Controller
         // 1. Cari kategori berdasarkan slug (buat slug dari nama_kategori)
         $kategori = KategoriUmkm::where('is_active', true)->get()
             ->filter(function ($k) use ($slug) {
-                return \Str::slug($k->nama_kategori) === $slug;
+                return Str::slug($k->nama_kategori) === $slug;
             })
             ->first();
 

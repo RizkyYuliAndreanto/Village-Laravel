@@ -37,8 +37,8 @@ class BeritaController extends Controller
             ->when($search, function ($query, $search) {
                 return $query->where(function ($q) use ($search) {
                     $q->where('judul', 'like', "%{$search}%")
-                        ->orWhere('konten', 'like', "%{$search}%")
-                        ->orWhere('penulis', 'like', "%{$search}%");
+                    ->orWhere('isi', 'like', "%{$search}%")
+                    ->orWhere('penulis', 'like', "%{$search}%");
                 });
             })
             ->when($kategori, function ($query, $kategori) {
@@ -52,7 +52,8 @@ class BeritaController extends Controller
             })
             ->where('status', 'published')
             ->orderBy('created_at', 'desc')
-            ->paginate(9); // 9 berita per halaman
+            ->paginate(9)
+            ->withQueryString();
 
         // Data tambahan untuk filter
         $kategoris = Berita::select('kategori')
@@ -75,7 +76,7 @@ class BeritaController extends Controller
             ->whereYear('created_at', now()->year)
             ->count();
 
-        return [
+        $data = [
             'berita' => $berita,
             'kategoris' => $kategoris,
             'tahuns' => $tahuns,
@@ -86,6 +87,7 @@ class BeritaController extends Controller
             'totalBerita' => $totalBerita,
             'beritaBulanIni' => $beritaBulanIni
         ];
+        return view('frontend.Berita.index', $data);
     }
 
     /**
@@ -119,11 +121,12 @@ class BeritaController extends Controller
             ->limit(5)
             ->get();
 
-        return [
+        $data = [
             'berita' => $berita,
             'beritaTerkait' => $beritaTerkait,
             'beritaTerbaru' => $beritaTerbaru
         ];
+        return view('frontend.Berita.show', $data);
     }
 
     /**
@@ -206,41 +209,64 @@ class BeritaController extends Controller
     {
         $search = $request->get('search');
         $tahun = $request->get('tahun');
+        $bulan = $request->get('bulan'); // <-- Tambahkan ini
 
-        $berita = Berita::where('status', 'published')
-            ->where('kategori', $kategori)
-            ->when($search, function ($query, $search) {
+        $query = Berita::where('status', 'published')
+            ->where('kategori', $kategori);
+
+        // Terapkan filter tambahan
+        $query->when($search, function ($query, $search) {
                 return $query->where(function ($q) use ($search) {
                     $q->where('judul', 'like', "%{$search}%")
-                        ->orWhere('konten', 'like', "%{$search}%");
+                        ->orWhere('isi', 'like', "%{$search}%");
                 });
             })
             ->when($tahun, function ($query, $tahun) {
                 return $query->whereYear('created_at', $tahun);
             })
-            ->orderBy('created_at', 'desc')
-            ->paginate(9);
+            ->when($bulan, function ($query, $bulan) { // <-- Tambahkan filter bulan
+                return $query->whereMonth('created_at', $bulan);
+            });
 
-        // Data untuk filter
-        $tahuns = Berita::where('kategori', $kategori)
+        $berita = $query->orderBy('created_at', 'desc')
+            ->paginate(9)
+            ->withQueryString(); // <-- TAMBAHKAN INI
+
+        // Data untuk filter (HARUS SAMA DENGAN METHOD INDEX)
+        $kategoris = Berita::select('kategori')
             ->where('status', 'published')
-            ->selectRaw('YEAR(created_at) as tahun')
+            ->distinct()
+            ->pluck('kategori')
+            ->filter()
+            ->sort();
+
+        $tahuns = Berita::selectRaw('YEAR(created_at) as tahun')
+            ->where('status', 'published')
             ->distinct()
             ->orderBy('tahun', 'desc')
             ->pluck('tahun');
 
-        $totalBerita = Berita::where('kategori', $kategori)
-            ->where('status', 'published')
+        // Statistik (HARUS SAMA DENGAN METHOD INDEX)
+        $totalBerita = Berita::where('status', 'published')->count();
+        $beritaBulanIni = Berita::where('status', 'published')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
             ->count();
 
-        return [
+        // Kirim semua data yang dibutuhkan oleh view index
+        $data = [
             'berita' => $berita,
-            'kategori' => $kategori,
+            'kategoris' => $kategoris, // <-- Tambahkan ini
             'tahuns' => $tahuns,
             'search' => $search,
+            'kategori' => $kategori, // Ini dari parameter URL, bukan form
             'tahun' => $tahun,
-            'totalBerita' => $totalBerita
+            'bulan' => $bulan, // <-- Tambahkan ini
+            'totalBerita' => $totalBerita, // <-- Tambahkan ini
+            'beritaBulanIni' => $beritaBulanIni // <-- Tambahkan ini
         ];
+        
+        return view('frontend.Berita.index', $data);
     }
 
     /**
@@ -261,7 +287,8 @@ class BeritaController extends Controller
         }
 
         $berita = $query->orderBy('created_at', 'desc')
-            ->paginate(12);
+            ->paginate(12)
+            ->withQueryString();
 
         // Statistik bulan untuk tahun tersebut
         $statistikBulan = Berita::where('status', 'published')
@@ -287,13 +314,14 @@ class BeritaController extends Controller
             12 => 'Desember'
         ];
 
-        return [
+        $data = [
             'berita' => $berita,
             'tahun' => $tahun,
             'bulan' => $bulan,
             'statistikBulan' => $statistikBulan,
             'namaBulan' => $namaBulan
         ];
+        return view('frontend.Berita.arsip', $data);
     }
 
     /**

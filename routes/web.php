@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\ProfilDesaController;
 use App\Http\Controllers\Frontend\UmkmController;
 use App\Http\Controllers\Frontend\BeritaController;
 use App\Http\Controllers\Frontend\StrukturOrganisasiController;
@@ -16,7 +17,7 @@ use App\Http\Controllers\Frontend\TestUmkmController;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
+Route::get('Profil-desa', [ProfilDesaController::class, 'index'])->name('Profil-desa.index');
 /*
 |--------------------------------------------------------------------------
 | BERITA ROUTES - Berita dan Informasi Desa

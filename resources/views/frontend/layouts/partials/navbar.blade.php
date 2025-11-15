@@ -24,13 +24,12 @@
 
       <div class="flex items-center space-x-8">
         <a href="{{ route('home') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Home</a>
-        <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Profil Desa</a>
+        <a href="{{ route('Profil-desa.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Profil Desa</a>
         <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Infografis</a>
-        <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Listing</a>
-        <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">IDM</a>
+        <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">APBDes</a>
+        <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">UMKM</a>
         <a href="{{ route('berita.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Berita</a>
-        <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">Belanja</a>
-        <a href="#" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">PPID</a>
+        <a href="{{ route('ppid.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 font-medium transition">PPID</a>
       </div>
     </div>
   </div>

@@ -12,13 +12,13 @@
 <body class="font-sans antialiased bg-gray-100 text-gray-900 dark:text-gray-100">
     <div class="min-h-screen flex flex-col">
         
-        @include('frontend.layouts.partials.navbar')
+        @include('layouts.partials.navbar')
 
-        <main>
+        <main class="flex-grow">
             @yield('content')
         </main>
 
-        @include('frontend.layouts.partials.footer')
+        @include('layouts.partials.footer')
         
     </div>
 </body>

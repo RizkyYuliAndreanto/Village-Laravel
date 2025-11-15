@@ -1,4 +1,4 @@
-@extends('layouts.profile_desa')
+@extends('frontend.layouts.profile_desa')
 
 @section('content')
 <!-- ===== Visi & Misi ===== -->
