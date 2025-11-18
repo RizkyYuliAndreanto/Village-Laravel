@@ -15,19 +15,41 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
             'password' => bcrypt('password'),
         ]);
 
-        // Run UMKM related seeders
         $this->call([
+            // === MASTER DATA (HARUS DIJALANKAN DULU) ===
+            // Data Tahun, dibutuhkan oleh semua seeder statistik
+            TahunDataSeeder::class,
+            // Data Kategori, dibutuhkan oleh UmkmSeeder
             KategoriUmkmSeeder::class,
-            UmkmSeeder::class,
+
+            // === DATA KONTEN (INDEPENDEN) ===
             BeritaSeeder::class,
+            StrukturOrganisasiSeeder::class,
+            PpidDokumenSeeder::class,
+            PendapatanSeeder::class,
+            // GaleriSeeder::class, // Anda bisa tambahkan ini jika sudah dibuat
+
+            // === DATA DEPENDEN (BERGANTUNG PADA MASTER) ===
+            
+            // Bergantung pada KategoriUmkmSeeder
+            UmkmSeeder::class,
+
+            // Bergantung pada TahunDataSeeder
+            AgamaStatistikSeeder::class,
+            DemografiPendudukSeeder::class,
+            DusunStatistikSeeder::class,
+            LaporanApbdesSeeder::class,
+            PekerjaanStatistikSeeder::class,
+            PendidikanStatistikSeeder::class,
+            PerkawinanStatistikSeeder::class,
+            UmurStatistikSeeder::class,
+            WajibPilihStatistikSeeder::class,
         ]);
     }
 }

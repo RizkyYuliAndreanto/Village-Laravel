@@ -42,7 +42,7 @@ class UmurStatistik extends Model
     ];
 
     // Custom timestamps
-    const CREATED_AT = 'create_at';
+    const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
     // Relasi belongs to tahun_data

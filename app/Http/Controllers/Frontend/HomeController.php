@@ -4,7 +4,14 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\LaporanApbdes;
+use App\Models\StrukturOrganisasi;
+use App\Models\Berita;
+use App\Models\Umkm;
+use App\Models\Galeri;             // <-- Tambahan
+use App\Models\TahunData;         // <-- Tambahan
+use App\Models\DemografiPenduduk; // <-- Tambahan
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -13,71 +20,79 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // // === 1. LOGIKA STATISTIK ===
-        // $tahunDataTerbaru = DB::table('tahun_data')->latest('tahun')->first();
+        // === 1. LOGIKA STATISTIK (Menggunakan Eloquent) ===
+        $tahunTerbaru = TahunData::latest('tahun')->first();
 
-        // $stats = null;
-        // if ($tahunDataTerbaru) {
-        //     $stats = DB::table('demografi_penduduk')
-        //                ->where('tahun_id', $tahunDataTerbaru->id_tahun)
-        //                ->first();
-        // }
+        $stats = null;
+        if ($tahunTerbaru) {
+            $stats = DemografiPenduduk::where('tahun_id', $tahunTerbaru->id_tahun)->first();
+        }
 
-        // // === 2. LOGIKA APBDES ===
-        // $apbdesTahun = DB::table('apbdes_tahun')->latest('tahun')->first();
+        // Siapkan variabel statistik dengan nilai default 0
+        $totalPenduduk = $stats->total_penduduk ?? 0;
+        $totalLaki = $stats->laki_laki ?? 0;
+        $totalPerempuan = $stats->perempuan ?? 0;
+        $pendudukSementara = $stats->penduduk_sementara ?? 0;
+        $mutasiPenduduk = $stats->mutasi_penduduk ?? 0;
 
-        // $pendapatanItems = collect();
-        // $pengeluaranItems = collect();
-        // $persenRealisasiPendapatan = 0;
-        // $persenRealisasiPengeluaran = 0;
 
-        // if ($apbdesTahun) {
-        //     // Karena tabel pendapatan dan pengeluaran memakai `tahun_id`,
-        //     // maka kita hubungkan via kolom `tahun` dari apbdes_tahun
-        //     $pendapatanItems = DB::table('pendapatan')
-        //                        ->join('tahun_data', 'pendapatan.tahun_id', '=', 'tahun_data.id_tahun')
-        //                        ->where('tahun_data.tahun', $apbdesTahun->tahun)
-        //                        ->select('pendapatan.*')
-        //                        ->get();
+        // === 2. LOGIKA APBDES (Sudah Benar) ===
+        $apbdesLaporan = LaporanApbdes::with(['tahunData', 'detailApbdes'])
+            ->join('tahun_data', 'laporan_apbdes.tahun_id', '=', 'tahun_data.id_tahun')
+            ->orderBy('tahun_data.tahun', 'DESC')
+            ->select('laporan_apbdes.*')
+            ->first();
 
-        //     $pengeluaranItems = DB::table('pengeluaran')
-        //                         ->join('tahun_data', 'pengeluaran.tahun_id', '=', 'tahun_data.id_tahun')
-        //                         ->where('tahun_data.tahun', $apbdesTahun->tahun)
-        //                         ->select('pengeluaran.*')
-        //                         ->get();
+        $pendapatanItems = collect();
+        $pengeluaranItems = collect();
+        $persenRealisasiPendapatan = 0;
+        $persenRealisasiPengeluaran = 0;
+        $totalAnggaranPendapatan = 0;
+        $totalAnggaranPengeluaran = 0;
+        $totalRealisasiPendapatan = 0;
+        $totalRealisasiPengeluaran = 0;
 
-        //     // Hitung total (menggunakan kolom 'jumlah')
-        //     $totalAnggaranPendapatan = $pendapatanItems->sum('jumlah');
-        //     $totalAnggaranPengeluaran = $pengeluaranItems->sum('jumlah');
+        if ($apbdesLaporan) {
+            $pendapatanItems = $apbdesLaporan->detailApbdes->where('tipe', 'pendapatan');
+            $pengeluaranItems = $apbdesLaporan->detailApbdes->where('tipe', 'belanja');
 
-        //     // Jika belum ada realisasi, anggap realisasi = jumlah
-        //     $totalRealisasiPendapatan = $totalAnggaranPendapatan;
-        //     $totalRealisasiPengeluaran = $totalAnggaranPengeluaran;
+            $totalAnggaranPendapatan = $pendapatanItems->sum('anggaran');
+            $totalRealisasiPendapatan = $pendapatanItems->sum('realisasi');
+            
+            $totalAnggaranPengeluaran = $pengeluaranItems->sum('anggaran');
+            $totalRealisasiPengeluaran = $pengeluaranItems->sum('realisasi');
 
-        //     if ($totalAnggaranPendapatan > 0) {
-        //         $persenRealisasiPendapatan = ($totalRealisasiPendapatan / $totalAnggaranPendapatan) * 100;
-        //     }
+            if ($totalAnggaranPendapatan > 0) {
+                $persenRealisasiPendapatan = ($totalRealisasiPendapatan / $totalAnggaranPendapatan) * 100;
+            }
 
-        //     if ($totalAnggaranPengeluaran > 0) {
-        //         $persenRealisasiPengeluaran = ($totalRealisasiPengeluaran / $totalAnggaranPengeluaran) * 100;
-        //     }
-        // }
+            if ($totalAnggaranPengeluaran > 0) {
+                $persenRealisasiPengeluaran = ($totalRealisasiPengeluaran / $totalAnggaranPengeluaran) * 100;
+            }
+        }
 
-        // === 3. KIRIM SEMUA DATA KE VIEW ===
-        return view('frontend.home', [
-            // // Data Statistik
-            // 'totalPenduduk' => $stats->total_penduduk ?? 0,
-            // 'totalLaki' => $stats->laki_laki ?? 0,
-            // 'totalPerempuan' => $stats->perempuan ?? 0,
-            // 'pendudukSementara' => $stats->penduduk_sementara ?? 0,
-            // 'mutasiPenduduk' => $stats->mutasi_penduduk ?? 0,
+        // === 3. LOGIKA SOTK ===
+        $sotk = StrukturOrganisasi::orderBy('id_struktur', 'asc')->take(4)->get();
 
-            // // Data APBDes
-            // 'apbdesTahun' => $apbdesTahun,
-            // 'pendapatanItems' => $pendapatanItems,
-            // 'pengeluaranItems' => $pengeluaranItems,
-            // 'persenRealisasiPendapatan' => $persenRealisasiPendapatan,
-            // 'persenRealisasiPengeluaran' => $persenRealisasiPengeluaran,
-        ]);
+        // === 4. LOGIKA BERITA TERBARU (Perbaikan status) ===
+        $beritaTerbaru = Berita::where('status', 'published') // <-- Diperbaiki
+                               ->latest()
+                               ->take(6)
+                               ->get();
+
+        // === 5. LOGIKA POTENSI DESA / UMKM ===
+        $potensiDesa = Umkm::where('status_usaha', Umkm::STATUS_AKTIF)
+                           ->inRandomOrder()
+                           ->take(3)
+                           ->get();
+
+        // === 7. KIRIM SEMUA DATA KE VIEW (Gabungan) ===
+        return view('frontend.home', compact(
+            'totalPenduduk', 'totalLaki', 'totalPerempuan', 'pendudukSementara', 'mutasiPenduduk',
+            'apbdesLaporan',
+            'totalAnggaranPendapatan', 'totalRealisasiPendapatan', 'persenRealisasiPendapatan',
+            'totalAnggaranPengeluaran', 'totalRealisasiPengeluaran', 'persenRealisasiPengeluaran',
+            'sotk', 'beritaTerbaru', 'potensiDesa',
+        ));
     }
 }
