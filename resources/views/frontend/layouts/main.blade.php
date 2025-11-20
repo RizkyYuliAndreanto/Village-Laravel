@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Website Desa')</title>
-    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('frontend.layouts.partials.navbar')
     </head>
 <body>
-    @include('frontend.layouts.partials.navbar')
 
     <main>
         @yield('content')

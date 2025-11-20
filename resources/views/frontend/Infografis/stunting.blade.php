@@ -1,4 +1,4 @@
-@extends('layouts.infografis')
+@extends('frontend.layouts.main')
 
 @section('content')
 <!-- ===== Visi & Misi ===== -->

@@ -21,12 +21,14 @@ class HomeController extends Controller
     public function index()
     {
         // === 1. LOGIKA STATISTIK (Menggunakan Eloquent) ===
-        $tahunTerbaru = TahunData::latest('tahun')->first();
+        // Ambil tahun terbaru yang MEMILIKI data demografi
+        $tahunTerbaru = TahunData::whereHas('demografiPenduduk')
+            ->orderBy('tahun', 'DESC')
+            ->first();
 
-        $stats = null;
-        if ($tahunTerbaru) {
-            $stats = DemografiPenduduk::where('tahun_id', $tahunTerbaru->id_tahun)->first();
-        }
+        $stats = $tahunTerbaru
+            ? DemografiPenduduk::where('tahun_id', $tahunTerbaru->id_tahun)->first()
+            : null;
 
         // Siapkan variabel statistik dengan nilai default 0
         $totalPenduduk = $stats->total_penduduk ?? 0;
@@ -58,7 +60,7 @@ class HomeController extends Controller
 
             $totalAnggaranPendapatan = $pendapatanItems->sum('anggaran');
             $totalRealisasiPendapatan = $pendapatanItems->sum('realisasi');
-            
+
             $totalAnggaranPengeluaran = $pengeluaranItems->sum('anggaran');
             $totalRealisasiPengeluaran = $pengeluaranItems->sum('realisasi');
 
@@ -76,23 +78,33 @@ class HomeController extends Controller
 
         // === 4. LOGIKA BERITA TERBARU (Perbaikan status) ===
         $beritaTerbaru = Berita::where('status', 'published') // <-- Diperbaiki
-                               ->latest()
-                               ->take(6)
-                               ->get();
+            ->latest()
+            ->take(6)
+            ->get();
 
         // === 5. LOGIKA POTENSI DESA / UMKM ===
         $potensiDesa = Umkm::where('status_usaha', Umkm::STATUS_AKTIF)
-                           ->inRandomOrder()
-                           ->take(3)
-                           ->get();
+            ->inRandomOrder()
+            ->take(3)
+            ->get();
 
         // === 7. KIRIM SEMUA DATA KE VIEW (Gabungan) ===
         return view('frontend.home', compact(
-            'totalPenduduk', 'totalLaki', 'totalPerempuan', 'pendudukSementara', 'mutasiPenduduk',
+            'totalPenduduk',
+            'totalLaki',
+            'totalPerempuan',
+            'pendudukSementara',
+            'mutasiPenduduk',
             'apbdesLaporan',
-            'totalAnggaranPendapatan', 'totalRealisasiPendapatan', 'persenRealisasiPendapatan',
-            'totalAnggaranPengeluaran', 'totalRealisasiPengeluaran', 'persenRealisasiPengeluaran',
-            'sotk', 'beritaTerbaru', 'potensiDesa',
+            'totalAnggaranPendapatan',
+            'totalRealisasiPendapatan',
+            'persenRealisasiPendapatan',
+            'totalAnggaranPengeluaran',
+            'totalRealisasiPengeluaran',
+            'persenRealisasiPengeluaran',
+            'sotk',
+            'beritaTerbaru',
+            'potensiDesa',
         ));
     }
 }

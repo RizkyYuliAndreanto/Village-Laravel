@@ -1,12 +1,11 @@
-@extends('frontend.layouts.profile_desa')
+@extends('frontend.layouts.main')
 
 @section('content')
 <!-- ===== Visi & Misi ===== -->
 <section class="min-h-screen flex items-center justify-center pb-10 bg-gray-100 dark:bg-gray-900">
   <div class="container mx-auto px-6 flex flex-col md:flex-row items-stretch justify-center gap-10">
-
     <!-- ===== VISI ===== -->
-    <div class="flex-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl shadow-md p-8">
+    <div class="flex-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl shadow-md p-20">
       <h2 class="text-2xl font-bold text-center mb-4">Visi</h2>
       <p class="text-center text-lg mb-4">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, voluptates reiciendis.

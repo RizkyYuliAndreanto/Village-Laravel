@@ -1,4 +1,4 @@
-@extends('frontend.layouts.berita')
+@extends('frontend.layouts.main')
 
 @section('content')
 <div class="bg-gray-100 dark:bg-gray-900 py-16">
@@ -55,7 +55,7 @@
         <!-- Berita Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @foreach($berita as $item)
-            <x-frontend.components.berita-card :item="$item" type="full" />
+            <x-frontend.components.card-berita :item="$item" type="full" />
             @endforeach
         </div>
 

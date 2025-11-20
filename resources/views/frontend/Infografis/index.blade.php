@@ -1,10 +1,10 @@
-@extends('frontend.layouts.infografis')
+@extends('frontend.layouts.main')
 
 @section('content')
 
     <section class="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900 py-16">
         <div class="flex justify-end mb-6">
-            @include('layouts.partials.submenu')
+            @include('frontend.layouts.partials.submenu')
         </div>
 
         <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-12">

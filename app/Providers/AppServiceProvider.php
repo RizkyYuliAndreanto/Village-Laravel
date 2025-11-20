@@ -19,6 +19,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Blade::component('frontend.components.berita-card', 'frontend.components.berita-card');
+        Blade::component('frontend.components.card-berita', 'frontend.components.card-berita');
     }
 }

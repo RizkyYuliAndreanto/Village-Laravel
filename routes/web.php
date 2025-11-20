@@ -18,6 +18,14 @@ use App\Http\Controllers\Frontend\TestUmkmController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('Profil-desa', [ProfilDesaController::class, 'index'])->name('Profil-desa.index');
+Route::prefix('infografis')->name('infografis.')->group(function () {
+    Route::get('/', [DemografiController::class, 'index'])->name('index'); // Penduduk
+    Route::get('/apbdes', [DemografiController::class, 'apbdes'])->name('apbdes');
+    Route::get('/stunting', [DemografiController::class, 'stunting'])->name('stunting');
+    Route::get('/bansos', [DemografiController::class, 'bansos'])->name('bansos');
+    Route::get('/idm', [DemografiController::class, 'idm'])->name('idm');
+    Route::get('/sdgs', [DemografiController::class, 'sdgs'])->name('sdgs');
+});
 /*
 |--------------------------------------------------------------------------
 | BERITA ROUTES - Berita dan Informasi Desa

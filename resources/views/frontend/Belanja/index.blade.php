@@ -1,4 +1,4 @@
-@extends('layouts.belanja')
+@extends('frontend.layouts.main')
 
 @section('content')
 <!-- ===== Visi & Misi ===== -->
