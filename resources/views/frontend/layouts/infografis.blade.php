@@ -7,8 +7,8 @@
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js - Versi yang paling stabil -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     
     <!-- Custom CSS untuk Infografis -->
     <link rel="stylesheet" href="{{ asset('css/infografis-tahun-selector.css') }}">
@@ -37,6 +37,14 @@
     </main>
 
     @include('frontend.layouts.partials.footer')
+    
+    <!-- Debug Chart.js -->
+    <script>
+        console.log('Chart.js loaded:', typeof Chart !== 'undefined');
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded properly!');
+        }
+    </script>
     
     <!-- Stack untuk script tambahan dari sections -->
     @stack('scripts')

@@ -25,8 +25,17 @@
 <script>
     // Chart Wajib Pilih
     document.addEventListener('DOMContentLoaded', function() {
-        if (document.getElementById("chartWajibPilih")) {
-            const wajib = document.getElementById("chartWajibPilih").getContext("2d");
+        console.log('Loading Wajib Pilih Chart...');
+        
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded!');
+            return;
+        }
+        
+        const chartElement = document.getElementById("chartWajibPilih");
+        if (chartElement) {
+            console.log('Wajib Pilih chart element found, creating chart...');
+            const wajib = chartElement.getContext("2d");
 
             new Chart(wajib, {
             type: 'bar',

@@ -8,10 +8,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".tahun-selector").forEach((selector) => {
         selector.addEventListener("change", function () {
             const tahun = this.value;
-            
+
             // Reload halaman dengan parameter tahun
             const url = new URL(window.location);
-            url.searchParams.set('tahun', tahun);
+            url.searchParams.set("tahun", tahun);
             window.location.href = url.toString();
         });
     });

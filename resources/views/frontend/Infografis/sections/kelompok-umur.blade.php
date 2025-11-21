@@ -48,8 +48,17 @@
 <script>
     // Piramida Penduduk Chart
     document.addEventListener('DOMContentLoaded', function() {
-        if (document.getElementById("chartPiramida")) {
-            const piramida = document.getElementById("chartPiramida").getContext("2d");
+        console.log('Loading Piramida Chart...');
+        
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded!');
+            return;
+        }
+        
+        const chartElement = document.getElementById("chartPiramida");
+        if (chartElement) {
+            console.log('Chart element found, creating chart...');
+            const piramida = chartElement.getContext("2d");
 
             new Chart(piramida, {
             type: "bar",

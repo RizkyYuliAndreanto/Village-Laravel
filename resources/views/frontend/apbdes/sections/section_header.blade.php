@@ -43,11 +43,58 @@
 
 {{-- Year Selector --}}
 @if($tahunTersedia && count($tahunTersedia) > 0)
-<div class="bg-white rounded-2xl shadow-lg p-6 mb-12 border border-gray-200">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div class="mb-4 sm:mb-0">
-            <div class="flex items-center mb-2">
-                <div class="bg-cyan-600 text-white px-4 py-2 rounded-lg mr-3 font-bold flex items-center shadow-md">
+<div class="apbdes-card p-6 mb-12">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <div class="bg-cyan-600 text-white px-4 py-2 rounded-lg font-bold flex items-center shadow-md">
+                <i class="fas fa-calendar-alt mr-2"></i>
+                Pilih Tahun Data
+            </div>
+            <select class="year-selector px-4 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 shadow-sm" onchange="window.location.href='{{ route('frontend.apbdes.index') }}?tahun=' + this.value">
+                @foreach($tahunTersedia as $tahun)
+                    <option value="{{ $tahun->tahun }}" {{ $tahun->tahun == ($tahunDipilih ?? '') ? 'selected' : '' }}>
+                        Tahun {{ $tahun->tahun }}
+                    </option>
+                @endforeach
+            </select>
+            <div class="loading-indicator hidden">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+        
+        @if($laporan)
+        <div class="flex items-center gap-2 text-sm text-gray-600">
+            <i class="fas fa-info-circle text-cyan-500"></i>
+            <span>Terakhir diperbarui: {{ $laporan->updated_at->format('d M Y') }}</span>
+        </div>
+        @endif
+    </div>
+</div>
+@endif
+
+{{-- No Data Message --}}
+@if(!$laporan)
+<div class="apbdes-card p-12 text-center">
+    <div class="text-gray-400 mb-4">
+        <i class="fas fa-exclamation-triangle text-6xl"></i>
+    </div>
+    <h3 class="text-2xl font-bold text-gray-700 mb-2">Data APBDes Tidak Tersedia</h3>
+    <p class="text-gray-600 mb-4">
+        @if($tahunTersedia->isEmpty())
+            Belum ada data APBDes yang diterbitkan.
+        @else
+            Data APBDes untuk tahun {{ $tahunDipilih }} belum tersedia atau belum diterbitkan.
+        @endif
+    </p>
+    @if(!$tahunTersedia->isEmpty())
+        <p class="text-sm text-gray-500">
+            Tahun yang tersedia: 
+            @foreach($tahunTersedia as $index => $tahun)
+                <span class="font-semibold">{{ $tahun->tahun }}</span>@if($index < count($tahunTersedia) - 1), @endif
+            @endforeach
+        </p>
+    @endif
+</div>
                     <i class="fas fa-calendar-alt mr-2"></i>
                 </div>
                 <h3 class="text-2xl font-bold text-gray-900">Pilih Tahun Anggaran</h3>

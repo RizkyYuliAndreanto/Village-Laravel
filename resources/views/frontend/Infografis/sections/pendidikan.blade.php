@@ -25,8 +25,17 @@
 <script>
     // Chart Pendidikan
     document.addEventListener('DOMContentLoaded', function() {
-        if (document.getElementById("chartPendidikan")) {
-            const pendidikan = document.getElementById("chartPendidikan").getContext("2d");
+        console.log('Loading Pendidikan Chart...');
+        
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded!');
+            return;
+        }
+        
+        const chartElement = document.getElementById("chartPendidikan");
+        if (chartElement) {
+            console.log('Pendidikan chart element found, creating chart...');
+            const pendidikan = chartElement.getContext("2d");
 
             new Chart(pendidikan, {
             type: "bar",

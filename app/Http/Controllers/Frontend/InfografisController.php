@@ -46,7 +46,7 @@ class InfografisController extends Controller
 
         // Ambil semua data yang tersedia untuk tahun tersebut
         $tahunId = $tahunData ? $tahunData->id_tahun : null;
-        
+
         // Data demografi
         $demografi = DemografiPenduduk::where('tahun_id', $tahunId)->first();
         $demografiData = [
@@ -131,8 +131,53 @@ class InfografisController extends Controller
 
         // Data dusun
         $dusunStatistik = DusunStatistik::where('tahun_id', $tahunId)->get();
+
+        // Hitung total penduduk untuk persentase
+        $totalPendudukDusun = $dusunStatistik->sum('jumlah_penduduk');
+
+        // Buat array untuk chart configuration dengan warna dinamis
+        $colors = [
+            '#3B82F6',
+            '#10B981',
+            '#F59E0B',
+            '#EF4444',
+            '#8B5CF6',
+            '#EC4899',
+            '#06B6D4',
+            '#84CC16',
+            '#F97316',
+            '#6366F1',
+            '#14B8A6',
+            '#F43F5E',
+            '#8B5A2B',
+            '#059669',
+            '#DC2626'
+        ];
+        $chartLabels = [];
+        $chartData = [];
+        $percentages = [];
+
+        foreach ($dusunStatistik as $index => $dusun) {
+            $chartLabels[] = $dusun->nama_dusun;
+            $chartData[] = $dusun->jumlah_penduduk;
+            $percentages[] = $totalPendudukDusun > 0 ? round(($dusun->jumlah_penduduk / $totalPendudukDusun) * 100, 1) : 0;
+
+            // Generate warna otomatis jika tidak ada di array
+            if (!isset($colors[$index])) {
+                $colors[$index] = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+            }
+        }
+
         $dusunData = [
             'dusunStatistik' => $dusunStatistik,
+            'dusunChartConfig' => [
+                'labels' => $chartLabels,
+                'data' => $chartData,
+                'colors' => $colors,
+                'percentages' => $percentages,
+            ],
+            'totalPendudukDusun' => $totalPendudukDusun,
+            'totalKKDusun' => $dusunStatistik->sum('jumlah_kk'),
         ];
 
         // Base data
@@ -163,13 +208,13 @@ class InfografisController extends Controller
     {
         $tahun = $request->get('tahun');
         $tahunData = TahunData::where('tahun', $tahun)->first();
-        
+
         if (!$tahunData) {
             return response()->json(['error' => 'Data tahun tidak ditemukan'], 404);
         }
 
         $tahunId = $tahunData->id_tahun;
-        
+
         // Ambil semua data untuk tahun tersebut
         return response()->json([
             'success' => true,
