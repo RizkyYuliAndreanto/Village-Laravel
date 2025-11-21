@@ -287,6 +287,108 @@
 }
 
 /* ========================================
+   APBDES SPECIFIC
+   ======================================== */
+.apbdes-hero {
+    background: linear-gradient(
+        135deg,
+        var(--primary-400),
+        var(--secondary-400)
+    );
+}
+
+.apbdes-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(20, 184, 166, 0.1);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+}
+
+.apbdes-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(20, 184, 166, 0.15);
+    border-color: var(--primary-300);
+}
+
+.apbdes-title {
+    color: var(--primary-800);
+}
+
+.apbdes-subtitle {
+    color: var(--secondary-700);
+}
+
+/* APBDes Status Colors - Menggunakan sistem warna yang konsisten */
+.apbdes-pendapatan {
+    background-color: var(--primary-500);
+    color: white;
+}
+
+.apbdes-pendapatan-light {
+    background-color: var(--primary-100);
+    color: var(--primary-800);
+}
+
+.apbdes-pendapatan-progress {
+    background-color: var(--primary-200);
+}
+
+.apbdes-pendapatan-bar {
+    background-color: var(--primary-500);
+}
+
+.apbdes-pendapatan-text {
+    color: var(--primary-700);
+}
+
+.apbdes-belanja {
+    background-color: var(--secondary-500);
+    color: white;
+}
+
+.apbdes-belanja-light {
+    background-color: var(--secondary-100);
+    color: var(--secondary-800);
+}
+
+.apbdes-belanja-progress {
+    background-color: var(--secondary-200);
+}
+
+.apbdes-belanja-bar {
+    background-color: var(--secondary-500);
+}
+
+.apbdes-belanja-text {
+    color: var(--secondary-700);
+}
+
+.apbdes-surplus {
+    background-color: var(--primary-500);
+    color: white;
+}
+
+.apbdes-surplus-light {
+    background-color: var(--primary-100);
+    color: var(--primary-800);
+}
+
+.apbdes-defisit {
+    background-color: var(--secondary-600);
+    color: white;
+}
+
+.apbdes-defisit-light {
+    background-color: var(--secondary-100);
+    color: var(--secondary-800);
+}
+
+.apbdes-balance {
+    background-color: var(--primary-600);
+    color: white;
+}
+
+/* ========================================
    UTILITY CLASSES
    ======================================== */
 .bg-gradient-primary {

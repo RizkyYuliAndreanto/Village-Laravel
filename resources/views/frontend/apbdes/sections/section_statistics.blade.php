@@ -12,8 +12,8 @@
             </div>
             <div class="text-right">
                 <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold text-white 
-                           {{ $balance['status'] == 'surplus' ? 'bg-green-500' : 
-                              ($balance['status'] == 'defisit' ? 'bg-red-500' : 'bg-yellow-500') }} shadow-lg">
+                           {{ $balance['status'] == 'surplus' ? 'apbdes-surplus' : 
+                              ($balance['status'] == 'defisit' ? 'apbdes-defisit' : 'apbdes-balance') }} shadow-lg">
                     @if($balance['status'] == 'surplus')
                         <i class="fas fa-arrow-up mr-2"></i> Surplus
                     @elseif($balance['status'] == 'defisit')
@@ -31,46 +31,46 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {{-- Total Pendapatan --}}
             <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 text-center border border-green-200 hover:shadow-lg transition-all duration-300">
-                <div class="w-16 h-16 bg-green-500 text-white rounded-full mb-4 mx-auto flex items-center justify-center shadow-lg">
-                    <i class="fas fa-coins text-2xl"></i>
+                <div class="w-16 h-16 apbdes-pendapatan rounded-full mb-4 mx-auto flex items-center justify-center shadow-lg">
+                    <i class="fas fa-arrow-up text-2xl"></i>
                 </div>
-                <p class="text-green-800 text-sm font-bold mb-2 uppercase tracking-wide">Total Pendapatan</p>
-                <p class="text-2xl font-bold text-green-900 mb-3">
+                <p class="apbdes-pendapatan-text text-sm font-bold mb-2 uppercase tracking-wide">Total Pendapatan</p>
+                <p class="text-2xl font-bold apbdes-pendapatan-text mb-3">
                     Rp {{ number_format($balance['total_pendapatan'] ?? 0, 0, ',', '.') }}
                 </p>
-                <div class="w-full bg-green-200 rounded-full h-2.5">
-                    <div class="bg-green-500 h-2.5 rounded-full transition-all duration-1000" style="width: {{ $balance['persentase_pendapatan'] ?? 0 }}%"></div>
+                <div class="w-full apbdes-pendapatan-progress rounded-full h-2.5">
+                    <div class="apbdes-pendapatan-bar h-2.5 rounded-full transition-all duration-1000" style="width: {{ $balance['persentase_pendapatan'] ?? 0 }}%"></div>
                 </div>
-                <p class="text-xs text-green-700 font-medium mt-2">{{ $balance['persentase_pendapatan'] ?? 0 }}% dari Total</p>
+                <p class="text-xs apbdes-pendapatan-text font-medium mt-2">{{ $balance['persentase_pendapatan'] ?? 0 }}% dari Total</p>
             </div>
 
             {{-- Total Belanja --}}
             <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-6 text-center border border-red-200 hover:shadow-lg transition-all duration-300">
-                <div class="w-16 h-16 bg-red-500 text-white rounded-full mb-4 mx-auto flex items-center justify-center shadow-lg">
-                    <i class="fas fa-shopping-cart text-2xl"></i>
+                <div class="w-16 h-16 apbdes-belanja rounded-full mb-4 mx-auto flex items-center justify-center shadow-lg">
+                    <i class="fas fa-arrow-down text-2xl"></i>
                 </div>
-                <p class="text-red-800 text-sm font-bold mb-2 uppercase tracking-wide">Total Belanja</p>
-                <p class="text-2xl font-bold text-red-900 mb-3">
+                <p class="apbdes-belanja-text text-sm font-bold mb-2 uppercase tracking-wide">Total Belanja</p>
+                <p class="text-2xl font-bold apbdes-belanja-text mb-3">
                     Rp {{ number_format($balance['total_belanja'] ?? 0, 0, ',', '.') }}
                 </p>
-                <div class="w-full bg-red-200 rounded-full h-2.5">
-                    <div class="bg-red-500 h-2.5 rounded-full transition-all duration-1000" style="width: {{ $balance['persentase_belanja'] ?? 0 }}%"></div>
+                <div class="w-full apbdes-belanja-progress rounded-full h-2.5">
+                    <div class="apbdes-belanja-bar h-2.5 rounded-full transition-all duration-1000" style="width: {{ $balance['persentase_belanja'] ?? 0 }}%"></div>
                 </div>
-                <p class="text-xs text-red-700 font-medium mt-2">{{ $balance['persentase_belanja'] ?? 0 }}% dari Total</p>
+                <p class="text-xs apbdes-belanja-text font-medium mt-2">{{ $balance['persentase_belanja'] ?? 0 }}% dari Total</p>
             </div>
 
             {{-- Selisih/Balance --}}
             <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 text-center border border-blue-200 hover:shadow-lg transition-all duration-300">
-                <div class="w-16 h-16 bg-blue-500 text-white rounded-full mb-4 mx-auto flex items-center justify-center shadow-lg">
+                <div class="w-16 h-16 apbdes-balance rounded-full mb-4 mx-auto flex items-center justify-center shadow-lg">
                     <i class="fas fa-balance-scale text-2xl"></i>
                 </div>
-                <p class="text-blue-800 text-sm font-bold mb-2 uppercase tracking-wide">Selisih</p>
-                <p class="text-2xl font-bold {{ $balance['selisih'] >= 0 ? 'text-green-900' : 'text-red-900' }} mb-3">
+                <p class="text-heading text-sm font-bold mb-2 uppercase tracking-wide">Selisih</p>
+                <p class="text-2xl font-bold {{ $balance['selisih'] >= 0 ? 'apbdes-pendapatan-text' : 'apbdes-belanja-text' }} mb-3">
                     {{ $balance['selisih'] >= 0 ? '+' : '' }}Rp {{ number_format($balance['selisih'] ?? 0, 0, ',', '.') }}
                 </p>
                 <div class="flex items-center justify-center">
                     @if($balance['selisih'] >= 0)
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold apbdes-surplus-light">
                             <i class="fas fa-arrow-up mr-1"></i> Surplus
                         </span>
                     @else
