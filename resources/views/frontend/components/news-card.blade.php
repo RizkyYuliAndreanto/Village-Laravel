@@ -5,7 +5,7 @@
     'url' => '#'
 ])
 
-<div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden flex flex-col w-60 h-full">
+<div class="card-bg card-shadow rounded-xl overflow-hidden flex flex-col w-60 h-full card-hover">
     
     <img src="{{ $image }}" alt="{{ $title }}" class="w-full h-40 object-cover">
     

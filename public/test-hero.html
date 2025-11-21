@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hero Images Test</title>
+    </head>
+    <body>
+        <h1>Testing Hero Images</h1>
+
+        <h2>Image 1: hero section 1.jpg</h2>
+        <img
+            src="../images/hero section 1.jpg"
+            style="max-width: 300px; border: 1px solid #ccc"
+            alt="Hero 1"
+            onload="console.log('Image 1 loaded')"
+            onerror="console.error('Image 1 failed to load'); this.style.border='2px solid red';"
+        />
+
+        <h2>Image 2: hero section 2.jpg</h2>
+        <img
+            src="../images/hero section 2.jpg"
+            style="max-width: 300px; border: 1px solid #ccc"
+            alt="Hero 2"
+            onload="console.log('Image 2 loaded')"
+            onerror="console.error('Image 2 failed to load'); this.style.border='2px solid red';"
+        />
+
+        <h2>Image 3: hero section 3.jpg</h2>
+        <img
+            src="../images/hero section 3.jpg"
+            style="max-width: 300px; border: 1px solid #ccc"
+            alt="Hero 3"
+            onload="console.log('Image 3 loaded')"
+            onerror="console.error('Image 3 failed to load'); this.style.border='2px solid red';"
+        />
+
+        <h2>Slideshow Test</h2>
+        <div
+            style="
+                width: 400px;
+                height: 200px;
+                position: relative;
+                border: 2px solid #333;
+            "
+        >
+            <div
+                class="hero-slide"
+                style="
+                    position: absolute;
+                    inset: 0;
+                    background-size: cover;
+                    background-position: center;
+                    background-image: url('../images/hero section 1.jpg');
+                    opacity: 1;
+                    transition: opacity 1s;
+                "
+            ></div>
+            <div
+                class="hero-slide"
+                style="
+                    position: absolute;
+                    inset: 0;
+                    background-size: cover;
+                    background-position: center;
+                    background-image: url('../images/hero section 2.jpg');
+                    opacity: 0;
+                    transition: opacity 1s;
+                "
+            ></div>
+            <div
+                class="hero-slide"
+                style="
+                    position: absolute;
+                    inset: 0;
+                    background-size: cover;
+                    background-position: center;
+                    background-image: url('../images/hero section 3.jpg');
+                    opacity: 0;
+                    transition: opacity 1s;
+                "
+            ></div>
+        </div>
+
+        <button onclick="testSlideshow()">Test Slideshow</button>
+
+        <script>
+            let currentSlide = 0;
+            const slides = document.querySelectorAll(".hero-slide");
+
+            function testSlideshow() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides.forEach((slide, index) => {
+                    slide.style.opacity = index === currentSlide ? "1" : "0";
+                });
+                console.log("Switched to slide:", currentSlide);
+            }
+
+            // Auto test
+            setInterval(testSlideshow, 2000);
+        </script>
+    </body>
+</html>

@@ -36,7 +36,7 @@ trait HasPopulationValidation
             // Show success notification for consistent data
             Notification::make()
                 ->success()
-                ->title('✅ Validasi Berhasil!')
+                ->title('Validasi Berhasil!')
                 ->body($validation['message'])
                 ->duration(5000)
                 ->send();
@@ -54,8 +54,7 @@ trait HasPopulationValidation
         $differenceFormatted = number_format($difference);
 
         $color = 'danger';
-        $icon = '❌';
-        $title = 'Validasi Populasi Gagal!';
+        $title = 'Error Validasi Populasi!';
 
         if ($validation['difference'] > 0) {
             $detailMessage = "Data yang Anda input ({$actual} orang) melebihi total penduduk dari Demografi Penduduk ({$expected} orang) sebanyak {$differenceFormatted} orang.";
@@ -67,7 +66,6 @@ trait HasPopulationValidation
             ->title($title)
             ->body($validation['message'])
             ->color($color)
-            ->icon($icon)
             ->persistent()
             ->actions([
                 \Filament\Notifications\Actions\Action::make('lihat_demografi')
@@ -82,7 +80,7 @@ trait HasPopulationValidation
                     ->color('gray')
                     ->action(function () use ($validation, $expected, $actual, $detailMessage) {
                         Notification::make()
-                            ->title('📊 Detail Validasi Populasi')
+                            ->title('Detail Validasi Populasi')
                             ->body(
                                 "**Total Demografi Penduduk:** {$expected} orang\n" .
                                     "**Total Input Anda:** {$actual} orang\n" .
@@ -109,7 +107,7 @@ trait HasPopulationValidation
         if ($summary['total_population'] === 0) {
             Notification::make()
                 ->warning()
-                ->title('⚠️ Data Demografi Belum Tersedia')
+                ->title('Data Demografi Belum Tersedia')
                 ->body('Data Demografi Penduduk untuk tahun ini belum tersedia. Harap input data Demografi Penduduk terlebih dahulu untuk memastikan konsistensi data.')
                 ->duration(5000)
                 ->actions([
@@ -132,12 +130,12 @@ trait HasPopulationValidation
 
         foreach ($summary['validations'] as $type => $validation) {
             $typeName = $this->getStatisticTypeName($type);
-            $status = $validation['valid'] === true ? '✅' : ($validation['valid'] === false ? '❌' : '⏳');
+            $status = $validation['valid'] === true ? 'VALID' : ($validation['valid'] === false ? 'TIDAK VALID' : 'BELUM ADA DATA');
             $bodyMessage .= "**{$typeName}:** {$status}\n";
         }
 
         Notification::make()
-            ->title('📊 Ringkasan Validasi Populasi')
+            ->title('Ringkasan Validasi Populasi')
             ->body($bodyMessage)
             ->color($summary['all_consistent'] ? 'success' : 'warning')
             ->duration(8000)

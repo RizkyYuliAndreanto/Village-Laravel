@@ -96,9 +96,10 @@ class PopulationValidationService
             case 'umur':
                 $record = UmurStatistik::where('tahun_id', $tahunId)->first();
                 if (!$record) return 0;
-                return $record->balita_0_4 + $record->anak_5_9 + $record->anak_10_14 +
-                    $record->remaja_15_19 + $record->dewasa_20_39 + $record->dewasa_40_59 +
-                    $record->lansia_60_plus;
+                return $record->umur_0_4 + $record->umur_5_9 + $record->umur_10_14 +
+                    $record->umur_15_19 + $record->umur_20_24 + $record->umur_25_29 +
+                    $record->umur_30_34 + $record->umur_35_39 + $record->umur_40_44 +
+                    $record->umur_45_49 + $record->umur_50_plus;
 
             case 'pekerjaan':
                 $record = PekerjaanStatistik::where('tahun_id', $tahunId)->first();
@@ -127,7 +128,7 @@ class PopulationValidationService
             case 'wajib_pilih':
                 $record = WajibPilihStatistik::where('tahun_id', $tahunId)->first();
                 if (!$record) return 0;
-                return $record->wajib_pilih + $record->tidak_wajib_pilih;
+                return $record->total;
 
             default:
                 return 0;
@@ -142,13 +143,17 @@ class PopulationValidationService
         switch ($resourceType) {
             case 'umur':
                 return collect([
-                    'balita_0_4',
-                    'anak_5_9',
-                    'anak_10_14',
-                    'remaja_15_19',
-                    'dewasa_20_39',
-                    'dewasa_40_59',
-                    'lansia_60_plus'
+                    'umur_0_4',
+                    'umur_5_9',
+                    'umur_10_14',
+                    'umur_15_19',
+                    'umur_20_24',
+                    'umur_25_29',
+                    'umur_30_34',
+                    'umur_35_39',
+                    'umur_40_44',
+                    'umur_45_49',
+                    'umur_50_plus'
                 ])->sum(fn($field) => (int) ($data[$field] ?? 0));
 
             case 'pekerjaan':
@@ -219,12 +224,12 @@ class PopulationValidationService
         $resourceName = $resourceNames[$resourceType] ?? 'Data Statistik';
 
         if ($difference > 0) {
-            return "❌ Total {$resourceName} ({$actual} orang) LEBIH BESAR dari data Demografi Penduduk ({$expected} orang). Kelebihan: {$difference} orang. Harap periksa kembali input data.";
+            return "KESALAHAN: Total {$resourceName} ({$actual} orang) JAUH MELEBIHI total penduduk ({$expected} orang) sebanyak {$difference} orang. Form tidak dapat disimpan karena data tidak sesuai dengan total populasi.";
         } elseif ($difference < 0) {
             $shortage = abs($difference);
-            return "❌ Total {$resourceName} ({$actual} orang) KURANG dari data Demografi Penduduk ({$expected} orang). Kekurangan: {$shortage} orang. Harap lengkapi data yang hilang.";
+            return "KESALAHAN: Total {$resourceName} ({$actual} orang) JAUH KURANG dari total penduduk ({$expected} orang) sebanyak {$shortage} orang. Form tidak dapat disimpan karena data tidak sesuai dengan total populasi.";
         } else {
-            return "✅ Total {$resourceName} ({$actual} orang) SESUAI dengan data Demografi Penduduk ({$expected} orang). Data konsisten!";
+            return "Total {$resourceName} ({$actual} orang) SESUAI dengan data Demografi Penduduk ({$expected} orang). Data konsisten!";
         }
     }
 

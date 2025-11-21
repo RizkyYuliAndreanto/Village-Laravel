@@ -22,7 +22,7 @@ class PpidController extends Controller
      * Route: GET /ppid
      * 
      * @param Request $request
-     * @return array
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request)
     {
@@ -32,62 +32,52 @@ class PpidController extends Controller
         $jenisDokumen = $request->get('jenis_dokumen');
 
         // Query dokumen PPID
-        $dokumen = PpidDokumen::where('status_publikasi', 'published')
-            ->when($search, function ($query, $search) {
+        $dokumen = PpidDokumen::when($search, function ($query, $search) {
                 return $query->where(function ($q) use ($search) {
                     $q->where('judul_dokumen', 'like', "%{$search}%")
-                        ->orWhere('deskripsi', 'like', "%{$search}%")
-                        ->orWhere('kategori_informasi', 'like', "%{$search}%");
+                        ->orWhere('uploader', 'like', "%{$search}%");
                 });
             })
             ->when($kategori, function ($query, $kategori) {
-                return $query->where('kategori_informasi', $kategori);
+                return $query->where('kategori', $kategori);
             })
             ->when($tahun, function ($query, $tahun) {
-                return $query->whereYear('tanggal_dokumen', $tahun);
+                return $query->where('tahun', $tahun);
             })
-            ->when($jenisDokumen, function ($query, $jenisDokumen) {
-                return $query->where('jenis_dokumen', $jenisDokumen);
-            })
-            ->orderBy('tanggal_dokumen', 'desc')
+            ->orderBy('tanggal_upload', 'desc')
             ->paginate(12);
 
         // Data untuk filter
-        $kategoris = PpidDokumen::where('status_publikasi', 'published')
-            ->select('kategori_informasi')
+        $kategoris = PpidDokumen::select('kategori')
             ->distinct()
-            ->pluck('kategori_informasi')
+            ->pluck('kategori')
             ->filter()
             ->sort();
 
-        $jenisDokumens = PpidDokumen::where('status_publikasi', 'published')
-            ->select('jenis_dokumen')
-            ->distinct()
-            ->pluck('jenis_dokumen')
-            ->filter();
+        // Jenis dokumen tidak ada di schema saat ini
+        $jenisDokumens = collect();
 
-        $tahuns = PpidDokumen::where('status_publikasi', 'published')
-            ->selectRaw('YEAR(tanggal_dokumen) as tahun')
+        $tahuns = PpidDokumen::select('tahun')
             ->distinct()
             ->orderBy('tahun', 'desc')
             ->pluck('tahun');
 
         // Statistik
-        $totalDokumen = PpidDokumen::where('status_publikasi', 'published')->count();
-        $totalDownload = PpidDokumen::where('status_publikasi', 'published')->sum('jumlah_download');
+        $totalDokumen = PpidDokumen::count();
+        // Note: download count not available in current schema
+        $totalDownload = 0; // PpidDokumen::sum('jumlah_download');
 
-        return [
-            'dokumen' => $dokumen,
-            'kategoris' => $kategoris,
-            'jenisDokumens' => $jenisDokumens,
-            'tahuns' => $tahuns,
-            'search' => $search,
-            'kategori' => $kategori,
-            'tahun' => $tahun,
-            'jenisDokumen' => $jenisDokumen,
-            'totalDokumen' => $totalDokumen,
-            'totalDownload' => $totalDownload
-        ];
+        return view('frontend.ppid.index', compact(
+            'dokumen',
+            'kategoris',
+            'jenisDokumens',
+            'tahuns',
+            'search',
+            'kategori',
+            'tahun',
+            'totalDokumen',
+            'totalDownload'
+        ));
     }
 
     /**
@@ -95,36 +85,33 @@ class PpidController extends Controller
      * Route: GET /ppid/{id}
      * 
      * @param int $id
-     * @return array
+     * @return \Illuminate\Contracts\View\View
      */
     public function show($id)
     {
-        $dokumen = PpidDokumen::where('status_publikasi', 'published')
-            ->findOrFail($id);
+        $dokumen = PpidDokumen::findOrFail($id);
 
-        // Increment view count
-        $dokumen->increment('jumlah_akses');
+        // Note: access count not available in current schema
+        // $dokumen->increment('jumlah_akses');
 
         // Dokumen terkait dari kategori yang sama
-        $dokumenTerkait = PpidDokumen::where('status_publikasi', 'published')
-            ->where('kategori_informasi', $dokumen->kategori_informasi)
+        $dokumenTerkait = PpidDokumen::where('kategori', $dokumen->kategori)
             ->where('id', '!=', $dokumen->id)
-            ->orderBy('tanggal_dokumen', 'desc')
+            ->orderBy('tanggal_upload', 'desc')
             ->limit(5)
             ->get();
 
         // Dokumen terbaru lainnya
-        $dokumenTerbaru = PpidDokumen::where('status_publikasi', 'published')
-            ->where('id', '!=', $dokumen->id)
-            ->orderBy('tanggal_dokumen', 'desc')
+        $dokumenTerbaru = PpidDokumen::where('id', '!=', $dokumen->id)
+            ->orderBy('tanggal_upload', 'desc')
             ->limit(5)
             ->get();
 
-        return [
-            'dokumen' => $dokumen,
-            'dokumenTerkait' => $dokumenTerkait,
-            'dokumenTerbaru' => $dokumenTerbaru
-        ];
+        return view('frontend.ppid.show', compact(
+            'dokumen',
+            'dokumenTerkait',
+            'dokumenTerbaru'
+        ));
     }
 
     /**
@@ -140,8 +127,7 @@ class PpidController extends Controller
         $search = $request->get('search');
         $tahun = $request->get('tahun');
 
-        $dokumen = PpidDokumen::where('status_publikasi', 'published')
-            ->where('jenis_dokumen', $jenis)
+        $dokumen = PpidDokumen::where('kategori', $jenis)
             ->when($search, function ($query, $search) {
                 return $query->where(function ($q) use ($search) {
                     $q->where('judul_dokumen', 'like', "%{$search}%")
@@ -149,20 +135,18 @@ class PpidController extends Controller
                 });
             })
             ->when($tahun, function ($query, $tahun) {
-                return $query->whereYear('tanggal_dokumen', $tahun);
+                return $query->where('tahun', $tahun);
             })
-            ->orderBy('tanggal_dokumen', 'desc')
+            ->orderBy('tanggal_upload', 'desc')
             ->paginate(12);
 
-        $tahuns = PpidDokumen::where('status_publikasi', 'published')
-            ->where('jenis_dokumen', $jenis)
-            ->selectRaw('YEAR(tanggal_dokumen) as tahun')
+        $tahuns = PpidDokumen::where('kategori', $jenis)
+            ->select('tahun')
             ->distinct()
             ->orderBy('tahun', 'desc')
             ->pluck('tahun');
 
-        $totalDokumen = PpidDokumen::where('status_publikasi', 'published')
-            ->where('jenis_dokumen', $jenis)
+        $totalDokumen = PpidDokumen::where('kategori', $jenis)
             ->count();
 
         // Deskripsi jenis dokumen
@@ -189,46 +173,64 @@ class PpidController extends Controller
      * 
      * @param string $kategori
      * @param Request $request
-     * @return array
+     * @return \Illuminate\Contracts\View\View
      */
     public function kategori($kategori, Request $request)
     {
         $search = $request->get('search');
         $tahun = $request->get('tahun');
+        $sort = $request->get('sort', 'terbaru');
 
-        $dokumen = PpidDokumen::where('status_publikasi', 'published')
-            ->where('kategori_informasi', $kategori)
+        $query = PpidDokumen::where('kategori', $kategori)
             ->when($search, function ($query, $search) {
-                return $query->where(function ($q) use ($search) {
-                    $q->where('judul_dokumen', 'like', "%{$search}%")
-                        ->orWhere('deskripsi', 'like', "%{$search}%");
-                });
+                return $query->where('judul_dokumen', 'like', "%{$search}%");
             })
             ->when($tahun, function ($query, $tahun) {
-                return $query->whereYear('tanggal_dokumen', $tahun);
-            })
-            ->orderBy('tanggal_dokumen', 'desc')
-            ->paginate(12);
+                return $query->where('tahun', $tahun);
+            });
 
-        $tahuns = PpidDokumen::where('status_publikasi', 'published')
-            ->where('kategori_informasi', $kategori)
-            ->selectRaw('YEAR(tanggal_dokumen) as tahun')
+        // Sorting
+        switch ($sort) {
+            case 'terlama':
+                $query->orderBy('tanggal_upload', 'asc');
+                break;
+            case 'a-z':
+                $query->orderBy('judul_dokumen', 'asc');
+                break;
+            case 'z-a':
+                $query->orderBy('judul_dokumen', 'desc');
+                break;
+            default: // terbaru
+                $query->orderBy('tanggal_upload', 'desc');
+                break;
+        }
+
+        $dokumen = $query->paginate(12);
+
+        // Get available years for this category
+        $tahunList = PpidDokumen::where('kategori', $kategori)
+            ->select('tahun')
             ->distinct()
             ->orderBy('tahun', 'desc')
-            ->pluck('tahun');
+            ->get();
 
-        $totalDokumen = PpidDokumen::where('status_publikasi', 'published')
-            ->where('kategori_informasi', $kategori)
-            ->count();
+        // Get other categories
+        $kategoriLain = PpidDokumen::where('kategori', '!=', $kategori)
+            ->selectRaw('kategori, COUNT(*) as total')
+            ->groupBy('kategori')
+            ->orderBy('total', 'desc')
+            ->limit(4)
+            ->get();
 
-        return [
-            'dokumen' => $dokumen,
-            'kategori' => $kategori,
-            'tahuns' => $tahuns,
-            'search' => $search,
-            'tahun' => $tahun,
-            'totalDokumen' => $totalDokumen
-        ];
+        return view('frontend.ppid.kategori', compact(
+            'dokumen',
+            'kategori',
+            'tahunList',
+            'kategoriLain',
+            'search',
+            'tahun',
+            'sort'
+        ));
     }
 
     /**
@@ -240,18 +242,17 @@ class PpidController extends Controller
      */
     public function download($id)
     {
-        $dokumen = PpidDokumen::where('status_publikasi', 'published')
-            ->findOrFail($id);
+        $dokumen = PpidDokumen::findOrFail($id);
 
-        // Increment download count
-        $dokumen->increment('jumlah_download');
+        // Note: download count not available in current schema
+        // $dokumen->increment('jumlah_download');
 
         // Log download (optional - bisa ditambahkan model DownloadLog)
 
         if ($dokumen->file_url && file_exists(public_path($dokumen->file_url))) {
             return response()->download(
                 public_path($dokumen->file_url),
-                $dokumen->nama_file ?? $dokumen->judul_dokumen . '.pdf'
+                $dokumen->judul_dokumen . '.pdf'
             );
         }
 
@@ -275,15 +276,10 @@ class PpidController extends Controller
             return response()->json([]);
         }
 
-        $results = PpidDokumen::where('status_publikasi', 'published')
-            ->where(function ($q) use ($query) {
-                $q->where('judul_dokumen', 'like', "%{$query}%")
-                    ->orWhere('deskripsi', 'like', "%{$query}%")
-                    ->orWhere('kategori_informasi', 'like', "%{$query}%");
-            })
-            ->orderBy('tanggal_dokumen', 'desc')
+        $results = PpidDokumen::where('judul_dokumen', 'like', "%{$query}%")
+            ->orderBy('tanggal_upload', 'desc')
             ->limit(10)
-            ->get(['id', 'judul_dokumen', 'kategori_informasi', 'tanggal_dokumen', 'jenis_dokumen']);
+            ->get(['id', 'judul_dokumen', 'kategori', 'tanggal_upload', 'tahun']);
 
         return response()->json($results);
     }
@@ -297,24 +293,22 @@ class PpidController extends Controller
     public function widget()
     {
         // Dokumen terbaru
-        $dokumenTerbaru = PpidDokumen::where('status_publikasi', 'published')
-            ->orderBy('tanggal_dokumen', 'desc')
+        $dokumenTerbaru = PpidDokumen::orderBy('tanggal_upload', 'desc')
             ->limit(5)
-            ->get(['id', 'judul_dokumen', 'tanggal_dokumen', 'jenis_dokumen']);
+            ->get(['id', 'judul_dokumen', 'tanggal_upload', 'kategori']);
 
-        // Dokumen paling banyak didownload
-        $dokumenPopuler = PpidDokumen::where('status_publikasi', 'published')
-            ->orderBy('jumlah_download', 'desc')
+        // Dokumen terbaru (menggantikan populer karena tidak ada jumlah_download)
+        $populerDokumen = PpidDokumen::orderBy('tanggal_upload', 'desc')
             ->limit(5)
-            ->get(['id', 'judul_dokumen', 'jumlah_download', 'jenis_dokumen']);
+            ->get(['id', 'judul_dokumen', 'kategori', 'tahun']);
 
-        // Statistik
-        $totalDokumen = PpidDokumen::where('status_publikasi', 'published')->count();
-        $totalDownload = PpidDokumen::where('status_publikasi', 'published')->sum('jumlah_download');
+        // Total statistik
+        $totalDokumen = PpidDokumen::count();
+        $totalDownload = 0; // PpidDokumen::sum('jumlah_download');
 
         return [
             'dokumenTerbaru' => $dokumenTerbaru,
-            'dokumenPopuler' => $dokumenPopuler,
+            'dokumenPopuler' => $populerDokumen,
             'totalDokumen' => $totalDokumen,
             'totalDownload' => $totalDownload
         ];
@@ -328,27 +322,25 @@ class PpidController extends Controller
      */
     public function statistik()
     {
-        $statistikPerJenis = PpidDokumen::where('status_publikasi', 'published')
-            ->selectRaw('jenis_dokumen, COUNT(*) as total, SUM(jumlah_download) as total_download')
-            ->groupBy('jenis_dokumen')
-            ->get();
-
-        $statistikPerKategori = PpidDokumen::where('status_publikasi', 'published')
-            ->selectRaw('kategori_informasi, COUNT(*) as total')
-            ->groupBy('kategori_informasi')
+        $statistikPerKategori = PpidDokumen::selectRaw('kategori, COUNT(*) as total')
+            ->groupBy('kategori')
             ->orderBy('total', 'desc')
             ->get();
 
-        $statistikPerBulan = PpidDokumen::where('status_publikasi', 'published')
-            ->whereYear('created_at', date('Y'))
-            ->selectRaw('MONTH(created_at) as bulan, COUNT(*) as total')
+        $statistikPerTahun = PpidDokumen::selectRaw('tahun, COUNT(*) as total')
+            ->groupBy('tahun')
+            ->orderBy('tahun', 'desc')
+            ->get();
+
+        $statistikPerBulan = PpidDokumen::whereYear('tanggal_upload', date('Y'))
+            ->selectRaw('MONTH(tanggal_upload) as bulan, COUNT(*) as total')
             ->groupBy('bulan')
             ->orderBy('bulan')
             ->get();
 
         return [
-            'perJenis' => $statistikPerJenis,
             'perKategori' => $statistikPerKategori,
+            'perTahun' => $statistikPerTahun,
             'perBulan' => $statistikPerBulan
         ];
     }
@@ -358,29 +350,69 @@ class PpidController extends Controller
      * Route: GET /ppid/arsip/{tahun}
      * 
      * @param int $tahun
-     * @return array
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\View
      */
-    public function arsip($tahun)
+    public function arsip($tahun, Request $request)
     {
-        $dokumen = PpidDokumen::where('status_publikasi', 'published')
-            ->whereYear('tanggal_dokumen', $tahun)
-            ->orderBy('tanggal_dokumen', 'desc')
-            ->paginate(15);
+        $search = $request->get('search');
+        $kategori = $request->get('kategori');
+        $bulan = $request->get('bulan');
+        $sort = $request->get('sort', 'terbaru');
 
-        // Statistik per bulan dalam tahun tersebut
-        $statistikBulan = PpidDokumen::where('status_publikasi', 'published')
-            ->whereYear('tanggal_dokumen', $tahun)
-            ->selectRaw('MONTH(tanggal_dokumen) as bulan, COUNT(*) as total')
-            ->groupBy('bulan')
+        $query = PpidDokumen::where('tahun', $tahun)
+            ->when($search, function ($query, $search) {
+                return $query->where('judul_dokumen', 'like', "%{$search}%");
+            })
+            ->when($kategori, function ($query, $kategori) {
+                return $query->where('kategori', $kategori);
+            })
+            ->when($bulan, function ($query, $bulan) {
+                return $query->whereMonth('tanggal_upload', $bulan);
+            });
+
+        // Sorting
+        switch ($sort) {
+            case 'terlama':
+                $query->orderBy('tanggal_upload', 'asc');
+                break;
+            case 'a-z':
+                $query->orderBy('judul_dokumen', 'asc');
+                break;
+            case 'z-a':
+                $query->orderBy('judul_dokumen', 'desc');
+                break;
+            default: // terbaru
+                $query->orderBy('tanggal_upload', 'desc');
+                break;
+        }
+
+        $dokumen = $query->paginate(15);
+
+        // Get available categories for this year
+        $kategoriList = PpidDokumen::where('tahun', $tahun)
+            ->select('kategori')
+            ->distinct()
+            ->orderBy('kategori')
+            ->get();
+
+        // Get available months for this year
+        $bulanList = PpidDokumen::where('tahun', $tahun)
+            ->selectRaw('MONTH(tanggal_upload) as bulan')
+            ->distinct()
             ->orderBy('bulan')
-            ->pluck('total', 'bulan')
-            ->toArray();
+            ->get();
+
+        // Get available years
+        $tahunTersedia = PpidDokumen::selectRaw('tahun, COUNT(*) as total')
+            ->groupBy('tahun')
+            ->orderBy('tahun', 'desc')
+            ->get();
 
         // Statistik per kategori dalam tahun tersebut
-        $statistikKategori = PpidDokumen::where('status_publikasi', 'published')
-            ->whereYear('tanggal_dokumen', $tahun)
-            ->selectRaw('kategori_informasi, COUNT(*) as total')
-            ->groupBy('kategori_informasi')
+        $statistikKategori = PpidDokumen::where('tahun', $tahun)
+            ->selectRaw('kategori, COUNT(*) as total')
+            ->groupBy('kategori')
             ->orderBy('total', 'desc')
             ->get();
 
@@ -399,12 +431,18 @@ class PpidController extends Controller
             12 => 'Desember'
         ];
 
-        return [
-            'dokumen' => $dokumen,
-            'tahun' => $tahun,
-            'statistikBulan' => $statistikBulan,
-            'statistikKategori' => $statistikKategori,
-            'namaBulan' => $namaBulan
-        ];
+        return view('frontend.ppid.arsip', compact(
+            'dokumen',
+            'tahun',
+            'kategoriList',
+            'bulanList',
+            'tahunTersedia',
+            'statistikKategori',
+            'namaBulan',
+            'search',
+            'kategori',
+            'bulan',
+            'sort'
+        ));
     }
 }

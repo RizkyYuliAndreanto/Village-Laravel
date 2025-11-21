@@ -89,7 +89,7 @@ return [
             'handler_with' => [
                 'host' => env('PAPERTRAIL_URL'),
                 'port' => env('PAPERTRAIL_PORT'),
-                'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
+                'connectionString' => 'tls://' . env('PAPERTRAIL_URL') . ':' . env('PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
         ],
@@ -125,6 +125,47 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        // Security Logging Channels
+        'security' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/security.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'days' => env('LOG_SECURITY_DAYS', 30),
+            'replace_placeholders' => true,
+        ],
+
+        'auth_failures' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/auth-failures.log'),
+            'level' => env('LOG_LEVEL', 'warning'),
+            'days' => env('LOG_AUTH_FAILURES_DAYS', 30),
+            'replace_placeholders' => true,
+        ],
+
+        'xss_attempts' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/xss-attempts.log'),
+            'level' => env('LOG_LEVEL', 'warning'),
+            'days' => env('LOG_XSS_DAYS', 30),
+            'replace_placeholders' => true,
+        ],
+
+        'sql_injection' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/sql-injection.log'),
+            'level' => env('LOG_LEVEL', 'critical'),
+            'days' => env('LOG_SQL_INJECTION_DAYS', 30),
+            'replace_placeholders' => true,
+        ],
+
+        'ddos_attempts' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/ddos-attempts.log'),
+            'level' => env('LOG_LEVEL', 'warning'),
+            'days' => env('LOG_DDOS_DAYS', 30),
+            'replace_placeholders' => true,
         ],
 
     ],

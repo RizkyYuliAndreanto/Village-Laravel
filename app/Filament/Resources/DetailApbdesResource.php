@@ -25,6 +25,9 @@ class DetailApbdesResource extends Resource
 
     protected static ?string $navigationGroup = 'APBDes';
 
+    // Sembunyikan dari navigation menu
+    protected static bool $shouldRegisterNavigation = false;
+
     public static function form(Form $form): Form
     {
         return $form

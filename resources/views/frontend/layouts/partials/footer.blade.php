@@ -1,61 +1,127 @@
-<footer class="bg-blue-100 dark:bg-blue-950 text-gray-800 dark:text-gray-200 border-t border-blue-200 dark:border-blue-800 shadow-inner">
-    <div class="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+<footer class="relative bg-gradient-to-r from-blue-800 via-blue-700 to-blue-800 text-white overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 bg-gradient-to-br from-primary-600/10 to-secondary-600/10">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent"></div>
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400"></div>
+    </div>
+
+    <div class="relative container mx-auto py-16 px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
             {{-- Logo & Deskripsi --}}
-            <div class="md:col-span-1 lg:col-span-2 flex items-start gap-4">
-                <img class="h-30 w-auto rounded-md shadow-sm"
-                    src="{{ asset('images/logo-placeholder.jpg') }}"
-                    alt="Logo {{ config('app.name', 'VillageLaravel') }}">
-                <p class="text-gray-700 dark:text-gray-300 text-md max-w-md leading-relaxed">
-                    Sistem Informasi Manajemen Desa <strong>(VillageLaravel)</strong> hadir untuk membantu digitalisasi
-                    dan mempermudah pengelolaan data administrasi di tingkat desa.
+            <div class="lg:col-span-2">
+                <div class="flex items-start gap-6 mb-6">
+                    <div class="relative">
+                        <img class="h-16 w-16 rounded-xl shadow-lg border-2 border-blue-300/30"
+                            src="{{ asset('images/logo-placeholder.jpg') }}"
+                            alt="Logo Desa Banyukambang">
+                        <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-400/20 to-transparent"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-2">Desa Banyukambang</h3>
+                        <p class="text-blue-200 font-medium">Kec. Wonoasri, Kab. Madiun</p>
+                    </div>
+                </div>
+                <p class="text-blue-100 text-base leading-relaxed max-w-md">
+                    Portal digital terpadu untuk layanan masyarakat, informasi desa, dan pengembangan UMKM lokal. 
+                    Membangun transparansi dan aksesibilitas dalam pemerintahan desa.
                 </p>
+                
+                <!-- Social Media -->
+                <div class="flex space-x-4 mt-6">
+                    <a href="#" class="bg-blue-600/50 hover:bg-blue-500 p-3 rounded-full transition-all duration-300 hover:scale-110 group">
+                        <i class="fab fa-facebook-f text-white group-hover:rotate-12 transition-transform duration-300"></i>
+                    </a>
+                    <a href="#" class="bg-blue-600/50 hover:bg-blue-500 p-3 rounded-full transition-all duration-300 hover:scale-110 group">
+                        <i class="fab fa-instagram text-white group-hover:rotate-12 transition-transform duration-300"></i>
+                    </a>
+                    <a href="#" class="bg-blue-600/50 hover:bg-blue-500 p-3 rounded-full transition-all duration-300 hover:scale-110 group">
+                        <i class="fab fa-youtube text-white group-hover:rotate-12 transition-transform duration-300"></i>
+                    </a>
+                </div>
             </div>
 
             {{-- Tautan Cepat --}}
             <div>
-                <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider">
+                <h3 class="text-lg font-bold text-white mb-6 flex items-center">
+                    <i class="fas fa-link mr-2 text-blue-300"></i>
                     Tautan Cepat
                 </h3>
-                <ul class="mt-4 space-y-2">
-                    <li><a href="{{ route('home') }}" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Home</a></li>
-                    <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Tentang Kami</a></li>
-                    <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Layanan</a></li>
-                    <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Kontak</a></li>
+                <ul class="space-y-3">
+                    <li><a href="{{ route('home') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
+                        <i class="fas fa-home w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Beranda</a></li>
+                    <li><a href="{{ route('profil-desa.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
+                        <i class="fas fa-info-circle w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Profil Desa</a></li>
+                    <li><a href="{{ route('infografis.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
+                        <i class="fas fa-chart-bar w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Infografis</a></li>
+                    <li><a href="{{ route('umkm.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
+                        <i class="fas fa-store w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>UMKM</a></li>
                 </ul>
             </div>
 
-            {{-- Lainnya --}}
+            {{-- Layanan --}}
             <div>
-                <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider">
-                    Lainnya
+                <h3 class="text-lg font-bold text-white mb-6 flex items-center">
+                    <i class="fas fa-cogs mr-2 text-blue-300"></i>
+                    Layanan
                 </h3>
-                <ul class="mt-4 space-y-2">
-                    <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Login Aparat</a></li>
-                    <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Kebijakan Privasi</a></li>
-                    <li><a href="#" class="text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Syarat & Ketentuan</a></li>
+                <ul class="space-y-3">
+                    <li><a href="{{ route('belanja.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
+                        <i class="fas fa-coins w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>APBDes</a></li>
+                    <li><a href="{{ route('berita.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
+                        <i class="fas fa-newspaper w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Berita</a></li>
+                    <li><a href="{{ route('ppid.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
+                        <i class="fas fa-folder-open w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>PPID</a></li>
+                    <li><a href="/admin" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
+                        <i class="fas fa-user-shield w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Login Admin</a></li>
                 </ul>
             </div>
+        </div>
 
-            {{-- Login/Register --}}
-            <div class="hidden sm:flex sm:flex-col sm:gap-2">
-                @auth
-                    <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Dashboard</a>
-                @else
-                    <a href="#" class="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-5">Log in</a>
-                    @if (Route::has('register'))
-                        <a href="#" class="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-5"> Register</a>
-                    @endif
-                @endauth
+        {{-- Kontak Info --}}
+        <div class="mt-12 pt-8 border-t border-blue-600/30">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-600/50 p-3 rounded-full">
+                        <i class="fas fa-map-marker-alt text-blue-200"></i>
+                    </div>
+                    <div>
+                        <p class="text-blue-200 text-sm">Alamat</p>
+                        <p class="text-white font-medium">Desa Banyukambang, Wonoasri</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-600/50 p-3 rounded-full">
+                        <i class="fas fa-phone text-blue-200"></i>
+                    </div>
+                    <div>
+                        <p class="text-blue-200 text-sm">Telepon</p>
+                        <p class="text-white font-medium">+62 xxx xxxx xxxx</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-600/50 p-3 rounded-full">
+                        <i class="fas fa-envelope text-blue-200"></i>
+                    </div>
+                    <div>
+                        <p class="text-blue-200 text-sm">Email</p>
+                        <p class="text-white font-medium">info@desabanyukambang.id</p>
+                    </div>
+                </div>
             </div>
         </div>
 
         {{-- Copyright --}}
-        <div class="mt-12 border-t border-blue-200 dark:border-blue-800 pt-6 text-center">
-            <p class="text-gray-700 dark:text-gray-400 text-sm">
-                &copy; {{ date('Y') }} <strong>{{ config('app.name', 'VillageLaravel') }}</strong>. Semua hak dilindungi.
-            </p>
+        <div class="mt-12 pt-8 border-t border-blue-600/30 text-center">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <p class="text-blue-200 text-sm">
+                    &copy; {{ date('Y') }} <strong class="text-white">Desa Banyukambang</strong>. Hak cipta dilindungi undang-undang.
+                </p>
+                <p class="text-blue-300 text-sm">
+                    <i class="fas fa-code mr-1"></i>
+                    Dikembangkan dengan <i class="fas fa-heart text-red-400 mx-1"></i> untuk transparansi desa
+                </p>
+            </div>
         </div>
     </div>
 </footer>

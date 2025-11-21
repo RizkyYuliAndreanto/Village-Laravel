@@ -28,7 +28,8 @@ return new class extends Migration
             $table->integer('umur_40_44')->default(0)->nullable(false);
             $table->integer('umur_45_49')->default(0)->nullable(false);
             $table->integer('umur_50_plus')->default(0)->nullable(false);
-            $table->timestamps(); // created_at dan updated_at (sesuai Knex)
+            $table->timestamp('create_at')->useCurrent(); // create_at
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate(); // updated_at
         });
     }
 

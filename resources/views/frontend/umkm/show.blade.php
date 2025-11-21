@@ -1,342 +1,244 @@
-@extends('frontend.layout')
+@extends('frontend.layouts.main')
 
 @section('title', $umkm->nama . ' - Detail UMKM')
+@section('meta_description', 'Detail lengkap UMKM ' . $umkm->nama . ' - ' . Str::limit($umkm->deskripsi, 150))
 
 @section('content')
-<div class="container">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{{ route('umkm.index') }}">
-                    <i class="fas fa-home me-1"></i>UMKM
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{{ route('umkm.kategori', $umkm->kategori->slug) }}">
-                    {{ $umkm->kategori->nama_kategori }}
-                </a>
-            </li>
-            <li class="breadcrumb-item active">{{ $umkm->nama }}</li>
-        </ol>
-    </nav>
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-cyan-300 via-cyan-400 to-teal-400 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Breadcrumb -->
+        <nav class="mb-6">
+            <ol class="flex items-center space-x-2 text-gray-700 text-sm">
+                <li>
+                    <a href="{{ route('umkm.index') }}" class="hover:text-gray-800 transition-colors duration-200">
+                        <i class="fas fa-home mr-1"></i>UMKM
+                    </a>
+                </li>
+                <li class="flex items-center">
+                    <i class="fas fa-chevron-right mx-2 text-xs"></i>
+                    <a href="{{ route('umkm.kategori', $umkm->kategori->slug) }}" class="hover:text-gray-800 transition-colors duration-200">
+                        {{ $umkm->kategori->nama_kategori }}
+                    </a>
+                </li>
+                <li class="flex items-center">
+                    <i class="fas fa-chevron-right mx-2 text-xs"></i>
+                    <span class="text-gray-800 font-medium">{{ $umkm->nama }}</span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</section>
 
-    <div class="row">
-        <!-- Main Content -->
-        <div class="col-lg-8">
-            <!-- UMKM Header -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 text-center">
+<!-- Main Content -->
+<section class="py-12 bg-gradient-to-br from-cyan-50 via-white to-cyan-100 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- UMKM Header -->
+                <div class="bg-white rounded-xl shadow-lg border border-cyan-100/50 p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="text-center">
                             <!-- UMKM Logo -->
                             @if($umkm->logo_url)
                                 <img src="{{ $umkm->logo_url }}" 
                                      alt="{{ $umkm->nama }}" 
-                                     class="img-fluid rounded shadow mb-3"
-                                     style="max-height: 200px;">
+                                     class="max-h-48 max-w-full rounded-lg shadow-md mb-4 mx-auto">
                             @else
-                                <div class="bg-light rounded p-4 mb-3">
-                                    <i class="fas fa-store fa-5x text-muted"></i>
+                                <div class="bg-cyan-50 rounded-lg p-8 mb-4">
+                                    <i class="fas fa-store text-6xl text-cyan-400"></i>
                                 </div>
                             @endif
                             
                             <!-- Kategori Badge -->
-                            <div>
-                                <span class="badge bg-primary fs-6 px-3 py-2">
-                                    {{ $umkm->kategori->icon }} {{ $umkm->kategori->nama_kategori }}
-                                </span>
-                            </div>
+                            <span class="inline-block bg-gradient-to-r from-cyan-500 to-teal-500 text-white text-sm font-semibold px-4 py-2 rounded-full">
+                                {{ $umkm->kategori->icon }} {{ $umkm->kategori->nama_kategori }}
+                            </span>
                         </div>
 
-                        <div class="col-md-8">
+                        <div class="md:col-span-2">
                             <!-- UMKM Name & Owner -->
-                            <h1 class="fw-bold mb-2">{{ $umkm->nama }}</h1>
-                            <p class="text-muted mb-3 fs-5">
-                                <i class="fas fa-user me-2"></i>Pemilik: <strong>{{ $umkm->pemilik }}</strong>
+                            <h1 class="text-3xl font-bold text-teal-900 mb-3">{{ $umkm->nama }}</h1>
+                            <p class="text-teal-700 mb-4 text-lg flex items-center">
+                                <i class="fas fa-user mr-2"></i>
+                                <span>Pemilik: <strong>{{ $umkm->pemilik }}</strong></span>
                             </p>
 
                             <!-- Contact Information -->
-                            <div class="contact-section">
-                                <h5 class="fw-bold mb-3">
-                                    <i class="fas fa-address-book me-2"></i>Informasi Kontak
+                            <div>
+                                <h5 class="text-xl font-bold text-teal-800 mb-4 flex items-center">
+                                    <i class="fas fa-address-book mr-2"></i>Informasi Kontak
                                 </h5>
                                 
-                                <!-- Address -->
-                                @if($umkm->alamat || $umkm->dusun)
-                                    <div class="mb-2">
-                                        <i class="fas fa-map-marker-alt text-danger me-2"></i>
-                                        <strong>Alamat:</strong>
-                                        <div class="ms-4">
-                                            @if($umkm->alamat)
-                                                {{ $umkm->alamat }}<br>
-                                            @endif
-                                            @if($umkm->dusun)
-                                                Dusun {{ $umkm->dusun }}
-                                                @if($umkm->rt && $umkm->rw)
-                                                    RT {{ $umkm->rt }}/RW {{ $umkm->rw }}
-                                                @endif
-                                            @endif
+                                <div class="space-y-3">
+                                    <!-- Address -->
+                                    @if($umkm->alamat || $umkm->dusun)
+                                        <div class="flex items-start">
+                                            <i class="fas fa-map-marker-alt text-red-500 mr-3 mt-1"></i>
+                                            <div>
+                                                <strong class="text-teal-800">Alamat:</strong>
+                                                <div class="text-gray-700 mt-1">
+                                                    @if($umkm->alamat)
+                                                        {{ $umkm->alamat }}<br>
+                                                    @endif
+                                                    @if($umkm->dusun)
+                                                        Dusun {{ $umkm->dusun }}
+                                                        @if($umkm->rt && $umkm->rw)
+                                                            RT {{ $umkm->rt }}/RW {{ $umkm->rw }}
+                                                        @endif
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                @endif
-
-                                <!-- Phone -->
-                                @if($umkm->telepon)
-                                    <div class="mb-2">
-                                        <i class="fas fa-phone text-success me-2"></i>
-                                        <strong>Telepon:</strong>
-                                        <a href="tel:{{ $umkm->telepon }}" class="text-decoration-none">
-                                            {{ $umkm->telepon }}
-                                        </a>
-                                    </div>
-                                @endif
-
-                                <!-- Email -->
-                                @if($umkm->email)
-                                    <div class="mb-2">
-                                        <i class="fas fa-envelope text-info me-2"></i>
-                                        <strong>Email:</strong>
-                                        <a href="mailto:{{ $umkm->email }}" class="text-decoration-none">
-                                            {{ $umkm->email }}
-                                        </a>
-                                    </div>
-                                @endif
-                            </div>
-
-                            <!-- Social Media & Contact Buttons -->
-                            <div class="social-contact mt-4">
-                                <h6 class="fw-bold mb-2">Hubungi Kami:</h6>
-                                <div class="d-flex flex-wrap gap-2">
-                                    @if($umkm->whatsapp)
-                                        <a href="https://wa.me/{{ $umkm->whatsapp }}" 
-                                           class="btn btn-success" 
-                                           target="_blank">
-                                            <i class="fab fa-whatsapp me-1"></i>WhatsApp
-                                        </a>
                                     @endif
-                                    
-                                    @if($umkm->sosial_instagram)
-                                        <a href="https://instagram.com/{{ ltrim($umkm->sosial_instagram, '@') }}" 
-                                           class="btn btn-danger" 
-                                           target="_blank">
-                                            <i class="fab fa-instagram me-1"></i>Instagram
-                                        </a>
+
+                                    <!-- Phone -->
+                                    @if($umkm->telepon)
+                                        <div class="flex items-center">
+                                            <i class="fas fa-phone text-green-500 mr-3"></i>
+                                            <div>
+                                                <strong class="text-teal-800">Telepon:</strong>
+                                                <a href="tel:{{ $umkm->telepon }}" class="text-cyan-600 hover:text-cyan-800 ml-2">
+                                                    {{ $umkm->telepon }}
+                                                </a>
+                                            </div>
+                                        </div>
                                     @endif
-                                    
-                                    @if($umkm->sosial_facebook)
-                                        <a href="{{ $umkm->sosial_facebook }}" 
-                                           class="btn btn-primary" 
-                                           target="_blank">
-                                            <i class="fab fa-facebook me-1"></i>Facebook
-                                        </a>
-                                    @endif
-                                    
-                                    @if($umkm->website)
-                                        <a href="{{ $umkm->website }}" 
-                                           class="btn btn-info" 
-                                           target="_blank">
-                                            <i class="fas fa-globe me-1"></i>Website
-                                        </a>
+
+                                    <!-- Email -->
+                                    @if($umkm->email)
+                                        <div class="flex items-center">
+                                            <i class="fas fa-envelope text-cyan-500 mr-3"></i>
+                                            <div>
+                                                <strong class="text-teal-800">Email:</strong>
+                                                <a href="mailto:{{ $umkm->email }}" class="text-cyan-600 hover:text-cyan-800 ml-2">
+                                                    {{ $umkm->email }}
+                                                </a>
+                                            </div>
+                                        </div>
                                     @endif
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Description -->
+                @if($umkm->deskripsi)
+                    <div class="bg-white rounded-xl shadow-lg border border-cyan-100/50 p-6">
+                        <h3 class="text-xl font-bold text-teal-800 mb-4 flex items-center">
+                            <i class="fas fa-info-circle mr-2"></i>Tentang UMKM
+                        </h3>
+                        <div class="text-gray-700 leading-relaxed">
+                            {!! nl2br(e($umkm->deskripsi)) !!}
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Products -->
+                @if($umkm->produk)
+                    <div class="bg-white rounded-xl shadow-lg border border-cyan-100/50 p-6">
+                        <h3 class="text-xl font-bold text-teal-800 mb-4 flex items-center">
+                            <i class="fas fa-box-open mr-2"></i>Produk & Layanan
+                        </h3>
+                        <div class="text-gray-700 leading-relaxed">
+                            {!! nl2br(e($umkm->produk)) !!}
+                        </div>
+                    </div>
+                @endif
             </div>
 
-            <!-- Description Section -->
-            @if($umkm->deskripsi)
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="fw-bold mb-0">
-                            <i class="fas fa-info-circle me-2"></i>Tentang {{ $umkm->nama }}
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="mb-0" style="line-height: 1.8;">
-                            {!! nl2br(e($umkm->deskripsi)) !!}
-                        </p>
-                    </div>
-                </div>
-            @endif
-
-            <!-- Products/Services Section -->
-            @if($umkm->produk_layanan)
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="fw-bold mb-0">
-                            <i class="fas fa-box me-2"></i>Produk & Layanan
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="mb-0" style="line-height: 1.8;">
-                            {!! nl2br(e($umkm->produk_layanan)) !!}
-                        </p>
-                    </div>
-                </div>
-            @endif
-
-            <!-- Operating Hours -->
-            @if($umkm->jam_operasional)
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="fw-bold mb-0">
-                            <i class="fas fa-clock me-2"></i>Jam Operasional
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="mb-0" style="line-height: 1.8;">
-                            {!! nl2br(e($umkm->jam_operasional)) !!}
-                        </p>
-                    </div>
-                </div>
-            @endif
-        </div>
-
-        <!-- Sidebar -->
-        <div class="col-lg-4">
-            <!-- Business Info Card -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h6 class="fw-bold mb-0">
-                        <i class="fas fa-chart-line me-2"></i>Informasi Bisnis
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <!-- Business Status -->
-                    <div class="mb-3">
-                        <strong>Status Bisnis:</strong><br>
-                        @if($umkm->status_aktif)
-                            <span class="badge bg-success">
-                                <i class="fas fa-check-circle me-1"></i>Aktif
-                            </span>
-                        @else
-                            <span class="badge bg-secondary">
-                                <i class="fas fa-pause-circle me-1"></i>Tidak Aktif
-                            </span>
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Social Media & Contact -->
+                <div class="bg-white rounded-xl shadow-lg border border-cyan-100/50 p-6">
+                    <h3 class="text-lg font-bold text-teal-800 mb-4 flex items-center">
+                        <i class="fas fa-share-alt mr-2"></i>Hubungi Kami
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        @if($umkm->whatsapp)
+                            <a href="https://wa.me/{{ $umkm->whatsapp }}" 
+                               target="_blank"
+                               class="flex items-center w-full bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                                <i class="fab fa-whatsapp mr-3 text-lg"></i>
+                                <span>WhatsApp</span>
+                            </a>
+                        @endif
+                        
+                        @if($umkm->sosial_instagram)
+                            <a href="https://instagram.com/{{ ltrim($umkm->sosial_instagram, '@') }}" 
+                               target="_blank"
+                               class="flex items-center w-full bg-pink-500 hover:bg-pink-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                                <i class="fab fa-instagram mr-3 text-lg"></i>
+                                <span>Instagram</span>
+                            </a>
+                        @endif
+                        
+                        @if($umkm->sosial_facebook)
+                            <a href="https://facebook.com/{{ $umkm->sosial_facebook }}" 
+                               target="_blank"
+                               class="flex items-center w-full bg-cyan-500 hover:bg-cyan-600 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                                <i class="fab fa-facebook mr-3 text-lg"></i>
+                                <span>Facebook</span>
+                            </a>
+                        @endif
+                        
+                        @if($umkm->website)
+                            <a href="{{ $umkm->website }}" 
+                               target="_blank"
+                               class="flex items-center w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                                <i class="fas fa-globe mr-3 text-lg"></i>
+                                <span>Website</span>
+                            </a>
                         @endif
                     </div>
-
-                    <!-- Founded Year -->
-                    @if($umkm->tahun_berdiri)
-                        <div class="mb-3">
-                            <strong>Tahun Berdiri:</strong><br>
-                            <span class="text-muted">{{ $umkm->tahun_berdiri }}</span>
-                        </div>
-                    @endif
-
-                    <!-- Employee Count -->
-                    @if($umkm->jumlah_karyawan)
-                        <div class="mb-3">
-                            <strong>Jumlah Karyawan:</strong><br>
-                            <span class="text-muted">{{ $umkm->jumlah_karyawan }} orang</span>
-                        </div>
-                    @endif
-
-                    <!-- Last Updated -->
-                    <div class="mb-0">
-                        <strong>Terakhir Diperbarui:</strong><br>
-                        <small class="text-muted">
-                            {{ $umkm->updated_at->format('d M Y, H:i') }}
-                        </small>
-                    </div>
                 </div>
-            </div>
 
-            <!-- Share Section -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h6 class="fw-bold mb-0">
-                        <i class="fas fa-share-alt me-2"></i>Bagikan
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <button type="button" 
-                                class="btn btn-outline-primary btn-sm" 
-                                onclick="copyToClipboard('{{ request()->url() }}')">
-                            <i class="fas fa-copy me-1"></i>Salin Link
-                        </button>
+                <!-- Quick Info -->
+                <div class="bg-white rounded-xl shadow-lg border border-cyan-100/50 p-6">
+                    <h3 class="text-lg font-bold text-teal-800 mb-4 flex items-center">
+                        <i class="fas fa-info mr-2"></i>Info Singkat
+                    </h3>
+                    
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Kategori:</span>
+                            <span class="font-medium text-teal-800">{{ $umkm->kategori->nama_kategori }}</span>
+                        </div>
                         
-                        <a href="https://wa.me/?text={{ urlencode($umkm->nama . ' - ' . request()->url()) }}" 
-                           class="btn btn-outline-success btn-sm" 
-                           target="_blank">
-                            <i class="fab fa-whatsapp me-1"></i>Bagikan via WhatsApp
-                        </a>
+                        @if($umkm->dusun)
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Dusun:</span>
+                                <span class="font-medium text-teal-800">{{ $umkm->dusun }}</span>
+                            </div>
+                        @endif
+                        
+                        @if($umkm->tahun_berdiri)
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Tahun Berdiri:</span>
+                                <span class="font-medium text-teal-800">{{ $umkm->tahun_berdiri }}</span>
+                            </div>
+                        @endif
+                        
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Terdaftar:</span>
+                            <span class="font-medium text-blue-800">{{ $umkm->created_at->format('d M Y') }}</span>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Back Button -->
+                <div class="bg-white rounded-xl shadow-lg border border-blue-100/50 p-6">
+                    <a href="{{ route('umkm.index') }}" 
+                       class="flex items-center justify-center w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        <span>Kembali ke Daftar UMKM</span>
+                    </a>
                 </div>
             </div>
-
-            <!-- Related UMKMs -->
-            @if($relatedUmkms->count() > 0)
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="fw-bold mb-0">
-                            <i class="fas fa-store me-2"></i>UMKM Serupa
-                        </h6>
-                    </div>
-                    <div class="card-body p-0">
-                        @foreach($relatedUmkms as $related)
-                            <div class="border-bottom p-3">
-                                <h6 class="fw-bold mb-1">
-                                    <a href="{{ route('umkm.show', $related->slug) }}" 
-                                       class="text-decoration-none">
-                                        {{ $related->nama }}
-                                    </a>
-                                </h6>
-                                <small class="text-muted d-block mb-1">
-                                    <i class="fas fa-user me-1"></i>{{ $related->pemilik }}
-                                </small>
-                                <small class="text-muted">
-                                    <i class="fas fa-map-marker-alt me-1"></i>{{ $related->dusun }}
-                                </small>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
         </div>
     </div>
-
-    <!-- Back Button -->
-    <div class="text-center mt-4">
-        <a href="{{ route('umkm.index') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left me-1"></i>Kembali ke Daftar UMKM
-        </a>
-    </div>
-</div>
+</section>
 @endsection
-
-@push('scripts')
-<script>
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(function() {
-        // Show success message
-        const toast = document.createElement('div');
-        toast.className = 'toast align-items-center text-white bg-success border-0 position-fixed';
-        toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999;';
-        toast.innerHTML = `
-            <div class="d-flex">
-                <div class="toast-body">
-                    <i class="fas fa-check me-1"></i>Link berhasil disalin!
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
-        `;
-        
-        document.body.appendChild(toast);
-        const bsToast = new bootstrap.Toast(toast);
-        bsToast.show();
-        
-        // Remove element after hiding
-        toast.addEventListener('hidden.bs.toast', () => {
-            toast.remove();
-        });
-    }).catch(function() {
-        alert('Gagal menyalin link. Silakan salin secara manual.');
-    });
-}
-</script>
-@endpush

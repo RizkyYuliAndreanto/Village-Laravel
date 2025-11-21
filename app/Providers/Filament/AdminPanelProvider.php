@@ -9,6 +9,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use App\Filament\Pages\Dashboard as CustomDashboard;
 use App\Filament\Pages\UmkmDashboard;
+use App\Filament\Widgets\ApbdesBalanceOverview;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -38,10 +39,12 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 CustomDashboard::class,
                 UmkmDashboard::class,
+                \App\Filament\Pages\ApbdesDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
+                ApbdesBalanceOverview::class,
                 FilamentInfoWidget::class,
             ])
             ->middleware([

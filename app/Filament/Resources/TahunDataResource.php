@@ -174,10 +174,7 @@ class TahunDataResource extends Resource
                 // TAMBAHKAN INI setelah statistik_count:
                 Tables\Columns\TextColumn::make('apbdes_count')
                     ->label('Laporan APBDes')
-                    ->getStateUsing(function ($record): string {
-                        $count = $record->laporanApbdes()->count();
-                        return $count . ' laporan';
-                    })
+                    
                     ->badge()
                     ->color(
                         fn(string $state): string =>
@@ -309,8 +306,7 @@ class TahunDataResource extends Resource
             $record->pekerjaanStatistik()->exists() ||
             $record->pendidikanStatistik()->exists() ||
             $record->perkawinanStatistik()->exists() ||
-            $record->wajibPilihStatistik()->exists() ||
-            $record->laporanApbdes()->exists() // TAMBAHKAN INI
+            $record->wajibPilihStatistik()->exists()
         ) {
             return false;
         }

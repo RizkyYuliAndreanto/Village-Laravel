@@ -14,10 +14,15 @@ class DetailApbdes extends Model
 
     protected $fillable = [
         'laporan_apbdes_id',
+        'bidang_apbdes_id',
+        'sub_bidang_apbdes_id',
         'tipe',
         'uraian',
         'anggaran',
         'realisasi',
+        'persentase_realisasi',
+        'keterangan',
+        'bulan_realisasi',
     ];
 
     /**
@@ -26,6 +31,8 @@ class DetailApbdes extends Model
     protected $casts = [
         'anggaran' => 'decimal:2',
         'realisasi' => 'decimal:2',
+        'persentase_realisasi' => 'decimal:2',
+        'bulan_realisasi' => 'integer',
     ];
 
     /**
@@ -34,5 +41,35 @@ class DetailApbdes extends Model
     public function laporanApbdes(): BelongsTo
     {
         return $this->belongsTo(LaporanApbdes::class);
+    }
+
+    /**
+     * Relasi ke Bidang APBDes
+     */
+    public function bidangApbdes(): BelongsTo
+    {
+        return $this->belongsTo(BidangApbdes::class);
+    }
+
+    /**
+     * Relasi ke Sub Bidang APBDes
+     */
+    public function subBidangApbdes(): BelongsTo
+    {
+        return $this->belongsTo(SubBidangApbdes::class);
+    }
+
+    /**
+     * Mutator untuk auto-calculate persentase realisasi
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            if ($model->anggaran > 0) {
+                $model->persentase_realisasi = ($model->realisasi / $model->anggaran) * 100;
+            }
+        });
     }
 }

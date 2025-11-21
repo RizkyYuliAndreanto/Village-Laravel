@@ -17,14 +17,44 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'),
-        ]);
+        // Create admin user only if it doesn't exist
+        if (!User::where('email', 'admin@example.com')->exists()) {
+            User::factory()->create([
+                'name' => 'Admin User',
+                'email' => 'admin@example.com',
+                'password' => bcrypt('password'),
+            ]);
+        }
 
-        // Run UMKM related seeders
+        // Run all seeders in proper order
         $this->call([
+            // Base data first
+            TahunDataSeeder::class,
+
+            // Demographic statistics
+            DemografiPendudukSeeder::class,
+            AgamaStatistikSeeder::class,
+            PekerjaanStatistikSeeder::class,
+            PendidikanStatistikSeeder::class,
+            PerkawinanStatistikSeeder::class,
+            UmurStatistikSeeder::class,
+            WajibPilihStatistikSeeder::class,
+            DusunStatistikSeeder::class,
+
+            // Village structure
+            StrukturOrganisasiSeeder::class,
+
+            // APBDes related - COMMENTED OUT FOR NOW (features not implemented yet)
+            // ApbdesTahunSeeder::class,
+            // PendapatanSeeder::class,
+            // PengeluaranSeeder::class,
+            // LaporanApbdesSeeder::class,
+            // DetailApbdesSeeder::class,
+
+            // PPID Documents
+            PpidDokumenSeeder::class,
+
+            // UMKM and News
             KategoriUmkmSeeder::class,
             UmkmSeeder::class,
             BeritaSeeder::class,

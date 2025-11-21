@@ -1,72 +1,35 @@
-@extends('layouts.belanja')
+@extends('frontend.layouts.belanja')
 
 @section('content')
-<!-- ===== Visi & Misi ===== -->
-<section class="min-h-screen flex items-center pb-10 bg-gray-100 dark:bg-gray-900 border border-red">
-  <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-10 border border-red">
-    <div class="flex-shrink-0">
-      <img class="rounded-lg shadow-md max-w-sm"
-        src="{{ asset('images/logo-placeholder.jpg') }}"
-        alt="Logo Desa">
-    </div>
-    <div class="max-w-xl">
-      <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">JELAJAHI DESA</h3>
-      <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify">
-        Melalui website ini Anda dapat menjelajahi segala hal yang terkait dengan Desa.<br>
-        Pemerintahan, penduduk, demografi, potensi Desa, dan juga berita tentang Desa.
-      </p>
-    </div>
-  </div>
-</section>
-<!-- ===== Bagan Desa ===== -->
-<section class="min-h-screen flex items-center pb-10 bg-gray-100 dark:bg-gray-900 border border-red">
-  <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-10 border border-red">
-    <div class="flex-shrink-0">
-      <img class="rounded-lg shadow-md max-w-sm"
-        src="{{ asset('images/logo-placeholder.jpg') }}"
-        alt="Logo Desa">
-    </div>
-    <div class="max-w-xl">
-      <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">JELAJAHI DESA</h3>
-      <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify">
-        Melalui website ini Anda dapat menjelajahi segala hal yang terkait dengan Desa.<br>
-        Pemerintahan, penduduk, demografi, potensi Desa, dan juga berita tentang Desa.
-      </p>
-    </div>
-  </div>
-</section>
-<!-- ===== Sejarah Desa ===== -->
-<section class="min-h-screen flex items-center pb-10 bg-gray-100 dark:bg-gray-900 border border-red">
-  <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-10 border border-red">
-    <div class="flex-shrink-0">
-      <img class="rounded-lg shadow-md max-w-sm"
-        src="{{ asset('images/logo-placeholder.jpg') }}"
-        alt="Logo Desa">
-    </div>
-    <div class="max-w-xl">
-      <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">JELAJAHI DESA</h3>
-      <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify">
-        Melalui website ini Anda dapat menjelajahi segala hal yang terkait dengan Desa.<br>
-        Pemerintahan, penduduk, demografi, potensi Desa, dan juga berita tentang Desa.
-      </p>
-    </div>
-  </div>
-</section>
-<!-- ===== Peta Lokasi ===== -->
-<section class="min-h-screen flex items-center pb-10 bg-gray-100 dark:bg-gray-900 border border-red">
-  <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-10 border border-red">
-    <div class="flex-shrink-0">
-      <img class="rounded-lg shadow-md max-w-sm"
-        src="{{ asset('images/logo-placeholder.jpg') }}"
-        alt="Logo Desa">
-    </div>
-    <div class="max-w-xl">
-      <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">JELAJAHI DESA</h3>
-      <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify">
-        Melalui website ini Anda dapat menjelajahi segala hal yang terkait dengan Desa.<br>
-        Pemerintahan, penduduk, demografi, potensi Desa, dan juga berita tentang Desa.
-      </p>
-    </div>
-  </div>
-</section>
+{{-- Anggaran Pendapatan --}}
+@include('frontend.belanja.sections.content-section', [
+    'title' => 'ANGGARAN PENDAPATAN DESA',
+    'description' => 'Rincian sumber-sumber pendapatan desa yang berasal dari Dana Desa, ADD, PAD, dan sumber lainnya.',
+    'image' => asset('images/logo-placeholder.jpg'),
+    'alt' => 'Anggaran Pendapatan Desa'
+])
+
+{{-- Anggaran Belanja --}}
+@include('frontend.belanja.sections.content-section', [
+    'title' => 'ANGGARAN BELANJA DESA',
+    'description' => 'Rincian penggunaan anggaran desa untuk pembangunan infrastruktur, pemberdayaan masyarakat, dan operasional pemerintahan.',
+    'image' => asset('images/logo-placeholder.jpg'),
+    'alt' => 'Anggaran Belanja Desa'
+])
+
+{{-- Laporan Keuangan --}}
+@include('frontend.belanja.sections.content-section', [
+    'title' => 'LAPORAN KEUANGAN DESA',
+    'description' => 'Laporan realisasi penggunaan dana desa dan pertanggungjawaban keuangan secara transparan.',
+    'image' => asset('images/logo-placeholder.jpg'),
+    'alt' => 'Laporan Keuangan Desa'
+])
+
+{{-- Grafik APBDES --}}
+@include('frontend.belanja.sections.content-section', [
+    'title' => 'VISUALISASI DATA APBDES',
+    'description' => 'Grafik dan chart yang menampilkan data pendapatan dan belanja desa secara visual dan mudah dipahami.',
+    'image' => asset('images/logo-placeholder.jpg'),
+    'alt' => 'Grafik APBDES'
+])
 @endsection

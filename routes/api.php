@@ -50,3 +50,30 @@ Route::prefix('v1')->group(function () {
         Route::get('/dusun/{dusun}', [UmkmController::class, 'getUmkmByDusun']); // GET /api/v1/location/dusun/{dusun}
     });
 });
+
+// Infografis API Routes
+use App\Http\Controllers\Frontend\Infografis\InfografisController;
+use App\Http\Controllers\Frontend\Infografis\StatistikController;
+use App\Http\Controllers\Frontend\Infografis\UmurController;
+use App\Http\Controllers\Frontend\Infografis\PendidikanController;
+use App\Http\Controllers\Frontend\Infografis\PekerjaanController;
+use App\Http\Controllers\Frontend\Infografis\AgamaController;
+use App\Http\Controllers\Frontend\Infografis\PerkawinanController;
+
+Route::prefix('infografis')->group(function () {
+    // Main infografis endpoints
+    Route::get('/', [InfografisController::class, 'apiData']); // GET /api/infografis
+    Route::get('/{section}', [InfografisController::class, 'getSectionData']); // GET /api/infografis/{section}
+    Route::get('/{section}/chart', [InfografisController::class, 'getChartData']); // GET /api/infografis/{section}/chart
+    Route::get('/{section}/analisis', [InfografisController::class, 'getAnalisis']); // GET /api/infografis/{section}/analisis
+    Route::post('/refresh', [InfografisController::class, 'refresh']); // POST /api/infografis/refresh
+
+    // Specific section endpoints
+    Route::get('/statistik', [StatistikController::class, 'apiData']); // GET /api/infografis/statistik
+    Route::get('/umur', [UmurController::class, 'apiData']); // GET /api/infografis/umur
+    Route::get('/pendidikan', [PendidikanController::class, 'apiData']); // GET /api/infografis/pendidikan
+    Route::get('/pekerjaan', [PekerjaanController::class, 'apiData']); // GET /api/infografis/pekerjaan
+    Route::get('/agama', [AgamaController::class, 'apiData']); // GET /api/infografis/agama
+    Route::get('/perkawinan', [PerkawinanController::class, 'apiData']); // GET /api/infografis/perkawinan
+    Route::get('/wajib-pilih', [PerkawinanController::class, 'apiWajibPilih']); // GET /api/infografis/wajib-pilih
+});

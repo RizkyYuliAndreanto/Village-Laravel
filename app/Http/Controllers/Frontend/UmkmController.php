@@ -162,4 +162,13 @@ class UmkmController extends Controller
 
         return response()->json($umkms);
     }
+
+    /**
+     * Menampilkan dashboard UMKM
+     * Route: GET /umkm/dashboard
+     */
+    public function dashboard()
+    {
+        return view('frontend.umkm.dashboard');
+    }
 }

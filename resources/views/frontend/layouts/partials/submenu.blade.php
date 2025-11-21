@@ -8,7 +8,7 @@
         INFOGRAFIS
       </span>
       <span class="text-3xl lg:text-4xl font-extrabold text-gray-800 dark:text-gray-100 leading-tight">
-        DESA NGENGOR
+        DESA BANYUKAMBANG
       </span>
     </div>
 
