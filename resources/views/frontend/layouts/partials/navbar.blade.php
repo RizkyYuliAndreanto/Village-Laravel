@@ -1,10 +1,10 @@
-<nav class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-cyan-300 via-cyan-400 to-teal-400 backdrop-blur-lg shadow-lg border-b border-white/20">
+<nav class="fixed top-0 left-0 right-0 z-50 navbar-bg backdrop-blur-lg shadow-lg border-b border-white/20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center py-2">
       
       <!-- Logo Section -->
       <div class="flex items-center">
-        <a href="{{ route('home') }}" class="flex items-center text-white no-underline hover:scale-105 transition-transform duration-300">
+        <a href="{{ route('home') }}" class="flex items-center navbar-text no-underline hover:scale-105 transition-transform duration-300">
           <div class="relative mr-3">
             <img
               class="h-12 w-12 rounded-full border-2 border-white/50 shadow-lg hover:shadow-xl transition-shadow duration-300"
@@ -13,11 +13,11 @@
             />
           </div>
           <div>
-            <span class="text-lg font-bold text-white drop-shadow-sm">
+            <span class="text-lg font-bold navbar-text drop-shadow-sm">
               Desa Banyukambang
             </span>
             <br>
-            <span class="text-sm text-white/90 drop-shadow-sm">
+            <span class="text-sm navbar-text-secondary drop-shadow-sm">
               Kabupaten Madiun
             </span>
           </div>
@@ -27,27 +27,27 @@
       <!-- Desktop Navigation -->
       <div class="hidden lg:flex items-center space-x-2">
         <a href="{{ route('home') }}" 
-           class="flex items-center px-4 py-2 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/20 hover:-translate-y-0.5 {{ request()->routeIs('home') ? 'bg-white/25 shadow-lg' : '' }}">
+           class="flex items-center px-4 py-2 rounded-full navbar-text font-medium transition-all duration-300 navbar-hover hover:-translate-y-0.5 {{ request()->routeIs('home') ? 'navbar-active shadow-lg' : '' }}">
           <i class="fas fa-home mr-2"></i>Home
         </a>
         
         <a href="{{ route('profil-desa.index') }}" 
-           class="flex items-center px-4 py-2 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/20 hover:-translate-y-0.5 {{ request()->routeIs('profil-desa.*') ? 'bg-white/25 shadow-lg' : '' }}">
+           class="flex items-center px-4 py-2 rounded-full navbar-text font-medium transition-all duration-300 navbar-hover hover:-translate-y-0.5 {{ request()->routeIs('profil-desa.*') ? 'navbar-active shadow-lg' : '' }}">
           <i class="fas fa-info-circle mr-2"></i>Profil Desa
         </a>
         
         <a href="{{ route('infografis.index') }}" 
-           class="flex items-center px-4 py-2 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/20 hover:-translate-y-0.5 {{ request()->routeIs('infografis.*') ? 'bg-white/25 shadow-lg' : '' }}">
+           class="flex items-center px-4 py-2 rounded-full navbar-text font-medium transition-all duration-300 navbar-hover hover:-translate-y-0.5 {{ request()->routeIs('infografis.*') ? 'navbar-active shadow-lg' : '' }}">
           <i class="fas fa-chart-bar mr-2"></i>Infografis
         </a>
         
         <a href="{{ route('umkm.index') }}" 
-           class="flex items-center px-4 py-2 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/20 hover:-translate-y-0.5 {{ request()->routeIs('umkm.*') ? 'bg-white/25 shadow-lg' : '' }}">
+           class="flex items-center px-4 py-2 rounded-full navbar-text font-medium transition-all duration-300 navbar-hover hover:-translate-y-0.5 {{ request()->routeIs('umkm.*') ? 'navbar-active shadow-lg' : '' }}">
           <i class="fas fa-store mr-2"></i>UMKM
         </a>
         
         <a href="{{ route('belanja.index') }}" 
-           class="flex items-center px-4 py-2 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/20 hover:-translate-y-0.5 {{ request()->routeIs('belanja.*') ? 'bg-white/25 shadow-lg' : '' }}">
+           class="flex items-center px-4 py-2 rounded-full navbar-text font-medium transition-all duration-300 navbar-hover hover:-translate-y-0.5 {{ request()->routeIs('belanja.*') ? 'navbar-active shadow-lg' : '' }}">
           <i class="fas fa-coins mr-2"></i>APBDES
         </a>
         
