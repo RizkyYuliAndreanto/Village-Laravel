@@ -33,7 +33,7 @@ class AgamaController extends Controller
         // Coba ambil data dari database
         $statistikAgama = AgamaStatistik::whereHas('tahunData', function ($query) use ($tahun) {
             $query->where('tahun', $tahun);
-        })->orderBy('total_jiwa', 'desc')->get();
+        })->get();
 
         if ($statistikAgama->isEmpty()) {
             // Data dummy jika tidak ada data real
@@ -67,24 +67,23 @@ class AgamaController extends Controller
      */
     private function transformDatabaseData($statistikAgama)
     {
-        $mapping = [
-            'Islam' => 'islam',
-            'Katolik' => 'katolik',
-            'Kristen' => 'kristen',
-            'Hindu' => 'hindu',
-            'Buddha' => 'buddha',
-            'Konghucu' => 'konghucu',
-            'Kepercayaan Lainnya' => 'kepercayaan_lain'
+        $data = $statistikAgama->first();
+
+        $agamaData = [
+            'islam' => $data->islam ?? 0,
+            'katolik' => $data->katolik ?? 0,
+            'kristen' => $data->kristen ?? 0,
+            'hindu' => $data->hindu ?? 0,
+            'buddha' => $data->buddha ?? 0,
+            'konghucu' => $data->konghucu ?? 0,
+            'kepercayaan_lain' => $data->kepercayaan_lain ?? 0
         ];
 
-        $data = [];
-        foreach ($statistikAgama as $stat) {
-            $key = $mapping[$stat->agama] ?? strtolower(str_replace([' ', '/'], '_', $stat->agama));
-            $data[$key] = $stat->total_jiwa;
-        }
+        // Sort by total (descending) 
+        arsort($agamaData);
 
         return [
-            'agama' => (object)$data
+            'agama' => (object)$agamaData
         ];
     }
 

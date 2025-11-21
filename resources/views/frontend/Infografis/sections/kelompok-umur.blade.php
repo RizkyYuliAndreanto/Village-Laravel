@@ -14,7 +14,7 @@
         </div>
 
         {{-- Tahun Selector --}}
-        @include('frontend.Infografis.partials.tahun-selector', [
+        @include('frontend.infografis.partials.tahun-selector', [
             'sectionId' => 'umur',
             'tahunTersedia' => $tahunTersedia ?? [],
             'tahunAktif' => $tahunAktif ?? date('Y')
@@ -47,10 +47,11 @@
 @push('scripts')
 <script>
     // Piramida Penduduk Chart
-    if (document.getElementById("chartPiramida")) {
-        const piramida = document.getElementById("chartPiramida").getContext("2d");
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById("chartPiramida")) {
+            const piramida = document.getElementById("chartPiramida").getContext("2d");
 
-        new Chart(piramida, {
+            new Chart(piramida, {
             type: "bar",
             data: {
                 labels: [
@@ -60,33 +61,33 @@
                 datasets: [{
                     label: "Laki-laki",
                     data: [
-                        -{{ $umurData->umur_0_4 ?? 0 }},
-                        -{{ $umurData->umur_5_9 ?? 0 }},
-                        -{{ $umurData->umur_10_14 ?? 0 }},
-                        -{{ $umurData->umur_15_19 ?? 0 }},
-                        -{{ $umurData->umur_20_24 ?? 0 }},
-                        -{{ $umurData->umur_25_29 ?? 0 }},
-                        -{{ $umurData->umur_30_34 ?? 0 }},
-                        -{{ $umurData->umur_35_39 ?? 0 }},
-                        -{{ $umurData->umur_40_44 ?? 0 }},
-                        -{{ $umurData->umur_45_49 ?? 0 }},
-                        -{{ $umurData->umur_50_plus ?? 0 }}
+                        -{{ $umur_0_4 ?? 0 }},
+                        -{{ $umur_5_9 ?? 0 }},
+                        -{{ $umur_10_14 ?? 0 }},
+                        -{{ $umur_15_19 ?? 0 }},
+                        -{{ $umur_20_24 ?? 0 }},
+                        -{{ $umur_25_29 ?? 0 }},
+                        -{{ $umur_30_34 ?? 0 }},
+                        -{{ $umur_35_39 ?? 0 }},
+                        -{{ $umur_40_44 ?? 0 }},
+                        -{{ $umur_45_49 ?? 0 }},
+                        -{{ $umur_50_plus ?? 0 }}
                     ],
                     backgroundColor: "rgba(56, 161, 105, 0.8)"
                 }, {
                     label: "Perempuan",
                     data: [
-                        {{ $umurData->umur_0_4 ?? 0 }},
-                        {{ $umurData->umur_5_9 ?? 0 }},
-                        {{ $umurData->umur_10_14 ?? 0 }},
-                        {{ $umurData->umur_15_19 ?? 0 }},
-                        {{ $umurData->umur_20_24 ?? 0 }},
-                        {{ $umurData->umur_25_29 ?? 0 }},
-                        {{ $umurData->umur_30_34 ?? 0 }},
-                        {{ $umurData->umur_35_39 ?? 0 }},
-                        {{ $umurData->umur_40_44 ?? 0 }},
-                        {{ $umurData->umur_45_49 ?? 0 }},
-                        {{ $umurData->umur_50_plus ?? 0 }}
+                        {{ $umur_0_4 ?? 0 }},
+                        {{ $umur_5_9 ?? 0 }},
+                        {{ $umur_10_14 ?? 0 }},
+                        {{ $umur_15_19 ?? 0 }},
+                        {{ $umur_20_24 ?? 0 }},
+                        {{ $umur_25_29 ?? 0 }},
+                        {{ $umur_30_34 ?? 0 }},
+                        {{ $umur_35_39 ?? 0 }},
+                        {{ $umur_40_44 ?? 0 }},
+                        {{ $umur_45_49 ?? 0 }},
+                        {{ $umur_50_plus ?? 0 }}
                     ],
                     backgroundColor: "rgba(244, 114, 182, 0.8)"
                 }]
@@ -115,6 +116,7 @@
                 }
             }
         });
-    }
+        }
+    });
 </script>
 @endpush

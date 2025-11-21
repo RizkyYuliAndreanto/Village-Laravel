@@ -33,9 +33,9 @@ class UmurController extends Controller
         // Coba ambil data dari database
         $statistikUmur = UmurStatistik::whereHas('tahunData', function ($query) use ($tahun) {
             $query->where('tahun', $tahun);
-        })->orderBy('kelompok_umur')->get();
+        })->first();
 
-        if ($statistikUmur->isEmpty()) {
+        if (!$statistikUmur) {
             // Data dummy jika tidak ada data real
             return $this->getDummyData();
         }
@@ -71,15 +71,20 @@ class UmurController extends Controller
      */
     private function transformDatabaseData($statistikUmur)
     {
-        $umurData = [];
-
-        foreach ($statistikUmur as $stat) {
-            $key = 'umur_' . str_replace(['-', '+'], ['_', '_plus'], $stat->kelompok_umur);
-            $umurData[$key] = $stat->total_jiwa;
-        }
-
         return [
-            'umurData' => (object)$umurData
+            'umurData' => (object)[
+                'umur_0_4' => $statistikUmur->umur_0_4 ?? 0,
+                'umur_5_9' => $statistikUmur->umur_5_9 ?? 0,
+                'umur_10_14' => $statistikUmur->umur_10_14 ?? 0,
+                'umur_15_19' => $statistikUmur->umur_15_19 ?? 0,
+                'umur_20_24' => $statistikUmur->umur_20_24 ?? 0,
+                'umur_25_29' => $statistikUmur->umur_25_29 ?? 0,
+                'umur_30_34' => $statistikUmur->umur_30_34 ?? 0,
+                'umur_35_39' => $statistikUmur->umur_35_39 ?? 0,
+                'umur_40_44' => $statistikUmur->umur_40_44 ?? 0,
+                'umur_45_49' => $statistikUmur->umur_45_49 ?? 0,
+                'umur_50_plus' => $statistikUmur->umur_50_plus ?? 0
+            ]
         ];
     }
 

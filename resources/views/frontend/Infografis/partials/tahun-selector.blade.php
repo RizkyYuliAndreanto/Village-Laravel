@@ -8,9 +8,9 @@
                    bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
             data-section="{{ $sectionId }}">
         @if(isset($tahunTersedia) && count($tahunTersedia) > 0)
-            @foreach($tahunTersedia as $tahun)
-                <option value="{{ $tahun }}" {{ ($tahun == ($tahunAktif ?? date('Y'))) ? 'selected' : '' }}>
-                    {{ $tahun }}
+            @foreach($tahunTersedia as $tahunData)
+                <option value="{{ $tahunData->tahun }}" {{ ($tahunData->tahun == ($tahunAktif ?? date('Y'))) ? 'selected' : '' }}>
+                    {{ $tahunData->tahun }}
                 </option>
             @endforeach
         @else

@@ -15,6 +15,11 @@ class RateLimitMiddleware
      */
     public function handle(Request $request, Closure $next, $maxAttempts = 60, $decayMinutes = 1): Response
     {
+        // Skip rate limiting in local development
+        if (app()->environment('local')) {
+            return $next($request);
+        }
+
         $key = $this->resolveRequestSignature($request);
 
         $attempts = Cache::get($key, 0);

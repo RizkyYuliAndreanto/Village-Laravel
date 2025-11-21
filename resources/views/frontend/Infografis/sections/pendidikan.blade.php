@@ -9,7 +9,7 @@
         </h3>
 
         {{-- Tahun Selector --}}
-        @include('frontend.Infografis.partials.tahun-selector', [
+        @include('frontend.infografis.partials.tahun-selector', [
             'sectionId' => 'pendidikan',
             'tahunTersedia' => $tahunTersedia ?? [],
             'tahunAktif' => $tahunAktif ?? date('Y')
@@ -24,10 +24,11 @@
 @push('scripts')
 <script>
     // Chart Pendidikan
-    if (document.getElementById("chartPendidikan")) {
-        const pendidikan = document.getElementById("chartPendidikan").getContext("2d");
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById("chartPendidikan")) {
+            const pendidikan = document.getElementById("chartPendidikan").getContext("2d");
 
-        new Chart(pendidikan, {
+            new Chart(pendidikan, {
             type: "bar",
             data: {
                 labels: [
@@ -36,14 +37,14 @@
                 ],
                 datasets: [{
                     data: [
-                        {{ $data->tidak_sekolah ?? 0 }},
-                        {{ $data->sd ?? 0 }},
-                        {{ $data->smp ?? 0 }},
-                        {{ $data->sma ?? 0 }},
-                        {{ $data->d1_d4 ?? 0 }},
-                        {{ $data->s1 ?? 0 }},
-                        {{ $data->s2 ?? 0 }},
-                        {{ $data->s3 ?? 0 }}
+                        {{ $tidak_sekolah_pendidikan ?? 0 }},
+                        {{ $sd ?? 0 }},
+                        {{ $smp ?? 0 }},
+                        {{ $sma ?? 0 }},
+                        {{ $d1_d4 ?? 0 }},
+                        {{ $s1 ?? 0 }},
+                        {{ $s2 ?? 0 }},
+                        {{ $s3 ?? 0 }}
                     ],
                     backgroundColor: "#2563eb",
                     borderColor: "#1d4ed8",
@@ -64,6 +65,7 @@
                 }
             }
         });
-    }
+        }
+    });
 </script>
 @endpush

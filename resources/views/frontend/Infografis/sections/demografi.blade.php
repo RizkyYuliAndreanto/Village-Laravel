@@ -12,7 +12,7 @@
         </div>
 
         {{-- Tahun Selector --}}
-        @include('frontend.Infografis.partials.tahun-selector', [
+        @include('frontend.infografis.partials.tahun-selector', [
             'sectionId' => 'demografi',
             'tahunTersedia' => $tahunTersedia ?? [],
             'tahunAktif' => $tahunAktif ?? $tahunDataTerbaru->tahun ?? date('Y')

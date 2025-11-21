@@ -8,17 +8,12 @@ window.infografisCharts = {
     piramida: null,
     pendidikan: null,
     wajibPilih: null,
+    dusun: null,
 };
 
 // API endpoints
 const API_ENDPOINTS = {
-    statistik: "/api/infografis/statistik",
-    umur: "/api/infografis/umur",
-    pendidikan: "/api/infografis/pendidikan",
-    pekerjaan: "/api/infografis/pekerjaan",
-    agama: "/api/infografis/agama",
-    perkawinan: "/api/infografis/perkawinan",
-    wajibPilih: "/api/infografis/wajib-pilih",
+    data: "/infografis/data",
 };
 
 /**
@@ -88,6 +83,9 @@ async function updateSectionData(section, tahun) {
                 break;
             case "wajib-pilih":
                 await updateWajibPilihData(tahun);
+                break;
+            case "dusun":
+                await updateDusunData(tahun);
                 break;
         }
 
@@ -453,6 +451,125 @@ function createWajibPilihChart(data) {
                 legend: {
                     display: false,
                 },
+            },
+        },
+    });
+}
+
+/**
+ * Update dusun data dan chart
+ */
+async function updateDusunData(tahun) {
+    try {
+        const response = await fetch(`${API_ENDPOINTS.dusun}?tahun=${tahun}`);
+        const data = await response.json();
+
+        if (data.success) {
+            // Update dusun chart
+            if (window.infografisCharts.dusun) {
+                window.infografisCharts.dusun.destroy();
+            }
+
+            // Recreate chart dengan data baru
+            createDusunChart(data.dusunData);
+
+            // Update total statistics
+            updateDataField(
+                "total_penduduk_dusun",
+                data.dusunData.totalPendudukDusun
+            );
+            updateDataField("total_kk_dusun", data.dusunData.totalKKDusun);
+
+            // Update individual dusun cards
+            if (data.dusunData.dusunStatistik) {
+                data.dusunData.dusunStatistik.forEach((dusun, index) => {
+                    const fieldName = `penduduk_${dusun.nama_dusun
+                        .replace(/\s+/g, "_")
+                        .toLowerCase()}`;
+                    updateDataField(fieldName, dusun.jumlah_penduduk);
+                });
+            }
+        }
+    } catch (error) {
+        console.error("Error updating dusun data:", error);
+        throw error;
+    }
+}
+
+/**
+ * Create dusun chart dengan data baru
+ */
+function createDusunChart(dusunData) {
+    const ctx = document.getElementById("chartDusun");
+    if (!ctx) return;
+
+    const chartConfig = dusunData.dusunChartConfig || {};
+
+    window.infografisCharts.dusun = new Chart(ctx.getContext("2d"), {
+        type: "doughnut",
+        data: {
+            labels: chartConfig.labels || [],
+            datasets: [
+                {
+                    data: chartConfig.data || [],
+                    backgroundColor: chartConfig.colors || [
+                        "rgba(59, 130, 246, 0.8)",
+                        "rgba(34, 197, 94, 0.8)",
+                        "rgba(251, 191, 36, 0.8)",
+                        "rgba(239, 68, 68, 0.8)",
+                    ],
+                    borderColor: chartConfig.borderColors || [
+                        "rgba(59, 130, 246, 1)",
+                        "rgba(34, 197, 94, 1)",
+                        "rgba(251, 191, 36, 1)",
+                        "rgba(239, 68, 68, 1)",
+                    ],
+                    borderWidth: 2,
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: "#ffffff",
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        padding: 20,
+                        usePointStyle: true,
+                        font: {
+                            size: 12,
+                            weight: "500",
+                        },
+                    },
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const label = context.label || "";
+                            const value = context.parsed || 0;
+                            const percentage = chartConfig.percentages
+                                ? chartConfig.percentages[context.dataIndex]
+                                : 0;
+                            return `${label}: ${value.toLocaleString()} orang (${percentage}%)`;
+                        },
+                    },
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
+                    titleColor: "#ffffff",
+                    bodyColor: "#ffffff",
+                    borderColor: "#ffffff",
+                    borderWidth: 1,
+                },
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true,
+            },
+            cutout: "50%",
+            layout: {
+                padding: 10,
             },
         },
     });

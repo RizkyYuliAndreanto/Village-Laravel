@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SecurityServiceProvider extends ServiceProvider
 {

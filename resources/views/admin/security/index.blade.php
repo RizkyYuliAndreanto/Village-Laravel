@@ -13,7 +13,7 @@
             <div class="mb-8">
                 <h1 class="text-3xl font-bold text-gray-800">🛡️ Security Monitoring Center</h1>
                 <p class="text-gray-600 mt-2">Real-time security threat monitoring and protection status</p>
-                <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:underline">← Back to Dashboard</a>
+                <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:underline">← Back to Security Dashboard</a>
             </div>
 
             <!-- Real-time Alerts -->

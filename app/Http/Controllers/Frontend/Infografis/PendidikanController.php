@@ -33,9 +33,9 @@ class PendidikanController extends Controller
         // Coba ambil data dari database
         $statistikPendidikan = PendidikanStatistik::whereHas('tahunData', function ($query) use ($tahun) {
             $query->where('tahun', $tahun);
-        })->orderBy('total_jiwa', 'desc')->get();
+        })->first();
 
-        if ($statistikPendidikan->isEmpty()) {
+        if (!$statistikPendidikan) {
             // Data dummy jika tidak ada data real
             return $this->getDummyData();
         }
@@ -68,25 +68,17 @@ class PendidikanController extends Controller
      */
     private function transformDatabaseData($statistikPendidikan)
     {
-        $mapping = [
-            'Tidak/Belum Sekolah' => 'tidak_sekolah',
-            'SD/Sederajat' => 'sd',
-            'SMP/Sederajat' => 'smp',
-            'SMA/Sederajat' => 'sma',
-            'Diploma I/II/III/IV' => 'd1_d4',
-            'Strata 1' => 's1',
-            'Strata 2' => 's2',
-            'Strata 3' => 's3'
-        ];
-
-        $data = [];
-        foreach ($statistikPendidikan as $stat) {
-            $key = $mapping[$stat->tingkat_pendidikan] ?? strtolower(str_replace([' ', '/'], '_', $stat->tingkat_pendidikan));
-            $data[$key] = $stat->total_jiwa;
-        }
-
         return [
-            'data' => (object)$data
+            'data' => (object)[
+                'tidak_sekolah' => $statistikPendidikan->tidak_sekolah ?? 0,
+                'sd' => $statistikPendidikan->sd ?? 0,
+                'smp' => $statistikPendidikan->smp ?? 0,
+                'sma' => $statistikPendidikan->sma ?? 0,
+                'd1_d4' => $statistikPendidikan->d1_d4 ?? 0,
+                's1' => $statistikPendidikan->s1 ?? 0,
+                's2' => $statistikPendidikan->s2 ?? 0,
+                's3' => $statistikPendidikan->s3 ?? 0
+            ]
         ];
     }
 

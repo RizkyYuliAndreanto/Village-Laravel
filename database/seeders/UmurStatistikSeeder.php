@@ -90,12 +90,29 @@ class UmurStatistikSeeder extends Seeder
                 'umur_50_plus' => 736,         // 8%
                 // Total: 9200
             ],
+            2025 => [
+                'umur_0_4' => 846,             // 9%
+                'umur_5_9' => 940,             // 10%
+                'umur_10_14' => 940,           // 10%
+                'umur_15_19' => 940,           // 10%
+                'umur_20_24' => 940,           // 10%
+                'umur_25_29' => 1034,          // 11%
+                'umur_30_34' => 1034,          // 11%
+                'umur_35_39' => 940,           // 10%
+                'umur_40_44' => 846,           // 9%
+                'umur_45_49' => 752,           // 8%
+                'umur_50_plus' => 752,         // 8%
+                // Total: 9400
+            ],
         ];
 
         foreach ($umurData as $tahun => $data) {
             if (isset($tahunIds[$tahun])) {
                 $data['tahun_id'] = $tahunIds[$tahun];
-                UmurStatistik::create($data);
+                UmurStatistik::updateOrCreate(
+                    ['tahun_id' => $tahunIds[$tahun]],
+                    $data
+                );
             }
         }
     }

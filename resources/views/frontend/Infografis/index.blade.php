@@ -25,25 +25,28 @@
     </section>
 
     {{-- Section: Statistik Demografi Penduduk --}}
-    @include('frontend.Infografis.sections.demografi')
+    @include('frontend.infografis.sections.demografi')
 
     {{-- Section: Berdasarkan Kelompok Umur --}}
-    @include('frontend.Infografis.sections.kelompok-umur')
+    @include('frontend.infografis.sections.kelompok-umur')
 
     {{-- Section: Berdasarkan Pendidikan --}}
-    @include('frontend.Infografis.sections.pendidikan')
+    @include('frontend.infografis.sections.pendidikan')
 
     {{-- Section: Berdasarkan Pekerjaan --}}
-    @include('frontend.Infografis.sections.pekerjaan')
+    @include('frontend.infografis.sections.pekerjaan')
 
     {{-- Section: Berdasarkan Wajib Pilih --}}
-    @include('frontend.Infografis.sections.wajib-pilih')
+    @include('frontend.infografis.sections.wajib-pilih')
 
     {{-- Section: Berdasarkan Perkawinan --}}
-    @include('frontend.Infografis.sections.perkawinan')
+    @include('frontend.infografis.sections.perkawinan')
 
     {{-- Section: Berdasarkan Agama --}}
-    @include('frontend.Infografis.sections.agama')
+    @include('frontend.infografis.sections.agama')
+
+    {{-- Section: Berdasarkan Dusun --}}
+    @include('frontend.infografis.sections.dusun')
 
 @endsection
 
@@ -53,7 +56,7 @@
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ asset('js/infografis-tahun-selector.js') }}"></script>
+  
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Initialize charts dengan data awal

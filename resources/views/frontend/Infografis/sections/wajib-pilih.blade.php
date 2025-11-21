@@ -9,7 +9,7 @@
         </h3>
 
         {{-- Tahun Selector --}}
-        @include('frontend.Infografis.partials.tahun-selector', [
+        @include('frontend.infografis.partials.tahun-selector', [
             'sectionId' => 'wajib-pilih',
             'tahunTersedia' => $tahunTersedia ?? [],
             'tahunAktif' => $tahunAktif ?? date('Y')
@@ -24,15 +24,16 @@
 @push('scripts')
 <script>
     // Chart Wajib Pilih
-    if (document.getElementById("chartWajibPilih")) {
-        const wajib = document.getElementById("chartWajibPilih").getContext("2d");
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById("chartWajibPilih")) {
+            const wajib = document.getElementById("chartWajibPilih").getContext("2d");
 
-        new Chart(wajib, {
+            new Chart(wajib, {
             type: 'bar',
             data: {
-                labels: @json($wajibPilihLabels),
+                labels: ['Laki-laki', 'Perempuan', 'Total'],
                 datasets: [{
-                    data: @json($wajibPilihTotals),
+                    data: [{{ $wajib_pilih_laki ?? 0 }}, {{ $wajib_pilih_perempuan ?? 0 }}, {{ $wajib_pilih_total ?? 0 }}],
                     backgroundColor: "#2563eb",
                     borderRadius: 6,
                     barThickness: 70
@@ -55,6 +56,7 @@
                 }
             }
         });
-    }
+        }
+    });
 </script>
 @endpush

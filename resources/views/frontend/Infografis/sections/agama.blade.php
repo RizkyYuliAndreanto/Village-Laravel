@@ -9,7 +9,7 @@
         </h3>
 
         {{-- Tahun Selector --}}
-        @include('frontend.Infografis.partials.tahun-selector', [
+        @include('frontend.infografis.partials.tahun-selector', [
             'sectionId' => 'agama',
             'tahunTersedia' => $tahunTersedia ?? [],
             'tahunAktif' => $tahunAktif ?? date('Y')
@@ -20,46 +20,43 @@
             <div class="infografis-card p-6 rounded-xl shadow text-center">
                 <img src="{{ asset('images/logo-placeholder.jpg') }}" class="w-24 mx-auto mb-3" alt="Icon">
                 <div class="text-xl font-semibold infografis-title">Islam</div>
-                <div class="text-3xl font-bold text-primary-600" data-field="islam">{{ $agama?->islam ?? 0 }}</div>
+                <div class="text-3xl font-bold text-primary-600" data-field="islam">{{ $islam ?? 0 }}</div>
             </div>
 
             <div class="infografis-card p-6 rounded-xl shadow text-center">
                 <img src="{{ asset('images/logo-placeholder.jpg') }}" class="w-24 mx-auto mb-3" alt="Icon">
                 <div class="text-xl font-semibold infografis-title">Katolik</div>
-                <div class="text-3xl font-bold text-primary-600">{{ $agama?->katolik ?? 0 }}</div>
+                <div class="text-3xl font-bold text-primary-600">{{ $katolik ?? 0 }}</div>
             </div>
 
             <div class="infografis-card p-6 rounded-xl shadow text-center">
                 <img src="{{ asset('images/logo-placeholder.jpg') }}" class="w-24 mx-auto mb-3" alt="Icon">
                 <div class="text-xl font-semibold infografis-title">Kristen</div>
-                <div class="text-3xl font-bold text-primary-600">{{ $agama?->kristen ?? 0 }}</div>
+                <div class="text-3xl font-bold text-primary-600">{{ $kristen ?? 0 }}</div>
             </div>
 
             <div class="infografis-card p-6 rounded-xl shadow text-center">
                 <img src="{{ asset('images/logo-placeholder.jpg') }}" class="w-24 mx-auto mb-3" alt="Icon">
                 <div class="text-xl font-semibold infografis-title">Hindu</div>
-                <div class="text-3xl font-bold text-primary-600">{{ $agama?->hindu ?? 0 }}</div>
+                <div class="text-3xl font-bold text-primary-600">{{ $hindu ?? 0 }}</div>
             </div>
 
             <div class="infografis-card p-6 rounded-xl shadow text-center">
                 <img src="{{ asset('images/logo-placeholder.jpg') }}" class="w-24 mx-auto mb-3" alt="Icon">
                 <div class="text-xl font-semibold infografis-title">Buddha</div>
-                <div class="text-3xl font-bold text-primary-600">{{ $agama?->buddha ?? 0 }}</div>
+                <div class="text-3xl font-bold text-primary-600">{{ $buddha ?? 0 }}</div>
             </div>
 
             <div class="infografis-card p-6 rounded-xl shadow text-center">
                 <img src="{{ asset('images/logo-placeholder.jpg') }}" class="w-24 mx-auto mb-3" alt="Icon">
                 <div class="text-xl font-semibold infografis-title">Konghucu</div>
-                <div class="text-3xl font-bold text-primary-600">{{ $agama?->konghucu ?? 0 }}</div>
+                <div class="text-3xl font-bold text-primary-600">{{ $konghucu ?? 0 }}</div>
             </div>
-
-            <div>
-                </div>
 
             <div class="infografis-card p-6 rounded-xl shadow text-center">
                 <img src="{{ asset('images/logo-placeholder.jpg') }}" class="w-24 mx-auto mb-3" alt="Icon">
                 <div class="text-xl font-semibold infografis-title">Kepercayaan Lainnya</div>
-                <div class="text-3xl font-bold text-primary-600">{{ $agama?->kepercayaan_lain ?? 0 }}</div>
+                <div class="text-3xl font-bold text-primary-600">{{ $kepercayaan_lain ?? 0 }}</div>
             </div>
 
             <div>

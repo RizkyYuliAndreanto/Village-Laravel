@@ -14,16 +14,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('admin.ip')->group(function () {
 
-    // Admin Dashboard
-    Route::get('/admin', function () {
+    // Security Dashboard - moved to /security to avoid conflict with Filament
+    Route::get('/security', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
     // Management Routes
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('security-admin')->name('admin.')->group(function () {
 
         // Security Management
-        Route::get('/security', function () {
+        Route::get('/dashboard', function () {
             return view('admin.security.index');
         })->name('security.index');
 
