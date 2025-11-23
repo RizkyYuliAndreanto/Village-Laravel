@@ -8,26 +8,38 @@ use App\Models\TahunData;
 
 class TahunDataSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        // Menggunakan firstOrCreate untuk menghindari duplikat
-        
-        TahunData::firstOrCreate(
-            ['tahun' => 2023], // Cari berdasarkan tahun
-            ['keterangan' => 'Data tahun 2023'] // Buat dengan keterangan ini
-        );
+        $tahunData = [
+            [
+                'tahun' => 2020,
+                'keterangan' => 'Data statistik tahun 2020 - Era pandemi COVID-19',
+            ],
+            [
+                'tahun' => 2021,
+                'keterangan' => 'Data statistik tahun 2021 - Pemulihan ekonomi',
+            ],
+            [
+                'tahun' => 2022,
+                'keterangan' => 'Data statistik tahun 2022 - Normalisasi kehidupan',
+            ],
+            [
+                'tahun' => 2023,
+                'keterangan' => 'Data statistik tahun 2023 - Pertumbuhan berkelanjutan',
+            ],
+            [
+                'tahun' => 2024,
+                'keterangan' => 'Data statistik tahun 2024 - Era digitalisasi desa',
+            ],
+        ];
 
-        TahunData::firstOrCreate(
-            ['tahun' => 2024], // Cari berdasarkan tahun
-            ['keterangan' => 'Data tahun 2024 (Aktif)'] // Buat dengan keterangan ini
-        );
-
-        TahunData::firstOrCreate(
-            ['tahun' => 2025], // Cari berdasarkan tahun
-            ['keterangan' => 'Data tahun 2025'] // Buat dengan keterangan ini
-        );
+        foreach ($tahunData as $data) {
+            TahunData::create($data);
+        }
     }
 }

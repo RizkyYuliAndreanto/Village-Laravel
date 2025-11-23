@@ -1,119 +1,168 @@
-<nav x-data="{ isOpen: false }" class="bg-blue-100 dark:bg-blue-950 text-gray-800 dark:text-gray-200 shadow-md fixed w-full z-50 transition-colors duration-300">
-  <div class="container mx-auto px-6">
-    <div class="flex justify-between items-center h-16">
+<nav class="fixed top-0 left-0 right-0 z-50 navbar-bg backdrop-blur-lg shadow-lg border-b border-white/20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center py-2">
       
-      <div class="flex items-center space-x-4">
-        <a href="{{ route('home') }}" class="flex items-center space-x-3 group">
-          <img
-            class="h-10 w-10 md:h-12 md:w-12 rounded-full shadow-md transition-transform duration-200 group-hover:scale-105"
-            src="{{ asset('images/logo-placeholder.jpg') }}"
-            alt="Logo Desa">
-
-          <div class="flex flex-col leading-tight">
-            <span class="text-lg md:text-xl font-bold text-gray-800 dark:text-gray-100 group-hover:text-blue-600 transition">
-              Desa Ngengor
+      <!-- Logo Section -->
+      <div class="flex items-center">
+        <a href="{{ route('home') }}" class="flex items-center navbar-text no-underline hover:scale-105 transition-transform duration-300">
+          <div class="relative mr-3">
+            <img
+              class="h-12 w-12 rounded-full border-2 border-white/50 shadow-lg hover:shadow-xl transition-shadow duration-300"
+              src="{{ asset('images/logo-placeholder.jpg') }}"
+              alt="Logo {{ config('app.name', 'Laravel') }}"
+            />
+          </div>
+          <div>
+            <span class="text-lg font-bold navbar-text drop-shadow-sm">
+              Desa Banyukambang
             </span>
-            <span class="text-xs md:text-sm text-gray-600 dark:text-gray-400">
+            <br>
+            <span class="text-sm navbar-text-secondary drop-shadow-sm">
               Kabupaten Madiun
             </span>
           </div>
         </a>
       </div>
 
-      <div class="flex items-center">
+      <!-- Desktop Navigation -->
+      <div class="hidden lg:flex items-center space-x-2">
+        <a href="{{ route('home') }}" 
+           class="flex items-center px-4 py-2 rounded-full navbar-text font-medium transition-all duration-300 navbar-hover hover:-translate-y-0.5 {{ request()->routeIs('home') ? 'navbar-active shadow-lg' : '' }}">
+          <i class="fas fa-home mr-2"></i>Home
+        </a>
         
-        <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
-          <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-              Home
-          </x-nav-link>
-          <x-nav-link :href="route('Profil-desa.index')" :active="request()->routeIs('Profil-desa.index')">
-              Profil Desa
-          </x-nav-link>
-          <x-nav-link :href="route('demografi.index')" :active="request()->routeIs('demografi.index')">
-              Infografis
-          </x-nav-link>
-          <x-nav-link href="#">
-              APBDes
-          </x-nav-link>
-          <x-nav-link :href="route('umkm.index')" :active="request()->routeIs('umkm.*')">
-              UMKM
-          </x-nav-link>
-          <x-nav-link :href="route('berita.index')" :active="request()->routeIs('berita.*')">
-              Berita
-          </x-nav-link>
-          <x-nav-link :href="route('ppid.index')" :active="request()->routeIs('ppid.*')">
-              PPID
-          </x-nav-link>
-        </div>
-
-        <div class="ml-4 hidden md:block">
-            @auth
-                <a href="{{ url('/admin') }}" class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition font-semibold">
-                    Dashboard
-                </a>
-            @else
-                <a href="{{ url('/admin') }}" class="px-4 py-2 text-sm bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition font-semibold">
-                    Login Admin
-                </a>
-            @endauth
-        </div>
-        <div class="flex items-center md:hidden ml-4">
-          <button @click="isOpen = !isOpen" type="button" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 focus:outline-none p-2">
-            <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
-              <path x-show="!isOpen" fill-rule="evenodd" d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/>
-              <path x-show="isOpen" fill-rule="evenodd" d="M18.36 6.64L16.95 5.23 12 10.18 7.05 5.23 5.64 6.64 10.59 11.59 5.64 16.54 7.05 17.95 12 13l4.95 4.95 1.41-1.41L13.41 11.59l4.95-4.95z"/>
-            </svg>
-          </button>
-        </div>
-
+        <a href="{{ route('profil-desa.index') }}" 
+           class="flex items-center px-4 py-2 rounded-full navbar-text font-medium transition-all duration-300 navbar-hover hover:-translate-y-0.5 {{ request()->routeIs('profil-desa.*') ? 'navbar-active shadow-lg' : '' }}">
+          <i class="fas fa-info-circle mr-2"></i>Profil Desa
+        </a>
+        
+        <a href="{{ route('infografis.index') }}" 
+           class="flex items-center px-4 py-2 rounded-full navbar-text font-medium transition-all duration-300 navbar-hover hover:-translate-y-0.5 {{ request()->routeIs('infografis.*') ? 'navbar-active shadow-lg' : '' }}">
+          <i class="fas fa-chart-bar mr-2"></i>Infografis
+        </a>
+        
+        <a href="{{ route('umkm.index') }}" 
+           class="flex items-center px-4 py-2 rounded-full navbar-text font-medium transition-all duration-300 navbar-hover hover:-translate-y-0.5 {{ request()->routeIs('umkm.*') ? 'navbar-active shadow-lg' : '' }}">
+          <i class="fas fa-store mr-2"></i>UMKM
+        </a>
+        
+        <a href="{{ route('belanja.index') }}" 
+           class="flex items-center px-4 py-2 rounded-full navbar-text font-medium transition-all duration-300 navbar-hover hover:-translate-y-0.5 {{ request()->routeIs('belanja.*') ? 'navbar-active shadow-lg' : '' }}">
+          <i class="fas fa-coins mr-2"></i>APBDES
+        </a>
+        
+        <a href="{{ route('berita.index') }}" 
+           class="flex items-center px-4 py-2 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/20 hover:-translate-y-0.5 {{ request()->routeIs('berita.*') ? 'bg-white/25 shadow-lg' : '' }}">
+          <i class="fas fa-newspaper mr-2"></i>Berita
+        </a>
+        
+        <a href="{{ route('ppid.index') }}" 
+           class="flex items-center px-4 py-2 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/20 hover:-translate-y-0.5 {{ request()->routeIs('ppid.*') ? 'bg-white/25 shadow-lg' : '' }}">
+          <i class="fas fa-folder-open mr-2"></i>PPID
+        </a>
       </div>
 
+      <!-- Mobile menu button -->
+      <button id="mobile-menu-toggle" class="lg:hidden p-2 rounded-lg bg-white/30 hover:bg-white/40 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white/50">
+        <div class="w-6 h-0.5 bg-white rounded-full transition-all duration-300"></div>
+        <div class="w-6 h-0.5 bg-white rounded-full mt-1.5 transition-all duration-300"></div>
+        <div class="w-6 h-0.5 bg-white rounded-full mt-1.5 transition-all duration-300"></div>
+      </button>
     </div>
-  </div>
 
-  <div x-show="isOpen" 
-       x-transition:enter="transition ease-out duration-200"
-       x-transition:enter-start="opacity-0 -translate-y-2"
-       x-transition:enter-end="opacity-100 translate-y-0"
-       x-transition:leave="transition ease-in duration-150"
-       x-transition:leave-start="opacity-100 translate-y-0"
-       x-transition:leave-end="opacity-0 -translate-y-2"
-       class="md:hidden bg-blue-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg">
-    
-    <div class="flex flex-col px-4 pt-2 pb-4 space-y-1">
-      <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">
-        Home
-      </x-responsive-nav-link>
-      <x-responsive-nav-link :href="route('Profil-desa.index')" :active="request()->routeIs('Profil-desa.index')">
-        Profil Desa
-      </x-responsive-nav-link>
-      <x-responsive-nav-link href="#">
-        Infografis
-      </x-responsive-nav-link>
-      <x-responsive-nav-link href="#">
-        APBDes
-      </x-responsive-nav-link>
-      <x-responsive-nav-link :href="route('umkm.index')" :active="request()->routeIs('umkm.*')">
-        UMKM
-      </x-responsive-nav-link>
-      <x-responsive-nav-link :href="route('berita.index')" :active="request()->routeIs('berita.*')">
-        Berita
-      </x-responsive-nav-link>
-      <x-responsive-nav-link :href="route('ppid.index')" :active="request()->routeIs('ppid.*')">
-        PPID
-      </x-responsive-nav-link>
-
-      <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
-        @auth
-            <a href="{{ url('/admin') }}" class="block px-3 py-2 text-base font-medium bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition text-center">
-                Dashboard
-            </a>
-        @else
-            <a href="{{ url('/admin') }}" class="block px-3 py-2 text-base font-medium bg-green-600 text-white rounded-md hover:bg-green-700 transition text-center">
-                Login Admin
-            </a>
-        @endauth
+    <!-- Mobile Navigation -->
+    <div id="mobile-menu" class="lg:hidden hidden">
+      <div class="bg-cyan-400/95 backdrop-blur-lg rounded-lg mt-2 p-4 shadow-xl">
+        <div class="space-y-2">
+          <a href="{{ route('home') }}" 
+             class="flex items-center px-4 py-3 rounded-lg text-white font-medium transition-all duration-300 hover:bg-white/30 hover:translate-x-2 {{ request()->routeIs('home') ? 'bg-white/40' : '' }}">
+            <i class="fas fa-home mr-3 w-4"></i>Home
+          </a>
+          
+          <a href="{{ route('profil-desa.index') }}" 
+             class="flex items-center px-4 py-3 rounded-lg text-white font-medium transition-all duration-300 hover:bg-white/30 hover:translate-x-2 {{ request()->routeIs('profil-desa.*') ? 'bg-white/40' : '' }}">
+            <i class="fas fa-info-circle mr-3 w-4"></i>Profil Desa
+          </a>
+          
+          <a href="{{ route('infografis.index') }}" 
+             class="flex items-center px-4 py-3 rounded-lg text-white font-medium transition-all duration-300 hover:bg-white/30 hover:translate-x-2 {{ request()->routeIs('infografis.*') ? 'bg-white/40' : '' }}">
+            <i class="fas fa-chart-bar mr-3 w-4"></i>Infografis
+          </a>
+          
+          <a href="{{ route('umkm.index') }}" 
+             class="flex items-center px-4 py-3 rounded-lg text-white font-medium transition-all duration-300 hover:bg-white/30 hover:translate-x-2 {{ request()->routeIs('umkm.*') ? 'bg-white/40' : '' }}">
+            <i class="fas fa-store mr-3 w-4"></i>UMKM
+          </a>
+          
+          <a href="{{ route('belanja.index') }}" 
+             class="flex items-center px-4 py-3 rounded-lg text-white font-medium transition-all duration-300 hover:bg-white/30 hover:translate-x-2 {{ request()->routeIs('belanja.*') ? 'bg-white/40' : '' }}">
+            <i class="fas fa-coins mr-3 w-4"></i>APBDES
+          </a>
+          
+          <a href="{{ route('berita.index') }}" 
+             class="flex items-center px-4 py-3 rounded-lg text-white font-medium transition-all duration-300 hover:bg-white/30 hover:translate-x-2 {{ request()->routeIs('berita.*') ? 'bg-white/40' : '' }}">
+            <i class="fas fa-newspaper mr-3 w-4"></i>Berita
+          </a>
+          
+          <a href="{{ route('ppid.index') }}" 
+             class="flex items-center px-4 py-3 rounded-lg text-white font-medium transition-all duration-300 hover:bg-white/30 hover:translate-x-2 {{ request()->routeIs('ppid.*') ? 'bg-white/40' : '' }}">
+            <i class="fas fa-folder-open mr-3 w-4"></i>PPID
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const bars = mobileMenuToggle.querySelectorAll('div');
+
+  mobileMenuToggle.addEventListener('click', function() {
+    if (mobileMenu.classList.contains('hidden')) {
+      // Show menu
+      mobileMenu.classList.remove('hidden');
+      
+      // Transform to X
+      bars[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
+      bars[1].style.opacity = '0';
+      bars[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
+    } else {
+      // Hide menu
+      mobileMenu.classList.add('hidden');
+      
+      // Transform back to hamburger
+      bars[0].style.transform = 'none';
+      bars[1].style.opacity = '1';
+      bars[2].style.transform = 'none';
+    }
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', function(event) {
+    if (!mobileMenuToggle.contains(event.target) && !mobileMenu.contains(event.target)) {
+      mobileMenu.classList.add('hidden');
+      
+      // Reset hamburger icon
+      bars[0].style.transform = 'none';
+      bars[1].style.opacity = '1';
+      bars[2].style.transform = 'none';
+    }
+  });
+
+  // Close mobile menu when clicking on links
+  mobileMenu.addEventListener('click', function(event) {
+    if (event.target.tagName === 'A') {
+      mobileMenu.classList.add('hidden');
+      
+      // Reset hamburger icon
+      bars[0].style.transform = 'none';
+      bars[1].style.opacity = '1';
+      bars[2].style.transform = 'none';
+    }
+  });
+});
+</script>
+

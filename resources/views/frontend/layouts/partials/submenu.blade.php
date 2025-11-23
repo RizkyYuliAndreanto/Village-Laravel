@@ -8,15 +8,15 @@
         INFOGRAFIS
       </span>
       <span class="text-3xl lg:text-4xl font-extrabold text-gray-800 dark:text-gray-100 leading-tight">
-        DESA NGENGOR
+        DESA BANYUKAMBANG
       </span>
     </div>
 
     <div class="flex flex-wrap justify-center items-center space-x-10 border-b border-gray-300 pb-3">
 
-      <a href="{{ route('demografi.index') }}"
+      <a href="#"
          class="flex flex-col items-center font-semibold relative group 
-                {{ request()->routeIs('demografi.index') ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white' }}">
+                {{ request()->routeIs('infografis.index') ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white' }}">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24"
              stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -24,7 +24,7 @@
         </svg>
         <span>Penduduk</span>
         <span
-          class="absolute bottom-[-6px] w-full h-0.5 transition {{ request()->routeIs('demografi.index') ? 'bg-red-600' : 'bg-transparent group-hover:bg-red-500' }}"></span>
+          class="absolute bottom-[-6px] w-full h-0.5 transition {{ request()->routeIs('infografis.index') ? 'bg-red-600' : 'bg-transparent group-hover:bg-red-500' }}"></span>
       </a>
 
       <a href="#"

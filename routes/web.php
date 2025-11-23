@@ -2,12 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Controllers\Frontend\ProfilDesaController;
 use App\Http\Controllers\Frontend\UmkmController;
 use App\Http\Controllers\Frontend\BeritaController;
 use App\Http\Controllers\Frontend\StrukturOrganisasiController;
 use App\Http\Controllers\Frontend\DemografiController;
 use App\Http\Controllers\Frontend\PpidController;
+use App\Http\Controllers\Frontend\ApbdesController;
+use App\Http\Controllers\Frontend\ProfilDesaController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Frontend\TestUmkmController;
 
 /*
@@ -17,15 +19,45 @@ use App\Http\Controllers\Frontend\TestUmkmController;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('Profil-desa', [ProfilDesaController::class, 'index'])->name('Profil-desa.index');
-Route::prefix('infografis')->name('infografis.')->group(function () {
-    Route::get('/', [DemografiController::class, 'index'])->name('index'); // Penduduk
-    Route::get('/apbdes', [DemografiController::class, 'apbdes'])->name('apbdes');
-    Route::get('/stunting', [DemografiController::class, 'stunting'])->name('stunting');
-    Route::get('/bansos', [DemografiController::class, 'bansos'])->name('bansos');
-    Route::get('/idm', [DemografiController::class, 'idm'])->name('idm');
-    Route::get('/sdgs', [DemografiController::class, 'sdgs'])->name('sdgs');
+
+// Dashboard redirect to UMKM dashboard
+Route::get('/dashboard', function () {
+    return redirect()->route('umkm.dashboard');
+})->name('dashboard');
+
+// Profile routes
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Test Bootstrap Route
+Route::view('/test-bootstrap', 'test-bootstrap')->name('test.bootstrap');
+
+/*
+|--------------------------------------------------------------------------
+| STATIC PAGES ROUTES - Halaman Statis
+|--------------------------------------------------------------------------
+*/
+// Route::view('/profil-desa', 'frontend.profil-desa.index')->name('profil-desa.index'); // Commented out - conflict with ProfilDesaController
+Route::get('/infografis', [DemografiController::class, 'infografis'])->name('infografis.index');
+
+/*
+|--------------------------------------------------------------------------
+| APBDes ROUTES - Anggaran Pendapatan dan Belanja Desa
+|--------------------------------------------------------------------------
+*/
+Route::prefix('apbdes')->name('frontend.apbdes.')->group(function () {
+    Route::get('/', [ApbdesController::class, 'index'])->name('index');
+    Route::get('/{id}', [ApbdesController::class, 'show'])->name('show');
+});
+
+// Backward compatibility - redirect old route
+Route::get('/belanja', function () {
+    return redirect()->route('frontend.apbdes.index');
+})->name('belanja.index');
+
 /*
 |--------------------------------------------------------------------------
 | BERITA ROUTES - Berita dan Informasi Desa
@@ -107,7 +139,18 @@ Route::prefix('api/ppid')->name('api.ppid.')->group(function () {
     Route::get('/statistik', [PpidController::class, 'statistik'])->name('statistik');
 });
 
-
+/*
+|--------------------------------------------------------------------------
+| PROFIL DESA ROUTES - Informasi Profil Desa
+|--------------------------------------------------------------------------
+*/
+Route::prefix('profil-desa')->name('profil-desa.')->group(function () {
+    Route::get('/', [ProfilDesaController::class, 'index'])->name('index');
+    Route::get('/visi-misi', [ProfilDesaController::class, 'visiMisi'])->name('visi-misi');
+    Route::get('/struktur-organisasi', [ProfilDesaController::class, 'strukturOrganisasi'])->name('struktur-organisasi');
+    Route::get('/potensi-desa', [ProfilDesaController::class, 'potensiDesa'])->name('potensi-desa');
+    Route::get('/peta-desa', [ProfilDesaController::class, 'petaDesa'])->name('peta-desa');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -116,6 +159,7 @@ Route::prefix('api/ppid')->name('api.ppid.')->group(function () {
 */
 Route::prefix('umkm')->name('umkm.')->group(function () {
     Route::get('/', [UmkmController::class, 'index'])->name('index');
+    Route::get('/dashboard', [UmkmController::class, 'dashboard'])->name('dashboard');
     Route::get('/kategori/{kategori:slug}', [UmkmController::class, 'kategori'])->name('kategori');
     Route::get('/search-ajax', [UmkmController::class, 'searchAjax'])->name('search.ajax');
     Route::get('/{umkm:slug}', [UmkmController::class, 'show'])->name('show');
@@ -128,3 +172,10 @@ Route::prefix('umkm')->name('umkm.')->group(function () {
 */
 Route::get('/test-umkm', [TestUmkmController::class, 'testAll'])->name('test.umkm');
 Route::get('/test-umkm-data', [TestUmkmController::class, 'testData'])->name('test.umkm.data');
+
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATION ROUTES
+|--------------------------------------------------------------------------
+*/
+require __DIR__ . '/auth.php';

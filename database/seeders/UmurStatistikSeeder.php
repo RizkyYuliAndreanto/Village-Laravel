@@ -9,48 +9,94 @@ use App\Models\TahunData;
 
 class UmurStatistikSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        UmurStatistik::query()->delete();
+        $tahunIds = TahunData::pluck('id_tahun', 'tahun')->toArray();
 
-        $tahun2024 = TahunData::where('tahun', 2024)->first();
-        $tahun2023 = TahunData::where('tahun', 2023)->first();
+        // Data harus sesuai dengan total penduduk dari DemografiPendudukSeeder
+        $umurData = [
+            2020 => [
+                'umur_0_4' => 765,             // 9%
+                'umur_5_9' => 850,             // 10%
+                'umur_10_14' => 850,           // 10%
+                'umur_15_19' => 850,           // 10%
+                'umur_20_24' => 850,           // 10%
+                'umur_25_29' => 935,           // 11%
+                'umur_30_34' => 935,           // 11%
+                'umur_35_39' => 850,           // 10%
+                'umur_40_44' => 765,           // 9%
+                'umur_45_49' => 680,           // 8%
+                'umur_50_plus' => 680,         // 8%
+                // Total: 8500 (9+10+10+10+10+11+11+10+9+8+8 = 100%)
+            ],
+            2021 => [
+                'umur_0_4' => 779,             // 9%
+                'umur_5_9' => 865,             // 10%
+                'umur_10_14' => 865,           // 10%
+                'umur_15_19' => 865,           // 10%
+                'umur_20_24' => 865,           // 10%
+                'umur_50_plus' => 951,         // 11%
+                'umur_30_34' => 951,           // 11%
+                'umur_35_39' => 865,           // 10%
+                'umur_40_44' => 779,           // 9%
+                'umur_45_49' => 692,           // 8%
+                'umur_25_29' => 692,           // 8%
+                // Total: 8650
+            ],
+            2022 => [
+                'umur_0_4' => 794,             // 9%
+                'umur_5_9' => 882,             // 10%
+                'umur_10_14' => 882,           // 10%
+                'umur_15_19' => 882,           // 10%
+                'umur_20_24' => 882,           // 10%
+                'umur_25_29' => 970,           // 11%
+                'umur_30_34' => 970,           // 11%
+                'umur_35_39' => 882,           // 10%
+                'umur_40_44' => 794,           // 9%
+                'umur_45_49' => 706,           // 8%
+                'umur_50_plus' => 706,         // 8%
+                // Total: 8820
+            ],
+            2023 => [
+                'umur_0_4' => 810,             // 9%
+                'umur_5_9' => 900,             // 10%
+                'umur_10_14' => 900,           // 10%
+                'umur_15_19' => 900,           // 10%
+                'umur_20_24' => 900,           // 10%
+                'umur_25_29' => 990,           // 11%
+                'umur_30_34' => 990,           // 11%
+                'umur_35_39' => 900,           // 10%
+                'umur_40_44' => 810,           // 9%
+                'umur_45_49' => 720,           // 8%
+                'umur_50_plus' => 720,         // 8%
+                // Total: 9000
+            ],
+            2024 => [
+                'umur_0_4' => 828,             // 9%
+                'umur_5_9' => 920,             // 10%
+                'umur_10_14' => 920,           // 10%
+                'umur_15_19' => 920,           // 10%
+                'umur_20_24' => 920,           // 10%
+                'umur_25_29' => 1012,          // 11%
+                'umur_30_34' => 1012,          // 11%
+                'umur_35_39' => 920,           // 10%
+                'umur_40_44' => 828,           // 9%
+                'umur_45_49' => 736,           // 8%
+                'umur_50_plus' => 736,         // 8%
+                // Total: 9200
+            ],
+        ];
 
-        if ($tahun2024) {
-            UmurStatistik::create([
-                'tahun_id' => $tahun2024->id_tahun,
-                'umur_0_4' => 150,
-                'umur_5_9' => 160,
-                'umur_10_14' => 170,
-                'umur_15_19' => 165,
-                'umur_20_24' => 155,
-                'umur_25_29' => 145,
-                'umur_30_34' => 135,
-                'umur_35_39' => 125,
-                'umur_40_44' => 115,
-                'umur_45_49' => 105,
-                'umur_50_plus' => 75,
-            ]);
-        }
-        
-        if ($tahun2023) {
-            UmurStatistik::create([
-                'tahun_id' => $tahun2023->id_tahun,
-                'umur_0_4' => 145,
-                'umur_5_9' => 155,
-                'umur_10_14' => 165,
-                'umur_15_19' => 160,
-                'umur_20_24' => 150,
-                'umur_25_29' => 140,
-                'umur_30_34' => 130,
-                'umur_35_39' => 120,
-                'umur_40_44' => 110,
-                'umur_45_49' => 100,
-                'umur_50_plus' => 75,
-            ]);
+        foreach ($umurData as $tahun => $data) {
+            if (isset($tahunIds[$tahun])) {
+                $data['tahun_id'] = $tahunIds[$tahun];
+                UmurStatistik::create($data);
+            }
         }
     }
 }

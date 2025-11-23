@@ -1,41 +1,49 @@
 @extends('frontend.layouts.main')
 
-@section('content')
+@section('title', 'Daftar UMKM')
+@section('meta_description', 'Temukan dan jelajahi UMKM terbaik di desa kami. Produk berkualitas dari usaha mikro kecil menengah lokal.')
 
-<section class="bg-gray-50 dark:bg-gray-900 py-12 pt-24 min-h-screen">
-    <div class="container mx-auto px-6 max-w-6xl">
-        
-        <div class="text-center mb-8">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 dark:text-gray-100 mb-3">
-                <i class="fas fa-store text-indigo-600 dark:text-indigo-400 me-2"></i>
-                UMKM Desa
+@section('content')
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-cyan-300 via-cyan-400 to-teal-400 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-store mr-4"></i>UMKM Desa
             </h1>
-            <p class="text-lg text-gray-600 dark:text-gray-400 mb-6">
-                Temukan dan jelajahi {{ $totalUmkm }} UMKM dari {{ $totalKategori }} kategori di desa kami.
+            <p class="text-xl text-gray-700 max-w-2xl mx-auto">
+                Temukan dan jelajahi {{ $totalUmkm }} UMKM dari {{ $totalKategori }} kategori di desa kami
             </p>
         </div>
+    </div>
+</section>
 
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg mb-8">
+<!-- Main Content -->
+<section class="py-12 bg-gradient-to-br from-cyan-50 via-white to-cyan-100 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Filter Section -->
+        <div class="bg-white rounded-xl shadow-lg border border-cyan-100/50 p-6 mb-8">
             <form method="GET" action="{{ route('umkm.index') }}">
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                    
-                    <div class="col-span-2 md:col-span-1">
-                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
-                            <i class="fas fa-search me-1"></i>Pencarian
+                <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    <!-- Search Box -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-teal-800 mb-2">
+                            <i class="fas fa-search mr-2"></i>Pencarian
                         </label>
                         <input type="text" 
                                name="search" 
-                               class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm" 
-                               placeholder="Cari nama UMKM..."
+                               class="w-full px-4 py-2 border border-cyan-200 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors duration-200" 
+                               placeholder="Cari nama UMKM atau pemilik..."
                                value="{{ $search }}">
                     </div>
 
-                    <div class="col-span-2 md:col-span-1">
-                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
-                            <i class="fas fa-tags me-1"></i>Kategori
+                    <!-- Kategori Filter -->
+                    <div>
+                        <label class="block text-sm font-semibold text-teal-800 mb-2">
+                            <i class="fas fa-tags mr-1"></i>Kategori
                         </label>
-                        <select name="kategori" 
-                                class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
+                        <select name="kategori" class="w-full px-4 py-2 border border-cyan-200 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors duration-200">
                             <option value="">Semua Kategori</option>
                             @foreach($kategoris as $kategori)
                                 <option value="{{ $kategori->id }}" 
@@ -46,12 +54,12 @@
                         </select>
                     </div>
 
-                    <div class="col-span-2 md:col-span-1">
-                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
-                            <i class="fas fa-map-marker-alt me-1"></i>Dusun
+                    <!-- Dusun Filter -->
+                    <div>
+                        <label class="block text-sm font-semibold text-teal-800 mb-2">
+                            <i class="fas fa-map-marker-alt mr-1"></i>Dusun
                         </label>
-                        <select name="dusun" 
-                                class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm">
+                        <select name="dusun" class="w-full px-4 py-2 border border-cyan-200 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors duration-200">
                             <option value="">Semua Dusun</option>
                             @foreach($dusuns as $dusunItem)
                                 <option value="{{ $dusunItem }}" 
@@ -62,152 +70,156 @@
                         </select>
                     </div>
 
-                    <div class="col-span-2 md:col-span-1 flex items-end">
-                        <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-2.5 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition">
-                            <i class="fas fa-filter me-1"></i>Filter
+                    <!-- Filter Button -->
+                    <div class="flex items-end">
+                        <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl">
+                            <i class="fas fa-filter mr-2"></i>Filter
                         </button>
-                    </div>
-
-                    <div class="col-span-2 md:col-span-1 flex items-end">
-                         <a href="{{ route('umkm.index') }}" class="w-full bg-gray-300 text-gray-800 font-semibold py-2.5 px-4 rounded-lg shadow-md hover:bg-gray-400 transition text-center">
-                            <i class="fas fa-redo me-1"></i>Reset
-                        </a>
                     </div>
                 </div>
             </form>
         </div>
 
+        <!-- Results Info -->
         @if($search || $kategori_id || $dusun)
-            <div class="bg-indigo-50 dark:bg-indigo-900/50 border-l-4 border-indigo-500 p-4 rounded-lg text-indigo-700 dark:text-indigo-300 mb-8 shadow-md">
-                <i class="fas fa-info-circle me-2"></i>
-                Menampilkan {{ $umkms->count() }} dari {{ $umkms->total() }} UMKM
-                @if($search) 
-                    untuk pencarian "<strong>{{ $search }}</strong>"
-                @endif
-                @if($kategori_id)
-                    @php $selectedKategori = $kategoris->find($kategori_id); @endphp
-                    dalam kategori "<strong>{{ $selectedKategori->nama_kategori }}</strong>"
-                @endif
-                @if($dusun)
-                    di dusun "<strong>{{ $dusun }}</strong>"
-                @endif
+                        <div class="bg-cyan-50 border-l-4 border-cyan-500 p-4 mb-6 rounded-r-lg">
+                <div class="flex items-center">
+                    <div class="mr-3">
+                                                <i class="fas fa-info-circle text-cyan-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-cyan-800 font-medium">
+                            Menampilkan {{ $umkms->count() }} dari {{ $umkms->total() }} UMKM
+                            @if($search) 
+                                untuk pencarian "<strong>{{ $search }}</strong>"
+                            @endif
+                            @if($kategori_id)
+                                @php $selectedKategori = $kategoris->find($kategori_id); @endphp
+                                dalam kategori "<strong>{{ $selectedKategori->nama_kategori }}</strong>"
+                            @endif
+                            @if($dusun)
+                                di dusun "<strong>{{ $dusun }}</strong>"
+                            @endif
+                        </p>
+                    </div>
+                </div>
             </div>
         @endif
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- UMKM Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($umkms as $umkm)
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:-translate-y-1 transition duration-300 h-full flex flex-col">
-                    
-                    <div class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4" 
-                            style="height: 200px;">
+                <div class="bg-white rounded-xl shadow-lg border border-cyan-100/50 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                    <!-- UMKM Logo/Image -->
+                    <div class="h-48 bg-gradient-to-br from-cyan-50 to-white flex items-center justify-center p-4">
                         @if($umkm->logo_url)
-                            {{-- Menggunakan asset('storage/') untuk logo --}}
-                            <img src="{{ $umkm->logo_url ? asset('storage/' . $umkm->logo_url) : asset('images/logo-placeholder.jpg') }}" 
+                            <img src="{{ $umkm->logo_url }}" 
                                  alt="{{ $umkm->nama }}" 
-                                 class="rounded-lg object-contain w-full h-full" 
-                                 style="max-height: 180px; max-width: 100%;">
+                                 class="max-h-40 max-w-full rounded-lg shadow-sm">
                         @else
-                            <div class="text-center text-gray-400 dark:text-gray-600">
-                                <i class="fas fa-store fa-4x mb-2"></i>
+                            <div class="text-center text-cyan-600">
+                                <i class="fas fa-store text-5xl mb-2"></i>
                                 <div class="text-sm font-medium">{{ $umkm->nama }}</div>
                             </div>
                         @endif
                     </div>
 
-                    <div class="p-5 flex flex-col flex-grow">
-                        
-                        <div class="mb-3">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300">
+                    <div class="p-6">
+                        <!-- Kategori Badge -->
+                        <div class="mb-4">
+                            <span class="inline-block bg-gradient-to-r from-cyan-500 to-teal-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
                                 {{ $umkm->kategori->icon }} {{ $umkm->kategori->nama_kategori }}
                             </span>
                         </div>
 
-                        <h5 class="text-xl font-extrabold text-gray-900 dark:text-white mb-2">{{ $umkm->nama }}</h5>
+                        <!-- UMKM Name -->
+                        <h3 class="text-xl font-bold text-teal-900 mb-2">{{ $umkm->nama }}</h3>
                         
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">
-                            <i class="fas fa-user me-1"></i>Pemilik: {{ $umkm->pemilik }}
+                        <!-- Owner -->
+                        <p class="text-teal-700 mb-3 flex items-center">
+                            <i class="fas fa-user mr-2"></i>{{ $umkm->pemilik }}
                         </p>
 
-                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 flex-grow">
-                            {{ Str::limit(strip_tags($umkm->deskripsi), 100) }}
+                        <!-- Description -->
+                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                            {{ Str::limit($umkm->deskripsi, 100) }}
                         </p>
 
-                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-3 border-t pt-3 border-gray-100 dark:border-gray-700">
+                        <!-- Contact Info -->
+                        <div class="space-y-2 mb-4">
                             @if($umkm->dusun)
-                                <div class="mb-1">
-                                    <i class="fas fa-map-marker-alt text-red-500 me-2 w-4 inline-block"></i>
-                                    {{ $umkm->dusun }}
+                                <div class="text-sm flex items-center text-teal-700">
+                                    <i class="fas fa-map-marker-alt mr-2 text-cyan-600"></i>
+                                    <span>{{ $umkm->dusun }}</span>
                                     @if($umkm->rt && $umkm->rw)
-                                        RT {{ $umkm->rt }}/RW {{ $umkm->rw }}
+                                        <span class="text-cyan-600"> RT {{ $umkm->rt }}/RW {{ $umkm->rw }}</span>
                                     @endif
                                 </div>
                             @endif
                             
                             @if($umkm->telepon)
-                                <div>
-                                    <i class="fas fa-phone text-green-500 me-2 w-4 inline-block"></i>
-                                    {{ $umkm->telepon }}
+                                <div class="text-sm flex items-center text-teal-700">
+                                    <i class="fas fa-phone mr-2 text-cyan-600"></i>
+                                    <span>{{ $umkm->telepon }}</span>
                                 </div>
                             @endif
                         </div>
                     </div>
 
-                    <div class="p-5 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+                    <!-- Card Footer -->
+                    <div class="bg-gradient-to-r from-cyan-50 to-white px-6 py-4 border-t border-cyan-100">
                         <div class="flex justify-between items-center">
-                            <div>
+                            <!-- Social Media Links -->
+                            <div class="flex space-x-2">
                                 @if($umkm->whatsapp)
                                     <a href="https://wa.me/{{ $umkm->whatsapp }}" 
-                                       class="text-green-500 hover:text-green-600 p-2 rounded-full transition" 
-                                       target="_blank" title="WhatsApp">
-                                        <i class="fab fa-whatsapp fa-lg"></i>
+                                       class="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg transition-colors duration-200" 
+                                       target="_blank" 
+                                       title="WhatsApp">
+                                        <i class="fab fa-whatsapp"></i>
                                     </a>
                                 @endif
                                 
                                 @if($umkm->sosial_instagram)
                                     <a href="https://instagram.com/{{ ltrim($umkm->sosial_instagram, '@') }}" 
-                                       class="text-pink-500 hover:text-pink-600 p-2 rounded-full transition" 
-                                       target="_blank" title="Instagram">
-                                        <i class="fab fa-instagram fa-lg"></i>
+                                       class="bg-pink-500 hover:bg-pink-600 text-white p-2 rounded-lg transition-colors duration-200" 
+                                       target="_blank" 
+                                       title="Instagram">
+                                        <i class="fab fa-instagram"></i>
                                     </a>
                                 @endif
                             </div>
 
+                            <!-- Detail Button -->
                             <a href="{{ route('umkm.show', $umkm->slug) }}" 
-                               class="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 transition text-sm">
-                                <i class="fas fa-eye me-1"></i>Detail
+                               class="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 flex items-center">
+                                <i class="fas fa-eye mr-2"></i>Detail
                             </a>
                         </div>
                     </div>
                 </div>
             @empty
-                <div class="col-span-full bg-white dark:bg-gray-800 rounded-xl shadow-lg p-12 text-center">
-                    <i class="fas fa-search fa-4x text-gray-400 dark:text-gray-600 mb-3"></i>
-                    <h4 class="text-gray-600 dark:text-gray-300 text-xl font-semibold">Tidak ada UMKM ditemukan</h4>
-                    <p class="text-gray-500 dark:text-gray-400 mb-4">Coba ubah kriteria pencarian Anda.</p>
-                    <a href="{{ route('umkm.index') }}" class="bg-indigo-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-indigo-700 transition">
-                        <i class="fas fa-refresh me-1"></i>Reset Filter
-                    </a>
+                <!-- No Results -->
+                <div class="col-span-full">
+                    <div class="text-center py-12 bg-white rounded-xl shadow-lg border border-cyan-100/50">
+                        <i class="fas fa-search text-6xl text-cyan-300 mb-4"></i>
+                        <h4 class="text-2xl font-bold text-teal-800 mb-2">Tidak ada UMKM ditemukan</h4>
+                        <p class="text-cyan-600 mb-6">Coba ubah kriteria pencarian Anda</p>
+                        <a href="{{ route('umkm.index') }}" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200">
+                            <i class="fas fa-refresh mr-2"></i>Reset Filter
+                        </a>
+                    </div>
                 </div>
             @endforelse
         </div>
 
+        <!-- Pagination -->
         @if($umkms->hasPages())
-            <div class="mt-8">
-                {{ $umkms->links('pagination::tailwind') }} {{-- Menggunakan pagination view Tailwind --}}
+            <div class="flex justify-center mt-8">
+                {{ $umkms->links() }}
             </div>
         @endif
     </div>
 </section>
+@endsection
 
-@push('scripts')
-<script>
-// Auto-submit form when filter changes
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('select[name="kategori"], select[name="dusun"]').forEach(function(element) {
-        element.addEventListener('change', function() {
-            this.form.submit();
-        });
-    });
-});
-</script>
-@endpush

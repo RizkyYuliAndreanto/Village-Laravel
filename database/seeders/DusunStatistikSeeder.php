@@ -9,58 +9,40 @@ use App\Models\TahunData;
 
 class DusunStatistikSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DusunStatistik::query()->delete();
+        $tahunIds = TahunData::pluck('id_tahun', 'tahun')->toArray();
 
-        $tahun2024 = TahunData::where('tahun', 2024)->first();
-        $tahun2023 = TahunData::where('tahun', 2023)->first();
+        $dusunNames = [
+            'Dusun Mawar',
+            'Dusun Melati',
+            'Dusun Kenanga',
+            'Dusun Cempaka',
+            'Dusun Anggrek',
+        ];
 
-        // --- Data Dusun untuk 2024 ---
-        if ($tahun2024) {
-            DusunStatistik::create([
-                'tahun_id' => $tahun2024->id_tahun,
-                'nama_dusun' => 'Krajan',
-                'jumlah_penduduk' => 500,
-                'jumlah_kk' => 150,
-            ]);
-            DusunStatistik::create([
-                'tahun_id' => $tahun2024->id_tahun,
-                'nama_dusun' => 'Wates',
-                'jumlah_penduduk' => 450,
-                'jumlah_kk' => 130,
-            ]);
-            DusunStatistik::create([
-                'tahun_id' => $tahun2024->id_tahun,
-                'nama_dusun' => 'Sawahan',
-                'jumlah_penduduk' => 550,
-                'jumlah_kk' => 160,
-            ]);
-        }
-        
-        // --- Data Dusun untuk 2023 ---
-        if ($tahun2023) {
-            DusunStatistik::create([
-                'tahun_id' => $tahun2023->id_tahun,
-                'nama_dusun' => 'Krajan',
-                'jumlah_penduduk' => 480,
-                'jumlah_kk' => 145,
-            ]);
-            DusunStatistik::create([
-                'tahun_id' => $tahun2023->id_tahun,
-                'nama_dusun' => 'Wates',
-                'jumlah_penduduk' => 440,
-                'jumlah_kk' => 125,
-            ]);
-            DusunStatistik::create([
-                'tahun_id' => $tahun2023->id_tahun,
-                'nama_dusun' => 'Sawahan',
-                'jumlah_penduduk' => 530,
-                'jumlah_kk' => 155,
-            ]);
+        foreach ($tahunIds as $tahun => $tahunId) {
+            foreach ($dusunNames as $index => $namaDusun) {
+                // Variasi data berdasarkan tahun dan dusun
+                $basePenduduk = 1500 + ($index * 200);
+                $baseKK = 400 + ($index * 50);
+
+                // Pertumbuhan tiap tahun
+                $growthFactor = ($tahun - 2020) * 0.02 + 1;
+
+                DusunStatistik::create([
+                    'tahun_id' => $tahunId,
+                    'nama_dusun' => $namaDusun,
+                    'jumlah_penduduk' => (int) ($basePenduduk * $growthFactor),
+                    'jumlah_kk' => (int) ($baseKK * $growthFactor),
+                    'keterangan' => "Data dusun {$namaDusun} tahun {$tahun}",
+                ]);
+            }
         }
     }
 }

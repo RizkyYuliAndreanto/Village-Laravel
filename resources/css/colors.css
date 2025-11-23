@@ -1,0 +1,453 @@
+/* ========================================
+   SISTEM WARNA GLOBAL WEBSITE DESA
+   ======================================== */
+
+:root {
+    /* PRIMARY COLORS - Warna Utama Website */
+    --primary-50: #f0fdfa; /* Background sangat terang */
+    --primary-100: #ccfbf1; /* Background terang */
+    --primary-200: #99f6e4; /* Background medium terang */
+    --primary-300: #5eead4; /* Accent terang */
+    --primary-400: #2dd4bf; /* Accent medium */
+    --primary-500: #14b8a6; /* Primary color */
+    --primary-600: #0d9488; /* Primary dark */
+    --primary-700: #0f766e; /* Text heading */
+    --primary-800: #115e59; /* Text dark */
+    --primary-900: #134e4a; /* Text very dark */
+
+    /* SECONDARY COLORS - Warna Pendukung */
+    --secondary-50: #ecfeff; /* Cyan very light */
+    --secondary-100: #cffafe; /* Cyan light */
+    --secondary-200: #a5f3fc; /* Cyan medium light */
+    --secondary-300: #67e8f9; /* Cyan medium */
+    --secondary-400: #22d3ee; /* Cyan bright */
+    --secondary-500: #06b6d4; /* Cyan primary */
+    --secondary-600: #0891b2; /* Cyan dark */
+    --secondary-700: #0e7490; /* Cyan very dark */
+    --secondary-800: #155e75; /* Cyan text */
+    --secondary-900: #164e63; /* Cyan text dark */
+}
+
+/* ========================================
+   NAVBAR COLORS
+   ======================================== */
+.navbar-bg {
+    background: linear-gradient(
+        to right,
+        var(--secondary-300),
+        var(--secondary-400),
+        var(--primary-400)
+    );
+}
+
+.navbar-text {
+    color: white;
+}
+
+.navbar-text-secondary {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.navbar-logo-border {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar-hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.navbar-active {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ========================================
+   SECTION BACKGROUNDS
+   ======================================== */
+.section-bg-primary {
+    background: linear-gradient(
+        to bottom right,
+        var(--primary-50),
+        var(--secondary-50)
+    );
+}
+
+.section-bg-secondary {
+    background: linear-gradient(
+        to bottom right,
+        var(--secondary-50),
+        var(--primary-50)
+    );
+}
+
+.section-bg-alternate {
+    background: linear-gradient(
+        to bottom right,
+        var(--primary-100),
+        var(--secondary-100)
+    );
+}
+
+/* Section yang gelap harus diganti */
+.section-bg-dark-fix {
+    background: linear-gradient(
+        to bottom right,
+        var(--primary-50),
+        var(--secondary-50)
+    ) !important;
+}
+
+/* ========================================
+   TEXT COLORS
+   ======================================== */
+.text-heading {
+    color: var(--primary-800);
+}
+
+.text-subheading {
+    color: var(--primary-700);
+}
+
+.text-body {
+    color: var(--primary-700);
+}
+
+.text-muted {
+    color: var(--secondary-600);
+}
+
+.text-accent {
+    color: var(--secondary-500);
+}
+
+/* ========================================
+   CARD COMPONENTS
+   ======================================== */
+.card-bg {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+}
+
+.card-border {
+    border-color: rgba(20, 184, 166, 0.1);
+}
+
+.card-shadow {
+    box-shadow: 0 10px 25px -5px rgba(20, 184, 166, 0.1),
+        0 4px 6px -2px rgba(20, 184, 166, 0.05);
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -10px rgba(21, 222, 198, 0.2);
+}
+
+/* ========================================
+   BUTTON COMPONENTS
+   ======================================== */
+.btn-primary {
+    background: linear-gradient(
+        135deg,
+        var(--primary-500),
+        var(--secondary-500)
+    );
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(
+        135deg,
+        var(--primary-600),
+        var(--secondary-600)
+    );
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(20, 184, 166, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--primary-600);
+    border: 2px solid var(--primary-400);
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: var(--primary-500);
+    color: white;
+    border-color: var(--primary-500);
+}
+
+/* ========================================
+   STATISTICS COMPONENTS
+   ======================================== */
+.stat-number {
+    color: var(--primary-800);
+    font-weight: 800;
+    font-size: 2rem;
+}
+
+.stat-label {
+    color: var(--secondary-600);
+    font-weight: 500;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(20, 184, 166, 0.1);
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+}
+
+/* ========================================
+   INFOGRAFIS SPECIFIC
+   ======================================== */
+.infografis-section {
+    background: linear-gradient(
+        to bottom right,
+        var(--primary-50),
+        var(--secondary-50)
+    );
+}
+
+.infografis-card {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(20, 184, 166, 0.15);
+}
+
+.infografis-title {
+    color: var(--primary-800);
+}
+
+.infografis-subtitle {
+    color: var(--secondary-700);
+}
+
+/* ========================================
+   UMKM SPECIFIC
+   ======================================== */
+.umkm-hero {
+    background: linear-gradient(
+        135deg,
+        var(--secondary-400),
+        var(--primary-400)
+    );
+}
+
+.umkm-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(20, 184, 166, 0.1);
+    transition: all 0.3s ease;
+}
+
+.umkm-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(20, 184, 166, 0.15);
+    border-color: var(--primary-300);
+}
+
+.umkm-title {
+    color: var(--primary-800);
+}
+
+.umkm-description {
+    color: var(--secondary-700);
+}
+
+/* ========================================
+   FOOTER SPECIFIC
+   ======================================== */
+.footer-bg {
+    background: linear-gradient(
+        135deg,
+        var(--primary-700),
+        var(--secondary-800)
+    );
+}
+
+.footer-text {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-title {
+    color: white;
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: var(--primary-300);
+}
+
+/* ========================================
+   APBDES SPECIFIC
+   ======================================== */
+.apbdes-hero {
+    background: linear-gradient(
+        135deg,
+        var(--primary-400),
+        var(--secondary-400)
+    );
+}
+
+.apbdes-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(20, 184, 166, 0.1);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+}
+
+.apbdes-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(20, 184, 166, 0.15);
+    border-color: var(--primary-300);
+}
+
+.apbdes-title {
+    color: var(--primary-800);
+}
+
+.apbdes-subtitle {
+    color: var(--secondary-700);
+}
+
+/* APBDes Status Colors - Menggunakan sistem warna yang konsisten */
+.apbdes-pendapatan {
+    background-color: var(--primary-500);
+    color: white;
+}
+
+.apbdes-pendapatan-light {
+    background-color: var(--primary-100);
+    color: var(--primary-800);
+}
+
+.apbdes-pendapatan-progress {
+    background-color: var(--primary-200);
+}
+
+.apbdes-pendapatan-bar {
+    background-color: var(--primary-500);
+}
+
+.apbdes-pendapatan-text {
+    color: var(--primary-700);
+}
+
+.apbdes-belanja {
+    background-color: var(--secondary-500);
+    color: white;
+}
+
+.apbdes-belanja-light {
+    background-color: var(--secondary-100);
+    color: var(--secondary-800);
+}
+
+.apbdes-belanja-progress {
+    background-color: var(--secondary-200);
+}
+
+.apbdes-belanja-bar {
+    background-color: var(--secondary-500);
+}
+
+.apbdes-belanja-text {
+    color: var(--secondary-700);
+}
+
+.apbdes-surplus {
+    background-color: var(--primary-500);
+    color: white;
+}
+
+.apbdes-surplus-light {
+    background-color: var(--primary-100);
+    color: var(--primary-800);
+}
+
+.apbdes-defisit {
+    background-color: var(--secondary-600);
+    color: white;
+}
+
+.apbdes-defisit-light {
+    background-color: var(--secondary-100);
+    color: var(--secondary-800);
+}
+
+.apbdes-balance {
+    background-color: var(--primary-600);
+    color: white;
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+.bg-gradient-primary {
+    background: linear-gradient(
+        135deg,
+        var(--primary-500),
+        var(--secondary-500)
+    );
+}
+
+.bg-gradient-light {
+    background: linear-gradient(
+        to bottom right,
+        var(--primary-50),
+        var(--secondary-50)
+    );
+}
+
+.bg-gradient-medium {
+    background: linear-gradient(
+        to bottom right,
+        var(--primary-100),
+        var(--secondary-100)
+    );
+}
+
+.border-primary {
+    border-color: var(--primary-400);
+}
+
+.border-secondary {
+    border-color: var(--secondary-400);
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+@media (max-width: 768px) {
+    .stat-number {
+        font-size: 1.5rem;
+    }
+}
+
+/* ========================================
+   DARK SECTIONS FIX - Untuk section yang masih gelap
+   ======================================== */
+.fix-dark-section {
+    background: linear-gradient(
+        to bottom right,
+        var(--primary-50),
+        var(--secondary-50)
+    ) !important;
+    color: var(--primary-800) !important;
+}
+
+.fix-dark-text {
+    color: var(--primary-800) !important;
+}
+
+.fix-dark-subtext {
+    color: var(--secondary-700) !important;
+}
