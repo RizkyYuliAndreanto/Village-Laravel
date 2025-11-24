@@ -3,16 +3,7 @@
 @section('content')
 <!-- Hero Section dengan Background Gradient -->
 <div class="section-bg-primary py-16">
-    <div class="container mx-auto px-4 lg:px-8">
-        <!-- Breadcrumb -->
-        <nav class="mb-8" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-sm">
-                <li><a href="{{ route('home') }}" class="text-primary-600 hover:text-primary-700 transition-colors">Beranda</a></li>
-                <li class="text-primary-400">/</li>
-                <li class="text-primary-800 font-medium">PPID</li>
-            </ol>
-        </nav>
-
+    <div class="container mx-auto px-4 py-16 lg:px-8">
         <!-- Page Title -->
         <div class="text-center mb-12">
             <h1 class="text-4xl lg:text-5xl font-bold text-heading mb-4">
@@ -217,23 +208,6 @@
         @endif
     </div>
 </div>
-      </p>
-    </div>
-  </div>
-</section>
-<!-- ===== Peta Lokasi ===== -->
-<section class="min-h-screen flex items-center pb-10 bg-gray-100 dark:bg-gray-900 border border-red">
-  <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-10 border border-red">
-    <div class="flex-shrink-0">
-      <img class="rounded-lg shadow-md max-w-sm"
-        src="{{ asset('images/logo-placeholder.jpg') }}"
-        alt="Logo Desa">
-    </div>
-    <div class="max-w-xl">
-      <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">JELAJAHI DESA</h3>
-      <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify">
-        Melalui website ini Anda dapat menjelajahi segala hal yang terkait dengan Desa.<br>
-        Pemerintahan, penduduk, demografi, potensi Desa, dan juga berita tentang Desa.
       </p>
     </div>
   </div>

@@ -1,6 +1,6 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Struktur Organisasi - Desa Banyukambang')
+@section('title', 'Struktur Organisasi - Desa Ngengor')
 
 @section('content')
 <!-- Hero Section with Breadcrumb -->
@@ -20,7 +20,7 @@
         <div class="text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Struktur Organisasi</h1>
             <p class="text-xl text-white/90 max-w-3xl mx-auto">
-                Pemerintahan Desa Banyukambang yang melayani dengan dedikasi dan transparansi
+                Pemerintahan Desa Ngengor yang melayani dengan dedikasi dan transparansi
             </p>
         </div>
     </div>

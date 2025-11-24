@@ -8,9 +8,9 @@
             Akses cepat dan transparan terhadap APB Desa serta proyek pembangunan.
         </p>
 
-        @if($apbdData && isset($apbdData['hasData']) && $apbdData['hasData'])
+        {{-- PERBAIKAN: Menggunakan isset($apbdData) agar tidak error jika variabel undefined --}}
+        @if(isset($apbdData) && isset($apbdData['hasData']) && $apbdData['hasData'])
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Pendapatan Desa -->
                 <div class="card-bg rounded-lg card-shadow p-6">
                     <h3 class="text-xl font-bold mb-3 text-heading">Pendapatan Desa</h3>
                     <p class="text-2xl font-bold text-green-600 mb-4">
@@ -31,7 +31,6 @@
                     </p>
                 </div>
 
-                <!-- Belanja Desa -->
                 <div class="card-bg rounded-lg card-shadow p-6">
                     <h3 class="text-xl font-bold mb-3 text-heading">Belanja Desa</h3>
                     <p class="text-2xl font-bold text-red-600 mb-4">
@@ -54,12 +53,14 @@
             </div>
 
             <div class="flex justify-end mt-10">
+                {{-- Pastikan route 'belanja.index' ada di web.php --}}
                 <a href="{{ route('belanja.index') }}" 
                    class="btn-primary inline-block px-8 py-3 font-semibold rounded-lg shadow transition-all duration-300">
                     Lihat Data Lengkap →
                 </a>
             </div>
         @else
+            {{-- Tampilan Alternatif jika Data Kosong --}}
             <div class="card-bg rounded-lg card-shadow p-8">
                 <div class="text-muted mb-4">
                     <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

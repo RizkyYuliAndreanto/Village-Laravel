@@ -13,7 +13,7 @@
                 <div class="flex items-start gap-6 mb-6">
                     <div class="relative">
                         <img class="h-16 w-16 rounded-xl shadow-lg border-2 border-blue-300/30"
-                            src="{{ asset('images/logo-placeholder.jpg') }}"
+                            src="{{ asset('images/Kabupaten_Madiun.png') }}"
                             alt="Logo Desa Banyukambang">
                         <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-400/20 to-transparent"></div>
                     </div>
@@ -23,10 +23,10 @@
                     </div>
                 </div>
                 <p class="text-blue-100 text-base leading-relaxed max-w-md">
-                    Portal digital terpadu untuk layanan masyarakat, informasi desa, dan pengembangan UMKM lokal. 
+                    Portal digital terpadu untuk layanan masyarakat, informasi desa, dan pengembangan UMKM lokal.
                     Membangun transparansi dan aksesibilitas dalam pemerintahan desa.
                 </p>
-                
+
                 <!-- Social Media -->
                 <div class="flex space-x-4 mt-6">
                     <a href="#" class="bg-blue-600/50 hover:bg-blue-500 p-3 rounded-full transition-all duration-300 hover:scale-110 group">
@@ -49,13 +49,13 @@
                 </h3>
                 <ul class="space-y-3">
                     <li><a href="{{ route('home') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-home w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Beranda</a></li>
+                            <i class="fas fa-home w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Beranda</a></li>
                     <li><a href="{{ route('profil-desa.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-info-circle w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Profil Desa</a></li>
+                            <i class="fas fa-info-circle w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Profil Desa</a></li>
                     <li><a href="{{ route('infografis.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-chart-bar w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Infografis</a></li>
+                            <i class="fas fa-chart-bar w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Infografis</a></li>
                     <li><a href="{{ route('umkm.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-store w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>UMKM</a></li>
+                            <i class="fas fa-store w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>UMKM</a></li>
                 </ul>
             </div>
 
@@ -67,20 +67,21 @@
                 </h3>
                 <ul class="space-y-3">
                     <li><a href="{{ route('belanja.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-coins w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>APBDes</a></li>
+                            <i class="fas fa-coins w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>APBDes</a></li>
                     <li><a href="{{ route('berita.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-newspaper w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Berita</a></li>
+                            <i class="fas fa-newspaper w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Berita</a></li>
                     <li><a href="{{ route('ppid.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-folder-open w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>PPID</a></li>
+                            <i class="fas fa-folder-open w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>PPID</a></li>
                     <li><a href="/admin" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-user-shield w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Login Admin</a></li>
+                            <i class="fas fa-user-shield w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Login Admin</a></li>
                 </ul>
             </div>
         </div>
 
         {{-- Kontak Info --}}
-        <div class="mt-12 pt-8 border-t border-blue-600/30">
+        <div class="mt-auto pt-16 border-t border-blue-600/30">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!--Map-->
                 <div class="flex items-center space-x-3">
                     <div class="bg-blue-600/50 p-3 rounded-full">
                         <i class="fas fa-map-marker-alt text-blue-200"></i>
@@ -90,6 +91,7 @@
                         <p class="text-white font-medium">Desa Banyukambang, Wonoasri</p>
                     </div>
                 </div>
+                <!--Telpon-->
                 <div class="flex items-center space-x-3">
                     <div class="bg-blue-600/50 p-3 rounded-full">
                         <i class="fas fa-phone text-blue-200"></i>
@@ -99,6 +101,7 @@
                         <p class="text-white font-medium">+62 xxx xxxx xxxx</p>
                     </div>
                 </div>
+                <!--Email-->
                 <div class="flex items-center space-x-3">
                     <div class="bg-blue-600/50 p-3 rounded-full">
                         <i class="fas fa-envelope text-blue-200"></i>

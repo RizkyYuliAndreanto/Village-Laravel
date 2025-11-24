@@ -1,26 +1,15 @@
 @extends('frontend.layouts.main')
 
-@section('title', 'Potensi Desa - Desa Banyukambang')
+@section('title', 'Potensi Desa - Desa Ngengor')
 
 @section('content')
 <!-- Hero Section with Breadcrumb -->
 <section class="bg-gradient-to-br from-profil-primary via-profil-accent to-teal-700 text-white py-16">
-    <div class="container mx-auto px-4">
-        <!-- Breadcrumb -->
-        <nav class="mb-8">
-            <ol class="flex items-center space-x-2 text-sm">
-                <li><a href="{{ route('home') }}" class="hover:underline">Beranda</a></li>
-                <li>›</li>
-                <li><a href="{{ route('profil-desa.index') }}" class="hover:underline">Profil Desa</a></li>
-                <li>›</li>
-                <li class="font-semibold">Potensi Desa</li>
-            </ol>
-        </nav>
-        
+    <div class="container mx-auto px-4 py-16">
         <div class="text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Potensi Desa</h1>
             <p class="text-xl text-white/90 max-w-3xl mx-auto">
-                Kekayaan alam, budaya, dan sumber daya yang menjadi keunggulan Desa Banyukambang
+                Kekayaan alam, budaya, dan sumber daya yang menjadi keunggulan Desa Ngengor
             </p>
         </div>
     </div>
@@ -31,9 +20,9 @@
     <div class="container mx-auto px-4">
         <!-- Section Header -->
         <div class="text-center mb-16" data-aos="fade-up">
-            <h2 class="text-3xl md:text-4xl font-bold text-heading mb-4">Kekayaan Desa Banyukambang</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-heading mb-4">Kekayaan Desa Ngengor</h2>
             <p class="text-lg text-body max-w-3xl mx-auto">
-                Desa Banyukambang memiliki berbagai potensi yang dapat dikembangkan untuk meningkatkan 
+                Desa Ngengor memiliki berbagai potensi yang dapat dikembangkan untuk meningkatkan 
                 kesejahteraan masyarakat dan daya tarik wisata
             </p>
             <div class="w-24 h-1 bg-gradient-to-r from-profil-primary to-profil-accent mx-auto mt-6"></div>

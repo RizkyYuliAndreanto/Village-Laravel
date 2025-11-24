@@ -1,26 +1,15 @@
 @extends('frontend.layouts.profil-desa')
 
-@section('title', 'Visi Misi - Desa Banyukambang')
+@section('title', 'Visi Misi - Desa Ngengor')
 
 @section('content')
 <!-- Hero Section with Breadcrumb -->
 <section class="bg-gradient-to-br from-profil-primary via-profil-accent to-teal-700 text-white py-16">
-    <div class="container mx-auto px-4">
-        <!-- Breadcrumb -->
-        <nav class="mb-8">
-            <ol class="flex items-center space-x-2 text-sm">
-                <li><a href="{{ route('frontend.home') }}" class="hover:underline">Beranda</a></li>
-                <li>›</li>
-                <li><a href="{{ route('profil-desa.index') }}" class="hover:underline">Profil Desa</a></li>
-                <li>›</li>
-                <li class="font-semibold">Visi Misi</li>
-            </ol>
-        </nav>
-        
+    <div class="container mx-auto px-4 py-16">
         <div class="text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Visi & Misi</h1>
             <p class="text-xl text-white/90 max-w-3xl mx-auto">
-                Komitmen Desa Banyukambang dalam membangun masa depan yang lebih baik
+                Komitmen Desa Ngengor dalam membangun masa depan yang lebih baik
             </p>
         </div>
     </div>

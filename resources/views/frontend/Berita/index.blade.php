@@ -3,16 +3,7 @@
 @section('content')
 <!-- Hero Section dengan Background Gradient -->
 <div class="section-bg-primary py-16">
-    <div class="container mx-auto px-4 lg:px-8">
-        <!-- Breadcrumb -->
-        <nav class="mb-8" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-sm">
-                <li><a href="{{ route('home') }}" class="text-primary-600 hover:text-primary-700 transition-colors">Beranda</a></li>
-                <li class="text-primary-400">/</li>
-                <li class="text-primary-800 font-medium">Berita</li>
-            </ol>
-        </nav>
-
+    <div class="container mx-auto px-4 py-16 lg:px-8">
         <!-- Page Title -->
         <div class="text-center mb-12">
             <h1 class="text-4xl lg:text-5xl font-bold text-heading mb-4">

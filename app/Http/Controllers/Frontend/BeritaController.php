@@ -22,7 +22,7 @@ class BeritaController extends Controller
      * Route: GET /berita
      * 
      * @param Request $request
-     * @return array
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request)
     {
@@ -37,8 +37,8 @@ class BeritaController extends Controller
             ->when($search, function ($query, $search) {
                 return $query->where(function ($q) use ($search) {
                     $q->where('judul', 'like', "%{$search}%")
-                    ->orWhere('isi', 'like', "%{$search}%")
-                    ->orWhere('penulis', 'like', "%{$search}%");
+                        ->orWhere('isi', 'like', "%{$search}%")
+                        ->orWhere('penulis', 'like', "%{$search}%");
                 });
             })
             ->when($kategori, function ($query, $kategori) {
@@ -50,44 +50,38 @@ class BeritaController extends Controller
             ->when($bulan, function ($query, $bulan) {
                 return $query->whereMonth('created_at', $bulan);
             })
-            ->where('status', 'published')
             ->orderBy('created_at', 'desc')
-            ->paginate(9)
-            ->withQueryString();
+            ->paginate(9); // 9 berita per halaman
 
         // Data tambahan untuk filter
         $kategoris = Berita::select('kategori')
-            ->where('status', 'published')
             ->distinct()
             ->pluck('kategori')
             ->filter()
             ->sort();
 
         $tahuns = Berita::selectRaw('YEAR(created_at) as tahun')
-            ->where('status', 'published')
             ->distinct()
             ->orderBy('tahun', 'desc')
             ->pluck('tahun');
 
         // Statistik
-        $totalBerita = Berita::where('status', 'published')->count();
-        $beritaBulanIni = Berita::where('status', 'published')
-            ->whereMonth('created_at', now()->month)
+        $totalBerita = Berita::count();
+        $beritaBulanIni = Berita::whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
             ->count();
 
-        $data = [
-            'berita' => $berita,
-            'kategoris' => $kategoris,
-            'tahuns' => $tahuns,
-            'search' => $search,
-            'kategori' => $kategori,
-            'tahun' => $tahun,
-            'bulan' => $bulan,
-            'totalBerita' => $totalBerita,
-            'beritaBulanIni' => $beritaBulanIni
-        ];
-        return view('frontend.Berita.index', $data);
+        return view('frontend.berita.index', compact(
+            'berita',
+            'kategoris', 
+            'tahuns',
+            'search',
+            'kategori',
+            'tahun',
+            'bulan',
+            'totalBerita',
+            'beritaBulanIni'
+        ));
     }
 
     /**
@@ -95,38 +89,34 @@ class BeritaController extends Controller
      * Route: GET /berita/{id}
      * 
      * @param int $id
-     * @return array
+     * @return \Illuminate\Contracts\View\View
      */
     public function show($id)
     {
         // Cari berita berdasarkan ID
-        $berita = Berita::where('status', 'published')
-            ->findOrFail($id);
+        $berita = Berita::findOrFail($id);
 
-        // Increment view count
-        $berita->increment('views');
+        // Note: views column not available in current schema
+        // $berita->increment('views');
 
         // Berita terkait (kategori sama, exclude current)
-        $beritaTerkait = Berita::where('status', 'published')
-            ->where('kategori', $berita->kategori)
+        $beritaTerkait = Berita::where('kategori', $berita->kategori)
             ->where('id', '!=', $berita->id)
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();
 
         // Berita terbaru untuk sidebar
-        $beritaTerbaru = Berita::where('status', 'published')
-            ->where('id', '!=', $berita->id)
+        $beritaTerbaru = Berita::where('id', '!=', $berita->id)
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();
 
-        $data = [
-            'berita' => $berita,
-            'beritaTerkait' => $beritaTerkait,
-            'beritaTerbaru' => $beritaTerbaru
-        ];
-        return view('frontend.Berita.show', $data);
+        return view('frontend.berita.show', compact(
+            'berita',
+            'beritaTerkait',
+            'beritaTerbaru'
+        ));
     }
 
     /**
@@ -138,10 +128,9 @@ class BeritaController extends Controller
      */
     public function terbaru($limit = 6)
     {
-        $berita = Berita::where('status', 'published')
-            ->orderBy('created_at', 'desc')
+        $berita = Berita::orderBy('created_at', 'desc')
             ->limit($limit)
-            ->get(['id', 'judul', 'slug', 'konten', 'gambar_url', 'created_at', 'penulis', 'kategori']);
+            ->get(['id', 'judul', 'isi', 'gambar_url', 'created_at', 'penulis', 'kategori']);
 
         return [
             'data' => $berita,
@@ -158,11 +147,9 @@ class BeritaController extends Controller
      */
     public function populer($limit = 5)
     {
-        $berita = Berita::where('status', 'published')
-            ->orderBy('views', 'desc')
-            ->orderBy('created_at', 'desc')
+        $berita = Berita::orderBy('created_at', 'desc')
             ->limit($limit)
-            ->get(['id', 'judul', 'slug', 'konten', 'gambar_url', 'views', 'created_at', 'penulis']);
+            ->get(['id', 'judul', 'isi', 'gambar_url', 'created_at', 'penulis']);
 
         return [
             'data' => $berita,
@@ -185,14 +172,13 @@ class BeritaController extends Controller
             return response()->json([]);
         }
 
-        $results = Berita::where('status', 'published')
-            ->where(function ($q) use ($query) {
+        $results = Berita::where(function ($q) use ($query) {
                 $q->where('judul', 'like', "%{$query}%")
-                    ->orWhere('konten', 'like', "%{$query}%");
+                    ->orWhere('isi', 'like', "%{$query}%");
             })
             ->orderBy('created_at', 'desc')
             ->limit(10)
-            ->get(['id', 'judul', 'slug', 'created_at']);
+            ->get(['id', 'judul', 'created_at']);
 
         return response()->json($results);
     }
@@ -203,19 +189,15 @@ class BeritaController extends Controller
      * 
      * @param string $kategori
      * @param Request $request
-     * @return array
+     * @return \Illuminate\Contracts\View\View
      */
     public function kategori($kategori, Request $request)
     {
         $search = $request->get('search');
         $tahun = $request->get('tahun');
-        $bulan = $request->get('bulan'); // <-- Tambahkan ini
 
-        $query = Berita::where('status', 'published')
-            ->where('kategori', $kategori);
-
-        // Terapkan filter tambahan
-        $query->when($search, function ($query, $search) {
+        $berita = Berita::where('kategori', $kategori)
+            ->when($search, function ($query, $search) {
                 return $query->where(function ($q) use ($search) {
                     $q->where('judul', 'like', "%{$search}%")
                         ->orWhere('isi', 'like', "%{$search}%");
@@ -224,49 +206,27 @@ class BeritaController extends Controller
             ->when($tahun, function ($query, $tahun) {
                 return $query->whereYear('created_at', $tahun);
             })
-            ->when($bulan, function ($query, $bulan) { // <-- Tambahkan filter bulan
-                return $query->whereMonth('created_at', $bulan);
-            });
+            ->orderBy('created_at', 'desc')
+            ->paginate(9);
 
-        $berita = $query->orderBy('created_at', 'desc')
-            ->paginate(9)
-            ->withQueryString(); // <-- TAMBAHKAN INI
-
-        // Data untuk filter (HARUS SAMA DENGAN METHOD INDEX)
-        $kategoris = Berita::select('kategori')
-            ->where('status', 'published')
-            ->distinct()
-            ->pluck('kategori')
-            ->filter()
-            ->sort();
-
-        $tahuns = Berita::selectRaw('YEAR(created_at) as tahun')
-            ->where('status', 'published')
+        // Data untuk filter
+        $tahuns = Berita::where('kategori', $kategori)
+            ->selectRaw('YEAR(created_at) as tahun')
             ->distinct()
             ->orderBy('tahun', 'desc')
             ->pluck('tahun');
 
-        // Statistik (HARUS SAMA DENGAN METHOD INDEX)
-        $totalBerita = Berita::where('status', 'published')->count();
-        $beritaBulanIni = Berita::where('status', 'published')
-            ->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
+        $totalBerita = Berita::where('kategori', $kategori)
             ->count();
 
-        // Kirim semua data yang dibutuhkan oleh view index
-        $data = [
-            'berita' => $berita,
-            'kategoris' => $kategoris, // <-- Tambahkan ini
-            'tahuns' => $tahuns,
-            'search' => $search,
-            'kategori' => $kategori, // Ini dari parameter URL, bukan form
-            'tahun' => $tahun,
-            'bulan' => $bulan, // <-- Tambahkan ini
-            'totalBerita' => $totalBerita, // <-- Tambahkan ini
-            'beritaBulanIni' => $beritaBulanIni // <-- Tambahkan ini
-        ];
-        
-        return view('frontend.Berita.index', $data);
+        return view('frontend.berita.kategori', compact(
+            'berita',
+            'kategori',
+            'tahuns',
+            'search',
+            'tahun',
+            'totalBerita'
+        ));
     }
 
     /**
@@ -275,24 +235,21 @@ class BeritaController extends Controller
      * 
      * @param int $tahun
      * @param int|null $bulan
-     * @return array
+     * @return \Illuminate\Contracts\View\View
      */
     public function arsip($tahun, $bulan = null)
     {
-        $query = Berita::where('status', 'published')
-            ->whereYear('created_at', $tahun);
+        $query = Berita::whereYear('created_at', $tahun);
 
         if ($bulan) {
             $query->whereMonth('created_at', $bulan);
         }
 
         $berita = $query->orderBy('created_at', 'desc')
-            ->paginate(12)
-            ->withQueryString();
+            ->paginate(12);
 
         // Statistik bulan untuk tahun tersebut
-        $statistikBulan = Berita::where('status', 'published')
-            ->whereYear('created_at', $tahun)
+        $statistikBulan = Berita::whereYear('created_at', $tahun)
             ->selectRaw('MONTH(created_at) as bulan, COUNT(*) as total')
             ->groupBy('bulan')
             ->orderBy('bulan')
@@ -314,14 +271,13 @@ class BeritaController extends Controller
             12 => 'Desember'
         ];
 
-        $data = [
-            'berita' => $berita,
-            'tahun' => $tahun,
-            'bulan' => $bulan,
-            'statistikBulan' => $statistikBulan,
-            'namaBulan' => $namaBulan
-        ];
-        return view('frontend.Berita.arsip', $data);
+        return view('frontend.berita.arsip', compact(
+            'berita',
+            'tahun',
+            'bulan',
+            'statistikBulan',
+            'namaBulan'
+        ));
     }
 
     /**
@@ -332,18 +288,16 @@ class BeritaController extends Controller
      */
     public function widget()
     {
-        $beritaTerbaru = Berita::where('status', 'published')
-            ->orderBy('created_at', 'desc')
+        $beritaTerbaru = Berita::orderBy('created_at', 'desc')
             ->limit(5)
-            ->get(['id', 'judul', 'slug', 'created_at']);
+            ->get(['id', 'judul', 'created_at']);
 
-        $beritaPopuler = Berita::where('status', 'published')
-            ->orderBy('views', 'desc')
+        $beritaPopuler = Berita::orderBy('created_at', 'desc')
             ->limit(5)
-            ->get(['id', 'judul', 'slug', 'views']);
+            ->get(['id', 'judul', 'created_at']);
 
-        $totalBerita = Berita::where('status', 'published')->count();
-        $totalViews = Berita::where('status', 'published')->sum('views');
+        $totalBerita = Berita::count();
+        $totalViews = 0; // views column not available
 
         return [
             'terbaru' => $beritaTerbaru,

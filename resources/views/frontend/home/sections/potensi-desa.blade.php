@@ -1,135 +1,67 @@
-{{-- Section: Potensi Desa --}}
-<section class="min-h-screen flex flex-col justify-center py-20 section-bg-primary">
+<section class="py-20 bg-white" id="potensi">
     <div class="container mx-auto px-6">
-        <div class="text-center text-body mb-10">
-            <h2 class="text-3xl font-bold mb-2 text-heading">Potensi Desa Banyukambang</h2>
-            <p class="text-body max-w-4xl mx-auto">
-                Informasi tentang potensi dan kemajuan Desa di berbagai bidang seperti ekonomi,
-                pariwisata, pertanian, industri kreatif, dan kelestarian lingkungan
-            </p>
-        </div>
-        
-        @if(isset($potensiDesa) && count($potensiDesa) > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                @foreach($potensiDesa as $potensi)
-                    <div class="text-center">
-                        <x-circle-image-frame 
-                            image="{{ $potensi->gambar ? asset('storage/'.$potensi->gambar) : asset('images/logo-placeholder.jpg') }}" 
-                            alt="{{ $potensi->nama }}" />
-                        <h3 class="text-xl font-bold text-heading mt-6">
-                            {{ $potensi->nama }}
-                        </h3>
-                        <p class="text-body mt-2 max-w-xs mx-auto">
-                            {{ $potensi->deskripsi }}
-                        </p>
-                        @if($potensi->kategori)
-                            <span class="inline-block mt-2 px-3 py-1 bg-primary-100 text-primary-800 text-xs font-medium rounded-full">
-                                {{ $potensi->kategori }}
-                            </span>
-                        @endif
-                    </div>
-                @endforeach
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+            <div class="max-w-2xl mb-4 md:mb-0">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Potensi Desa</h2>
+                <div class="w-20 h-1 bg-blue-600 rounded-full mb-4"></div>
+                <p class="text-gray-600">Menjelajahi kekayaan produk lokal dan usaha mikro kecil menengah (UMKM) yang menjadi penggerak ekonomi desa.</p>
             </div>
-        @else
-            {{-- Data potensi berdasarkan data real desa --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div class="text-center">
-                    <x-circle-image-frame 
-                        image="{{ asset('images/logo-placeholder.jpg') }}" 
-                        alt="Lahan Pertanian" />
-                    <h3 class="text-xl font-bold text-heading mt-6">
-                        Lahan Pertanian
-                    </h3>
-                    <p class="text-body mt-2 max-w-xs mx-auto">
-                        Lahan pertanian seluas 100 ha yang menjadi sumber ekonomi utama masyarakat desa.
-                    </p>
-                    <span class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-                        Pertanian
-                    </span>
-                </div>
-                
-                <div class="text-center">
-                    <x-circle-image-frame 
-                        image="{{ asset('images/logo-placeholder.jpg') }}" 
-                        alt="Lahan Perkebunan" />
-                    <h3 class="text-xl font-bold text-heading mt-6">
-                        Lahan Perkebunan
-                    </h3>
-                    <p class="text-body mt-2 max-w-xs mx-auto">
-                        Perkebunan seluas 13 ha yang menghasilkan berbagai komoditas untuk ekonomi desa.
-                    </p>
-                    <span class="inline-block mt-2 px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
-                        Perkebunan
-                    </span>
-                </div>
-                
-                <div class="text-center">
-                    <x-circle-image-frame 
-                        image="{{ asset('images/logo-placeholder.jpg') }}" 
-                        alt="Sumber Daya Manusia" />
-                    <h3 class="text-xl font-bold text-heading mt-6">
-                        SDM Berkualitas
-                    </h3>
-                    <p class="text-body mt-2 max-w-xs mx-auto">
-                        1.697 jiwa penduduk dengan 658 KK yang menjadi kekuatan pembangunan desa.
-                    </p>
-                    <span class="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                        SDM
-                    </span>
-                </div>
-                
-                <div class="text-center">
-                    <x-circle-image-frame 
-                        image="{{ asset('images/logo-placeholder.jpg') }}" 
-                        alt="Tenaga Kerja Pertanian" />
-                    <h3 class="text-xl font-bold text-heading mt-6">
-                        Tenaga Kerja Pertanian
-                    </h3>
-                    <p class="text-body mt-2 max-w-xs mx-auto">
-                        305 orang tenaga kerja di sektor pertanian sebagai penghasilan utama penduduk.
-                    </p>
-                    <span class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-                        Tenaga Kerja
-                    </span>
-                </div>
-                
-                <div class="text-center">
-                    <x-circle-image-frame 
-                        image="{{ asset('images/logo-placeholder.jpg') }}" 
-                        alt="Tenaga Pendidik" />
-                    <h3 class="text-xl font-bold text-heading mt-6">
-                        Tenaga Pendidik
-                    </h3>
-                    <p class="text-body mt-2 max-w-xs mx-auto">
-                        1.397 orang lulusan berbagai jenjang pendidikan yang berkontribusi pada pembangunan.
-                    </p>
-                    <span class="inline-block mt-2 px-3 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
-                        Pendidikan
-                    </span>
-                </div>
-                
-                <div class="text-center">
-                    <x-circle-image-frame 
-                        image="{{ asset('images/logo-placeholder.jpg') }}" 
-                        alt="Fasilitas Umum" />
-                    <h3 class="text-xl font-bold text-heading mt-6">
-                        Fasilitas Umum
-                    </h3>
-                    <p class="text-body mt-2 max-w-xs mx-auto">
-                        Lapangan olahraga, tempat pendidikan, dan fasilitas umum lainnya untuk mendukung aktivitas masyarakat.
-                    </p>
-                    <span class="inline-block mt-2 px-3 py-1 bg-cyan-100 text-cyan-800 text-xs font-medium rounded-full">
-                        Fasilitas
-                    </span>
-                </div>
-            </div>
-        @endif
-        
-        <div class="flex justify-end mt-10">
-            <a href="{{ route('umkm.index') }}" 
-               class="btn-primary px-6 py-2 rounded-lg transition-all duration-300">
-                Lihat Selengkapnya →
+            <a href="{{ route('umkm.index') }}" class="text-blue-600 font-semibold hover:text-blue-700 flex items-center group">
+                Jelajahi Semua
+                <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
             </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            @forelse($potensiDesa as $umkm)
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 group">
+                    <div class="relative h-64 overflow-hidden">
+                        {{-- Cover Image --}}
+                        @if($umkm->foto_url || $umkm->image)
+                             {{-- Support format array jika foto multiple, atau string single path --}}
+                            @php
+                                $foto = is_array($umkm->foto_url) ? ($umkm->foto_url[0] ?? null) : $umkm->foto_url;
+                            @endphp
+                            <img src="{{ asset('storage/' . $foto) }}" 
+                                 alt="{{ $umkm->nama_umkm ?? $umkm->nama_usaha }}" 
+                                 class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                        @else
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </div>
+                        @endif
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-3 py-1 bg-blue-50 text-blue-600 text-xs font-semibold rounded-full">
+                                {{ $umkm->kategori->nama_kategori ?? 'UMKM' }}
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
+                            <a href="{{ route('umkm.show', $umkm->slug ?? $umkm->id) }}">
+                                {{ $umkm->nama_umkm ?? $umkm->nama_usaha }}
+                            </a>
+                        </h3>
+                        
+                        <p class="text-gray-600 text-sm line-clamp-2 mb-4">
+                            {{ Str::limit($umkm->deskripsi, 100) }}
+                        </p>
+                        
+                        <div class="flex items-center text-sm text-gray-500 pt-4 border-t border-gray-100">
+                            <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            {{ $umkm->pemilik }}
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-full text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                    <p class="text-gray-500">Belum ada data potensi desa yang ditambahkan.</p>
+                </div>
+            @endforelse
         </div>
     </div>
 </section>
