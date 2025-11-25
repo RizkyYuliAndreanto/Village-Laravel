@@ -13,7 +13,7 @@
                             allowfullscreen=""
                             loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade"
-                            title="Peta Desa Banyukambang">
+                            title="Peta Desa Ngengor">
                         </iframe>
         </div>
         

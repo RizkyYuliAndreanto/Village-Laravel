@@ -6,6 +6,9 @@
 @section('content')
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-cyan-300 via-cyan-400 to-teal-400 py-16">
+    <div class="flex justify-center mb-6 w-full">
+                @include('frontend.layouts.partials.submenu')
+            </div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
             <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">

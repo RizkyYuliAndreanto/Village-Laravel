@@ -145,12 +145,28 @@ Route::prefix('api/ppid')->name('api.ppid.')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('profil-desa')->name('profil-desa.')->group(function () {
+
     Route::get('/', [ProfilDesaController::class, 'index'])->name('index');
     Route::get('/visi-misi', [ProfilDesaController::class, 'visiMisi'])->name('visi-misi');
     Route::get('/struktur-organisasi', [ProfilDesaController::class, 'strukturOrganisasi'])->name('struktur-organisasi');
     Route::get('/potensi-desa', [ProfilDesaController::class, 'potensiDesa'])->name('potensi-desa');
     Route::get('/peta-desa', [ProfilDesaController::class, 'petaDesa'])->name('peta-desa');
+
+    // -----------------------------
+    //  ROUTE KHUSUS STRUKTUR ANGGOTA
+    // -----------------------------
+    Route::prefix('struktur-anggota')->name('struktur-anggota.')->group(function () {
+
+        // Lihat semua anggota
+        Route::get('/', [ProfilDesaController::class, 'strukturSemua'])
+            ->name('index');
+
+        // Detail anggota
+        Route::get('/{id}', [ProfilDesaController::class, 'strukturShow'])
+            ->name('show');
+    });
 });
+
 
 /*
 |--------------------------------------------------------------------------
@@ -159,7 +175,10 @@ Route::prefix('profil-desa')->name('profil-desa.')->group(function () {
 */
 Route::prefix('umkm')->name('umkm.')->group(function () {
     Route::get('/', [UmkmController::class, 'index'])->name('index');
-    Route::get('/dashboard', [UmkmController::class, 'dashboard'])->name('dashboard');
+    // ADD middleware(['auth']) here
+    Route::get('/dashboard', [UmkmController::class, 'dashboard'])
+        ->name('dashboard')
+        ->middleware(['auth']);
     Route::get('/kategori/{kategori:slug}', [UmkmController::class, 'kategori'])->name('kategori');
     Route::get('/search-ajax', [UmkmController::class, 'searchAjax'])->name('search.ajax');
     Route::get('/{umkm:slug}', [UmkmController::class, 'show'])->name('show');
