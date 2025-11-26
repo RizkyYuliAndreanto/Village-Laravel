@@ -45,11 +45,12 @@ class DatabaseSeeder extends Seeder
             StrukturOrganisasiSeeder::class,
 
             // APBDes related - COMMENTED OUT FOR NOW (features not implemented yet)
+            BidangApbdesSeeder::class,
+            LaporanApbdesSeeder::class,
+            DetailApbdesSeeder::class,
             // ApbdesTahunSeeder::class,
             // PendapatanSeeder::class,
             // PengeluaranSeeder::class,
-            // LaporanApbdesSeeder::class,
-            // DetailApbdesSeeder::class,
 
             // PPID Documents
             PpidDokumenSeeder::class,

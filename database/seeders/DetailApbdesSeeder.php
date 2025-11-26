@@ -2,66 +2,103 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
+use App\Models\BidangApbdes;
 use App\Models\DetailApbdes;
 use App\Models\LaporanApbdes;
+use App\Models\SubBidangApbdes;
+use Illuminate\Database\Seeder;
 
 class DetailApbdesSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $laporanIds = LaporanApbdes::all();
+        // Cari Laporan Tahun Ini yang baru saja kita seed
+        $tahunSekarang = date('Y');
+        $laporan = LaporanApbdes::whereHas('tahunData', function($q) use ($tahunSekarang) {
+            $q->where('tahun', $tahunSekarang);
+        })->first();
 
-        $detailTemplate = [
-            'pendapatan' => [
-                'Dana Desa dari Pusat' => ['anggaran' => 800000000, 'realisasi' => 800000000],
-                'Alokasi Dana Desa' => ['anggaran' => 400000000, 'realisasi' => 390000000],
-                'Pendapatan Asli Desa' => ['anggaran' => 100000000, 'realisasi' => 95000000],
-                'Bantuan Keuangan Daerah' => ['anggaran' => 300000000, 'realisasi' => 300000000],
-                'Hibah dan Sumbangan' => ['anggaran' => 50000000, 'realisasi' => 45000000],
-            ],
-            'belanja' => [
-                'Belanja Pegawai' => ['anggaran' => 400000000, 'realisasi' => 380000000],
-                'Belanja Barang dan Jasa' => ['anggaran' => 300000000, 'realisasi' => 290000000],
-                'Belanja Modal' => ['anggaran' => 600000000, 'realisasi' => 580000000],
-                'Belanja Tak Terduga' => ['anggaran' => 50000000, 'realisasi' => 25000000],
-            ],
-        ];
+        if (!$laporan) {
+            // Fallback jika tidak ketemu, ambil yang terakhir
+            $laporan = LaporanApbdes::latest()->first();
+        }
 
-        foreach ($laporanIds as $laporan) {
-            // Get the year from tahun_data relation
-            $tahun = $laporan->tahunData->tahun ?? 2024;
+        if (!$laporan) {
+            $this->command->error('Harap jalankan LaporanAPBDesSeeder terlebih dahulu.');
+            return;
+        }
 
-            // Growth factor based on year
-            $growthFactor = 1 + (($tahun - 2020) * 0.1);
+        // --- INPUT PENDAPATAN ---
+        $bidangPendapatan = BidangApbdes::where('kategori', 'pendapatan')->first();
+        if ($bidangPendapatan) {
+            $subDD = SubBidangApbdes::where('nama_sub_bidang', 'like', '%Transfer%')->first();
+            
+            // Menggunakan updateOrCreate berdasarkan laporan_id dan uraian
+            DetailApbdes::updateOrCreate(
+                [
+                    'laporan_apbdes_id' => $laporan->id,
+                    'uraian' => 'Dana Desa (DD)',
+                ],
+                [
+                    'bidang_apbdes_id' => $bidangPendapatan->id,
+                    'sub_bidang_apbdes_id' => $subDD?->id,
+                    'tipe' => 'pendapatan',
+                    'anggaran' => 850000000,
+                    'realisasi' => 850000000,
+                    'bulan_realisasi' => 12,
+                ]
+            );
 
-            foreach ($detailTemplate as $tipe => $items) {
-                foreach ($items as $uraian => $amounts) {
-                    $anggaran = $amounts['anggaran'] * $growthFactor;
-                    $realisasi = $amounts['realisasi'] * $growthFactor;
+            DetailApbdes::updateOrCreate(
+                [
+                    'laporan_apbdes_id' => $laporan->id,
+                    'uraian' => 'Alokasi Dana Desa (ADD)',
+                ],
+                [
+                    'bidang_apbdes_id' => $bidangPendapatan->id,
+                    'sub_bidang_apbdes_id' => $subDD?->id,
+                    'tipe' => 'pendapatan',
+                    'anggaran' => 450000000,
+                    'realisasi' => 450000000,
+                    'bulan_realisasi' => 12,
+                ]
+            );
+        }
 
-                    // Add some variation for different semesters
-                    if (str_contains($laporan->nama_laporan, 'Semester I')) {
-                        $realisasi = $realisasi * 0.45; // 45% realisasi di semester 1
-                    } elseif (str_contains($laporan->nama_laporan, 'Semester II')) {
-                        $realisasi = $realisasi * 0.95; // 95% realisasi di akhir tahun
-                    }
-
-                    DetailApbdes::create([
-                        'laporan_apbdes_id' => $laporan->id,
-                        'tipe' => $tipe,
-                        'uraian' => $uraian,
-                        'anggaran' => $anggaran,
-                        'realisasi' => $realisasi,
-                    ]);
-                }
-            }
+        // --- INPUT BELANJA ---
+        $bidangPem = BidangApbdes::where('nama_bidang', 'like', '%Pemerintahan%')->first();
+        if ($bidangPem) {
+            DetailApbdes::updateOrCreate(
+                [
+                    'laporan_apbdes_id' => $laporan->id,
+                    'uraian' => 'Penghasilan Tetap Kepala Desa & Perangkat',
+                ],
+                [
+                    'bidang_apbdes_id' => $bidangPem->id,
+                    'tipe' => 'belanja',
+                    'anggaran' => 350000000,
+                    'realisasi' => 320000000,
+                    'bulan_realisasi' => 11,
+                ]
+            );
+        }
+        
+        // Tambahkan data belanja pembangunan agar grafik terlihat bagus
+        $bidangBang = BidangApbdes::where('nama_bidang', 'like', '%Pembangunan%')->first();
+        if ($bidangBang) {
+            DetailApbdes::updateOrCreate(
+                [
+                    'laporan_apbdes_id' => $laporan->id,
+                    'uraian' => 'Pembangunan Jalan Desa',
+                ],
+                [
+                    'bidang_apbdes_id' => $bidangBang->id,
+                    'tipe' => 'belanja',
+                    'anggaran' => 200000000,
+                    'realisasi' => 150000000,
+                    'bulan_realisasi' => 10,
+                ]
+            );
         }
     }
 }

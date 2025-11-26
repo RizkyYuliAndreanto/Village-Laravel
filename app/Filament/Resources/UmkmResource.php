@@ -7,9 +7,11 @@ use App\Filament\Resources\UmkmResource\RelationManagers;
 use App\Models\Umkm;
 use App\Models\KategoriUmkm;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload; // Import FileUpload
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn; // Import ImageColumn
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -39,26 +41,55 @@ class UmkmResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('kategori_id')
                             ->label('Kategori')
-                            ->options(KategoriUmkm::all()->pluck('nama_kategori', 'id'))
-                            ->required()
-                            ->searchable(),
+                            // Menggunakan relationship agar lebih dinamis
+                            ->relationship('kategori', 'nama_kategori')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+                            
                         Forms\Components\TextInput::make('nama')
                             ->label('Nama UMKM')
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
                             ->afterStateUpdated(fn(string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
+                            
                         Forms\Components\TextInput::make('slug')
                             ->required()
                             ->maxLength(255)
                             ->unique(Umkm::class, 'slug', ignoreRecord: true),
+                            
                         Forms\Components\Textarea::make('deskripsi')
                             ->label('Deskripsi')
                             ->rows(3)
                             ->columnSpanFull(),
+                            
                         Forms\Components\TextInput::make('pemilik')
                             ->label('Nama Pemilik')
                             ->maxLength(150),
+                    ])
+                    ->columns(2),
+
+                // SECTION MEDIA (UPDATED)
+                Forms\Components\Section::make('Media')
+                    ->schema([
+                        FileUpload::make('logo_url')
+                            ->label('Logo UMKM')
+                            ->image()
+                            ->directory('umkm-logos') // Menyimpan di storage/app/public/umkm-logos
+                            ->visibility('public')
+                            ->imageEditor()
+                            ->maxSize(2048), // Maks 2MB
+
+                        FileUpload::make('foto_galeri')
+                            ->label('Galeri Foto')
+                            ->image()
+                            ->multiple() // Upload banyak foto
+                            ->reorderable()
+                            ->directory('umkm-gallery') // Menyimpan di storage/app/public/umkm-gallery
+                            ->visibility('public')
+                            ->maxSize(2048)
+                            ->columnSpanFull(),
                     ])
                     ->columns(2),
 
@@ -178,19 +209,6 @@ class UmkmResource extends Resource
                             ->placeholder('0 jika tidak ada karyawan'),
                     ])
                     ->columns(2),
-
-                Forms\Components\Section::make('Media')
-                    ->schema([
-                        Forms\Components\TextInput::make('logo_url')
-                            ->label('URL Logo')
-                            ->url()
-                            ->maxLength(500),
-                        Forms\Components\Textarea::make('foto_galeri')
-                            ->label('Foto Galeri (JSON)')
-                            ->placeholder('["url1", "url2", "url3"]')
-                            ->helperText('Format JSON array untuk multiple foto')
-                            ->columnSpanFull(),
-                    ]),
             ]);
     }
 
@@ -198,6 +216,13 @@ class UmkmResource extends Resource
     {
         return $table
             ->columns([
+                // IMAGE COLUMN (UPDATED)
+                ImageColumn::make('logo_url')
+                    ->label('Logo')
+                    ->disk('public')
+                    ->circular()
+                    ->defaultImageUrl(url('/images/logo-placeholder.jpg')),
+
                 Tables\Columns\TextColumn::make('kategori.nama_kategori')
                     ->label('Kategori')
                     ->badge()

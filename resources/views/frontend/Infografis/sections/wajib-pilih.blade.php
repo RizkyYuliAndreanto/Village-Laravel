@@ -15,46 +15,74 @@
             'tahunAktif' => $tahunAktif ?? date('Y')
         ])
 
-        <div id="wajib-pilih-content" class="infografis-card p-5 rounded-xl shadow">
-            <canvas id="chartWajibPilih" height="130"></canvas>
+        <div id="wajib-pilih-content" class="infografis-card p-6 rounded-xl shadow w-full">
+            {{-- Container Chart --}}
+            <div class="h-[400px] w-full relative flex items-center justify-center">
+                <canvas id="chartWajibPilih"></canvas>
+            </div>
         </div>
     </div>
 </section>
 
 @push('scripts')
 <script>
-    // Chart Wajib Pilih
-    if (document.getElementById("chartWajibPilih")) {
-        const wajib = document.getElementById("chartWajibPilih").getContext("2d");
+    document.addEventListener("DOMContentLoaded", function() {
+        if (document.getElementById("chartWajibPilih")) {
+            const ctx = document.getElementById("chartWajibPilih").getContext("2d");
 
-        new Chart(wajib, {
-            type: 'bar',
-            data: {
-                labels: @json($wajibPilihLabels),
-                datasets: [{
-                    data: @json($wajibPilihTotals),
-                    backgroundColor: "#2563eb",
-                    borderRadius: 6,
-                    barThickness: 70
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
+            // Registrasi global untuk update AJAX
+            window.infografisCharts = window.infografisCharts || {};
+
+            // Data dari Controller (Blade)
+            // Menggunakan json_encode untuk array PHP agar menjadi array JS yang valid
+            const labels = @json($wajibPilihLabels ?? []);
+            const data = @json($wajibPilihTotals ?? []);
+
+            // Cek jika data kosong
+            const hasData = data.length > 0 && data.some(val => val > 0);
+
+            if (!hasData) {
+                // Opsi: Tampilkan pesan jika data kosong
+                // console.log('Data Wajib Pilih kosong untuk tahun ini');
+            }
+
+            window.infografisCharts['wajib-pilih'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels.length ? labels : ['Data Kosong'],
+                    datasets: [{
+                        label: "Jumlah Jiwa",
+                        data: data.length ? data : [0],
+                        backgroundColor: ["#dc2626", "#9ca3af", "#3b82f6"], // Merah, Abu, Biru
+                        borderRadius: 6,
+                        barThickness: 60,
+                        maxBarThickness: 80
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 300
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Agar mengikuti tinggi container
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' Jiwa';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
                         }
                     }
                 }
-            }
-        });
-    }
+            });
+        }
+    });
 </script>
 @endpush

@@ -14,10 +14,14 @@ class DetailApbdes extends Model
 
     protected $fillable = [
         'laporan_apbdes_id',
+        'bidang_apbdes_id',     // Menambahkan ini
+        'sub_bidang_apbdes_id', // Menambahkan ini
         'tipe',
         'uraian',
         'anggaran',
         'realisasi',
+        'bulan_realisasi',      // Menambahkan ini
+        'keterangan',           // Menambahkan ini
     ];
 
     /**
@@ -26,13 +30,32 @@ class DetailApbdes extends Model
     protected $casts = [
         'anggaran' => 'decimal:2',
         'realisasi' => 'decimal:2',
+        'bidang_apbdes_id' => 'integer',
+        'sub_bidang_apbdes_id' => 'integer',
+        'bulan_realisasi' => 'integer',
     ];
 
     /**
-     * Relasi balik ke Laporan APBDes
+     * Relasi ke Laporan APBDes
      */
     public function laporanApbdes(): BelongsTo
     {
-        return $this->belongsTo(LaporanApbdes::class);
+        return $this->belongsTo(LaporanApbdes::class, 'laporan_apbdes_id');
+    }
+
+    /**
+     * Relasi ke Bidang APBDes (WAJIB ADA agar ->relationship('bidangApbdes') bekerja)
+     */
+    public function bidangApbdes(): BelongsTo
+    {
+        return $this->belongsTo(BidangApbdes::class, 'bidang_apbdes_id');
+    }
+
+    /**
+     * Relasi ke Sub Bidang APBDes (WAJIB ADA agar ->relationship('subBidangApbdes') bekerja)
+     */
+    public function subBidangApbdes(): BelongsTo
+    {
+        return $this->belongsTo(SubBidangApbdes::class, 'sub_bidang_apbdes_id');
     }
 }

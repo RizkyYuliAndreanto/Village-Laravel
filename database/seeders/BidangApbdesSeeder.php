@@ -8,91 +8,147 @@ use Illuminate\Database\Seeder;
 
 class BidangApbdesSeeder extends Seeder
 {
-    /**
-     * Run the database seeder.
-     */
     public function run(): void
     {
-        // Data Bidang Pendapatan
-        $pendapatan = BidangApbdes::create([
-            'kode_bidang' => 'PDD01',
-            'nama_bidang' => 'Pendapatan Desa',
-            'kategori' => 'pendapatan',
-            'deskripsi' => 'Semua jenis pendapatan desa',
-            'urutan' => 1,
-            'is_active' => true,
-        ]);
-
-        // Sub bidang pendapatan
-        SubBidangApbdes::create([
-            'bidang_apbdes_id' => $pendapatan->id,
-            'kode_sub_bidang' => 'PDD01.001',
-            'nama_sub_bidang' => 'Pendapatan Asli Desa (PAD)',
-            'urutan' => 1,
-        ]);
-
-        SubBidangApbdes::create([
-            'bidang_apbdes_id' => $pendapatan->id,
-            'kode_sub_bidang' => 'PDD01.002',
-            'nama_sub_bidang' => 'Transfer/Dana Desa',
-            'urutan' => 2,
-        ]);
-
-        SubBidangApbdes::create([
-            'bidang_apbdes_id' => $pendapatan->id,
-            'kode_sub_bidang' => 'PDD01.003',
-            'nama_sub_bidang' => 'Pendapatan Lain-lain',
-            'urutan' => 3,
-        ]);
-
-        // Data Bidang Belanja sesuai banner
-        $bidangBelanja = [
+        // 1. PENDAPATAN
+        $pd = BidangApbdes::updateOrCreate(
+            ['kode_bidang' => '1'], // Kunci pencarian unik
             [
-                'kode' => 'BPD01',
-                'nama' => 'Bidang Penyelenggaraan Pemerintahan Desa',
+                'nama_bidang' => 'Pendapatan Desa',
+                'kategori' => 'pendapatan',
                 'urutan' => 1,
-            ],
-            [
-                'kode' => 'BPP01',
-                'nama' => 'Bidang Pelaksanaan Pembangunan Desa',
-                'urutan' => 2,
-            ],
-            [
-                'kode' => 'BPK01',
-                'nama' => 'Bidang Pembinaan Kemasyarakatan',
-                'urutan' => 3,
-            ],
-            [
-                'kode' => 'BPM01',
-                'nama' => 'Bidang Pemberdayaan Masyarakat',
-                'urutan' => 4,
-            ],
-            [
-                'kode' => 'BPB01',
-                'nama' => 'Bidang Penanggulangan Bencana, Darurat dan Mendesak',
-                'urutan' => 5,
-            ],
-        ];
-
-        foreach ($bidangBelanja as $bidang) {
-            BidangApbdes::create([
-                'kode_bidang' => $bidang['kode'],
-                'nama_bidang' => $bidang['nama'],
-                'kategori' => 'belanja',
-                'deskripsi' => "Belanja untuk {$bidang['nama']}",
-                'urutan' => $bidang['urutan'] + 1, // +1 karena pendapatan urutan 1
                 'is_active' => true,
-            ]);
-        }
+            ]
+        );
 
-        // Bidang Pembiayaan (opsional)
-        BidangApbdes::create([
-            'kode_bidang' => 'PMB01',
-            'nama_bidang' => 'Pembiayaan Desa',
-            'kategori' => 'pembiayaan',
-            'deskripsi' => 'Penerimaan dan pengeluaran pembiayaan desa',
-            'urutan' => 7,
-            'is_active' => true,
-        ]);
+        SubBidangApbdes::updateOrCreate(
+            ['kode_sub_bidang' => '1.1'],
+            [
+                'bidang_apbdes_id' => $pd->id,
+                'nama_sub_bidang' => 'Pendapatan Asli Desa (PAD)'
+            ]
+        );
+
+        SubBidangApbdes::updateOrCreate(
+            ['kode_sub_bidang' => '1.2'],
+            [
+                'bidang_apbdes_id' => $pd->id,
+                'nama_sub_bidang' => 'Transfer (Dana Desa, ADD, dll)'
+            ]
+        );
+
+        // 2. BELANJA - Penyelenggaraan Pemerintahan
+        $b1 = BidangApbdes::updateOrCreate(
+            ['kode_bidang' => '2.1'],
+            [
+                'nama_bidang' => 'Penyelenggaraan Pemerintahan Desa',
+                'kategori' => 'belanja',
+                'urutan' => 2,
+                'is_active' => true,
+            ]
+        );
+
+        SubBidangApbdes::updateOrCreate(
+            ['kode_sub_bidang' => '2.1.1'],
+            [
+                'bidang_apbdes_id' => $b1->id,
+                'nama_sub_bidang' => 'Siltap dan Tunjangan'
+            ]
+        );
+
+        SubBidangApbdes::updateOrCreate(
+            ['kode_sub_bidang' => '2.1.2'],
+            [
+                'bidang_apbdes_id' => $b1->id,
+                'nama_sub_bidang' => 'Operasional Kantor Desa'
+            ]
+        );
+
+        // 3. BELANJA - Pembangunan
+        $b2 = BidangApbdes::updateOrCreate(
+            ['kode_bidang' => '2.2'],
+            [
+                'nama_bidang' => 'Pelaksanaan Pembangunan Desa',
+                'kategori' => 'belanja',
+                'urutan' => 3,
+                'is_active' => true,
+            ]
+        );
+
+        SubBidangApbdes::updateOrCreate(
+            ['kode_sub_bidang' => '2.2.1'],
+            [
+                'bidang_apbdes_id' => $b2->id,
+                'nama_sub_bidang' => 'Pendidikan'
+            ]
+        );
+
+        SubBidangApbdes::updateOrCreate(
+            ['kode_sub_bidang' => '2.2.2'],
+            [
+                'bidang_apbdes_id' => $b2->id,
+                'nama_sub_bidang' => 'Kesehatan'
+            ]
+        );
+
+        SubBidangApbdes::updateOrCreate(
+            ['kode_sub_bidang' => '2.2.3'],
+            [
+                'bidang_apbdes_id' => $b2->id,
+                'nama_sub_bidang' => 'Pekerjaan Umum & Penataan Ruang'
+            ]
+        );
+
+        // 4. BELANJA - Pembinaan Kemasyarakatan
+        $b3 = BidangApbdes::updateOrCreate(
+            ['kode_bidang' => '2.3'],
+            [
+                'nama_bidang' => 'Pembinaan Kemasyarakatan Desa',
+                'kategori' => 'belanja',
+                'urutan' => 4,
+                'is_active' => true,
+            ]
+        );
+
+        // 5. BELANJA - Pemberdayaan Masyarakat
+        $b4 = BidangApbdes::updateOrCreate(
+            ['kode_bidang' => '2.4'],
+            [
+                'nama_bidang' => 'Pemberdayaan Masyarakat Desa',
+                'kategori' => 'belanja',
+                'urutan' => 5,
+                'is_active' => true,
+            ]
+        );
+
+        SubBidangApbdes::updateOrCreate(
+            ['kode_sub_bidang' => '2.4.1'],
+            [
+                'bidang_apbdes_id' => $b4->id,
+                'nama_sub_bidang' => 'Pertanian dan Peternakan'
+            ]
+        );
+
+        // 6. BELANJA - Penanggulangan Bencana
+        $b5 = BidangApbdes::updateOrCreate(
+            ['kode_bidang' => '2.5'],
+            [
+                'nama_bidang' => 'Penanggulangan Bencana & Mendesak',
+                'kategori' => 'belanja',
+                'urutan' => 6,
+                'is_active' => true,
+            ]
+        );
+
+        // 7. PEMBIAYAAN
+        $pb = BidangApbdes::updateOrCreate(
+            ['kode_bidang' => '3'],
+            [
+                'nama_bidang' => 'Pembiayaan Desa',
+                'kategori' => 'pembiayaan',
+                'urutan' => 7,
+                'is_active' => true,
+            ]
+        );
     }
 }

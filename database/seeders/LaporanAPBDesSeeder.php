@@ -2,52 +2,37 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\LaporanApbdes;
 use App\Models\TahunData;
+use Illuminate\Database\Seeder;
 
 class LaporanApbdesSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $tahunIds = TahunData::pluck('id_tahun', 'tahun')->toArray();
+        $tahunSekarang = date('Y');
 
-        $laporanTypes = [
-            'Laporan Semester I',
-            'Laporan Semester II',
-            'Laporan Tahunan',
-        ];
+        // 1. Pastikan data Tahun ada
+        $tahun = TahunData::firstOrCreate(
+            ['tahun' => $tahunSekarang],
+            ['keterangan' => 'Tahun Anggaran ' . $tahunSekarang]
+        );
 
-        foreach ($tahunIds as $tahun => $tahunId) {
-            foreach ($laporanTypes as $index => $namaLaporan) {
-                $bulan = match ($namaLaporan) {
-                    'Laporan Semester I' => 6, // Juni
-                    'Laporan Semester II' => 12, // Desember
-                    'Laporan Tahunan' => 1, // Januari tahun berikutnya
-                    default => 12,
-                };
-
-                $status = match ($namaLaporan) {
-                    'Laporan Semester I' => 'selesai',
-                    'Laporan Semester II' => 'selesai',
-                    'Laporan Tahunan' => $tahun < 2024 ? 'selesai' : 'draft',
-                    default => 'selesai',
-                };
-
-                LaporanApbdes::create([
-                    'tahun_id' => $tahunId,
-                    'nama_laporan' => "{$namaLaporan} {$tahun}",
-                    'bulan_rilis' => $bulan,
-                    'deskripsi' => "Laporan keuangan APBDes {$namaLaporan} untuk tahun anggaran {$tahun}",
-                    'status' => $status,
-                ]);
-            }
-        }
+        // 2. Buat/Update Laporan APBDes
+        // Kita gunakan updateOrCreate agar jika data sudah ada (misal statusnya draft),
+        // akan di-update menjadi 'diterbitkan'
+        $laporan = LaporanApbdes::updateOrCreate(
+            [
+                'tahun_id' => $tahun->id_tahun, 
+                'nama_laporan' => 'APBDes Tahun Anggaran ' . $tahunSekarang,
+            ],
+            [
+                'bulan_rilis' => 1, 
+                'status' => 'diterbitkan', // PENTING: Harus diterbitkan agar muncul di Home
+                'deskripsi' => 'Anggaran Pendapatan dan Belanja Desa Murni', 
+            ]
+        );
+        
+        $this->command->info('Laporan APBDes berhasil dibuat/diupdate dengan status: ' . $laporan->status);
     }
 }

@@ -9,8 +9,7 @@ use Illuminate\Http\Request;
 
 /**
  * PendidikanController - Handle data pendidikan
- * 
- * Responsibilities:
+ * * Responsibilities:
  * - Data statistik tingkat pendidikan
  * - Chart horizontal pendidikan
  * - Analisis sebaran pendidikan
@@ -19,8 +18,7 @@ class PendidikanController extends Controller
 {
     /**
      * Get data pendidikan
-     * 
-     * @param string|null $tahun
+     * * @param string|null $tahun
      * @return array
      */
     public function getData($tahun = null)
@@ -30,63 +28,24 @@ class PendidikanController extends Controller
             $tahun = $tahunTerbaru ? $tahunTerbaru->tahun : date('Y');
         }
 
-        // Coba ambil data dari database
-        $statistikPendidikan = PendidikanStatistik::whereHas('tahunData', function ($query) use ($tahun) {
+        // PERBAIKAN: Ambil satu baris data (first) karena struktur horizontal
+        // Jangan gunakan orderBy('total_jiwa') karena kolom itu tidak ada di DB
+        $data = PendidikanStatistik::whereHas('tahunData', function ($query) use ($tahun) {
             $query->where('tahun', $tahun);
-        })->orderBy('total_jiwa', 'desc')->get();
+        })->first();
 
-        if ($statistikPendidikan->isEmpty()) {
-            // Data dummy jika tidak ada data real
-            return $this->getDummyData();
-        }
-
-        // Transform database data
-        return $this->transformDatabaseData($statistikPendidikan);
-    }
-
-    /**
-     * Data dummy untuk testing
-     */
-    private function getDummyData()
-    {
+        // Transform database data (kolom) ke object
         return [
-            'data' => (object)[
-                'tidak_sekolah' => 250,
-                'sd' => 1850,
-                'smp' => 1420,
-                'sma' => 1680,
-                'd1_d4' => 180,
-                's1' => 220,
-                's2' => 15,
-                's3' => 3
+            'pendidikan' => (object)[
+                'tidak_sekolah' => $data->tidak_sekolah ?? 0,
+                'sd' => $data->sd ?? 0,
+                'smp' => $data->smp ?? 0,
+                'sma' => $data->sma ?? 0,
+                'd1_d4' => $data->d1_d4 ?? 0,
+                's1' => $data->s1 ?? 0,
+                's2' => $data->s2 ?? 0,
+                's3' => $data->s3 ?? 0,
             ]
-        ];
-    }
-
-    /**
-     * Transform database data ke format view
-     */
-    private function transformDatabaseData($statistikPendidikan)
-    {
-        $mapping = [
-            'Tidak/Belum Sekolah' => 'tidak_sekolah',
-            'SD/Sederajat' => 'sd',
-            'SMP/Sederajat' => 'smp',
-            'SMA/Sederajat' => 'sma',
-            'Diploma I/II/III/IV' => 'd1_d4',
-            'Strata 1' => 's1',
-            'Strata 2' => 's2',
-            'Strata 3' => 's3'
-        ];
-
-        $data = [];
-        foreach ($statistikPendidikan as $stat) {
-            $key = $mapping[$stat->tingkat_pendidikan] ?? strtolower(str_replace([' ', '/'], '_', $stat->tingkat_pendidikan));
-            $data[$key] = $stat->total_jiwa;
-        }
-
-        return [
-            'data' => (object)$data
         ];
     }
 
@@ -97,9 +56,7 @@ class PendidikanController extends Controller
     public function apiData(Request $request)
     {
         $tahun = $request->get('tahun');
-        $data = $this->getData($tahun);
-
-        return response()->json($data);
+        return response()->json($this->getData($tahun));
     }
 
     /**
@@ -108,7 +65,7 @@ class PendidikanController extends Controller
     public function getChartData($tahun = null)
     {
         $data = $this->getData($tahun);
-        $pendidikanData = $data['data'];
+        $pendidikanData = $data['pendidikan'];
 
         return [
             'labels' => [
@@ -147,21 +104,42 @@ class PendidikanController extends Controller
     public function getAnalisis($tahun = null)
     {
         $data = $this->getData($tahun);
-        $pendidikanData = (array)$data['data'];
+        $pendidikanData = (array)$data['pendidikan']; // Cast ke array untuk perhitungan
 
         $total = array_sum($pendidikanData);
+        
+        if ($total == 0) {
+            return [
+                'total_penduduk' => 0,
+                'pendidikan_dasar' => 0,
+                'pendidikan_menengah' => 0,
+                'pendidikan_tinggi' => 0,
+                'persentase_pendidikan_tinggi' => 0,
+                'tingkat_terbanyak' => '-',
+                'jumlah_terbanyak' => 0
+            ];
+        }
+
         $pendidikanTinggi = ($pendidikanData['d1_d4'] ?? 0) +
             ($pendidikanData['s1'] ?? 0) +
             ($pendidikanData['s2'] ?? 0) +
             ($pendidikanData['s3'] ?? 0);
+
+        // Cari tingkat terbanyak
+        $tingkatTerbanyakKey = array_keys($pendidikanData, max($pendidikanData))[0] ?? 'sd';
+        // Format label agar lebih rapi (misal: d1_d4 -> Diploma)
+        $labelMapping = [
+            'tidak_sekolah' => 'Tidak Sekolah', 'sd' => 'SD', 'smp' => 'SMP', 
+            'sma' => 'SMA', 'd1_d4' => 'Diploma', 's1' => 'S1', 's2' => 'S2', 's3' => 'S3'
+        ];
 
         return [
             'total_penduduk' => $total,
             'pendidikan_dasar' => ($pendidikanData['sd'] ?? 0) + ($pendidikanData['smp'] ?? 0),
             'pendidikan_menengah' => $pendidikanData['sma'] ?? 0,
             'pendidikan_tinggi' => $pendidikanTinggi,
-            'persentase_pendidikan_tinggi' => $total > 0 ? round(($pendidikanTinggi / $total) * 100, 2) : 0,
-            'tingkat_terbanyak' => array_keys($pendidikanData, max($pendidikanData))[0] ?? 'sd',
+            'persentase_pendidikan_tinggi' => round(($pendidikanTinggi / $total) * 100, 2),
+            'tingkat_terbanyak' => $labelMapping[$tingkatTerbanyakKey] ?? ucfirst($tingkatTerbanyakKey),
             'jumlah_terbanyak' => max($pendidikanData)
         ];
     }
@@ -172,16 +150,28 @@ class PendidikanController extends Controller
     public function getRanking($tahun = null)
     {
         $data = $this->getData($tahun);
-        $pendidikanData = (array)$data['data'];
+        $pendidikanData = (array)$data['pendidikan'];
 
+        // Sorting di level PHP (bukan Database) karena data sudah berbentuk array
         arsort($pendidikanData);
 
         $ranking = [];
         $no = 1;
-        foreach ($pendidikanData as $tingkat => $jumlah) {
+        $labelMapping = [
+            'tidak_sekolah' => 'Tidak/Belum Sekolah', 
+            'sd' => 'SD/Sederajat', 
+            'smp' => 'SMP/Sederajat', 
+            'sma' => 'SMA/Sederajat', 
+            'd1_d4' => 'Diploma I/II/III/IV', 
+            's1' => 'Strata 1', 
+            's2' => 'Strata 2', 
+            's3' => 'Strata 3'
+        ];
+
+        foreach ($pendidikanData as $key => $jumlah) {
             $ranking[] = [
                 'ranking' => $no++,
-                'tingkat' => $tingkat,
+                'tingkat' => $labelMapping[$key] ?? ucfirst($key),
                 'jumlah' => $jumlah,
                 'persentase' => array_sum($pendidikanData) > 0 ?
                     round(($jumlah / array_sum($pendidikanData)) * 100, 2) : 0

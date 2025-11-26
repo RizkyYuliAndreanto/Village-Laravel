@@ -1,28 +1,20 @@
-{{-- Partial: Tahun Selector --}}
-<div class="flex items-center gap-3 mb-6">
-    <label for="tahunSelector-{{ $sectionId }}" class="text-sm font-medium text-gray-700 dark:text-gray-300">
-        Pilih Tahun Data:
-    </label>
-    <select id="tahunSelector-{{ $sectionId }}" 
-            class="tahun-selector px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm 
-                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-            data-section="{{ $sectionId }}">
-        @if(isset($tahunTersedia) && count($tahunTersedia) > 0)
-            @foreach($tahunTersedia as $tahun)
-                <option value="{{ $tahun }}" {{ ($tahun == ($tahunAktif ?? date('Y'))) ? 'selected' : '' }}>
-                    {{ $tahun }}
-                </option>
-            @endforeach
-        @else
-            <option value="{{ $tahunAktif ?? date('Y') }}" selected>
-                {{ $tahunAktif ?? date('Y') }}
+{{-- partials/tahun-selector.blade.php --}}
+<div class="flex items-center justify-center mb-6">
+    <label for="tahun-{{ $sectionId ?? 'default' }}" class="mr-3 font-medium text-gray-700">Pilih Tahun:</label>
+    <select 
+        id="tahun-{{ $sectionId ?? 'default' }}" 
+        class="tahun-selector form-select block w-32 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-200 focus:ring-opacity-50"
+        data-section="{{ $sectionId ?? '' }}"
+    >
+        @foreach($tahunTersedia as $t)
+            @php
+                // jika $t object (model), ambil property ->tahun, jika int/string, pakai langsung
+                $year = is_object($t) ? ($t->tahun ?? $t) : $t;
+            @endphp
+
+            <option value="{{ $year }}" {{ (string)($tahunAktif ?? '') === (string)$year ? 'selected' : '' }}>
+                {{ $year }}
             </option>
-        @endif
+        @endforeach
     </select>
-    <div id="loading-{{ $sectionId }}" class="hidden">
-        <svg class="animate-spin h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-    </div>
 </div>

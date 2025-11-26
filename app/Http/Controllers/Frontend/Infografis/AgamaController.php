@@ -30,18 +30,23 @@ class AgamaController extends Controller
             $tahun = $tahunTerbaru ? $tahunTerbaru->tahun : date('Y');
         }
 
-        // Coba ambil data dari database
-        $statistikAgama = AgamaStatistik::whereHas('tahunData', function ($query) use ($tahun) {
+        // AMBIL DATA MENGGUNAKAN first() KARENA STRUKTUR DATABASE HORIZONTAL (KOLOM)
+        $data = AgamaStatistik::whereHas('tahunData', function ($query) use ($tahun) {
             $query->where('tahun', $tahun);
-        })->orderBy('total_jiwa', 'desc')->get();
+        })->first();
 
-        if ($statistikAgama->isEmpty()) {
-            // Data dummy jika tidak ada data real
-            return $this->getDummyData();
-        }
-
-        // Transform database data
-        return $this->transformDatabaseData($statistikAgama);
+        // Mapping langsung dari kolom database ke object view
+        return [
+            'agama' => (object)[
+                'islam' => $data->islam ?? 0,
+                'katolik' => $data->katolik ?? 0,
+                'kristen' => $data->kristen ?? 0,
+                'hindu' => $data->hindu ?? 0,
+                'buddha' => $data->buddha ?? 0,
+                'konghucu' => $data->konghucu ?? 0,
+                'kepercayaan_lain' => $data->kepercayaan_lain ?? 0,
+            ]
+        ];
     }
 
     /**
@@ -95,9 +100,7 @@ class AgamaController extends Controller
     public function apiData(Request $request)
     {
         $tahun = $request->get('tahun');
-        $data = $this->getData($tahun);
-
-        return response()->json($data);
+        return response()->json($this->getData($tahun));
     }
 
     /**
@@ -109,13 +112,13 @@ class AgamaController extends Controller
         $agamaData = $data['agama'];
 
         return [
-            ['nama' => 'Islam', 'jumlah' => $agamaData->islam ?? 0, 'icon' => 'islam'],
-            ['nama' => 'Katolik', 'jumlah' => $agamaData->katolik ?? 0, 'icon' => 'katolik'],
-            ['nama' => 'Kristen', 'jumlah' => $agamaData->kristen ?? 0, 'icon' => 'kristen'],
-            ['nama' => 'Hindu', 'jumlah' => $agamaData->hindu ?? 0, 'icon' => 'hindu'],
-            ['nama' => 'Buddha', 'jumlah' => $agamaData->buddha ?? 0, 'icon' => 'buddha'],
-            ['nama' => 'Konghucu', 'jumlah' => $agamaData->konghucu ?? 0, 'icon' => 'konghucu'],
-            ['nama' => 'Kepercayaan Lainnya', 'jumlah' => $agamaData->kepercayaan_lain ?? 0, 'icon' => 'lainnya']
+            ['nama' => 'Islam', 'jumlah' => $agamaData->islam, 'icon' => 'islam'],
+            ['nama' => 'Katolik', 'jumlah' => $agamaData->katolik, 'icon' => 'katolik'],
+            ['nama' => 'Kristen', 'jumlah' => $agamaData->kristen, 'icon' => 'kristen'],
+            ['nama' => 'Hindu', 'jumlah' => $agamaData->hindu, 'icon' => 'hindu'],
+            ['nama' => 'Buddha', 'jumlah' => $agamaData->buddha, 'icon' => 'buddha'],
+            ['nama' => 'Konghucu', 'jumlah' => $agamaData->konghucu, 'icon' => 'konghucu'],
+            ['nama' => 'Kepercayaan Lainnya', 'jumlah' => $agamaData->kepercayaan_lain, 'icon' => 'lainnya']
         ];
     }
 
@@ -126,21 +129,22 @@ class AgamaController extends Controller
     {
         $data = $this->getData($tahun);
         $agamaData = (array)$data['agama'];
-
+        
         $total = array_sum($agamaData);
+        
+        if ($total == 0) return ['total_penduduk' => 0];
+
         $agama_mayoritas = array_keys($agamaData, max($agamaData))[0] ?? 'islam';
-        $diversitas = count(array_filter($agamaData, function ($val) {
-            return $val > 0;
-        }));
+        $diversitas = count(array_filter($agamaData, function ($val) { return $val > 0; }));
 
         return [
             'total_penduduk' => $total,
-            'agama_mayoritas' => $agama_mayoritas,
+            'agama_mayoritas' => ucfirst($agama_mayoritas),
             'jumlah_mayoritas' => max($agamaData),
-            'persentase_mayoritas' => $total > 0 ? round((max($agamaData) / $total) * 100, 2) : 0,
+            'persentase_mayoritas' => round((max($agamaData) / $total) * 100, 2),
             'jumlah_agama' => $diversitas,
             'tingkat_diversitas' => $diversitas >= 5 ? 'Tinggi' : ($diversitas >= 3 ? 'Sedang' : 'Rendah'),
-            'agama_minoritas' => $this->getMinoritas($agamaData)
+            'agama_minoritas' => []
         ];
     }
 
@@ -162,23 +166,19 @@ class AgamaController extends Controller
     {
         $data = $this->getData($tahun);
         $agamaData = (array)$data['agama'];
-
         arsort($agamaData);
-
         $ranking = [];
         $no = 1;
         foreach ($agamaData as $agama => $jumlah) {
-            if ($jumlah > 0) { // Hanya tampilkan yang ada pengikutnya
+            if ($jumlah > 0) {
                 $ranking[] = [
                     'ranking' => $no++,
                     'agama' => ucfirst($agama),
                     'jumlah' => $jumlah,
-                    'persentase' => array_sum($agamaData) > 0 ?
-                        round(($jumlah / array_sum($agamaData)) * 100, 2) : 0
+                    'persentase' => array_sum($agamaData) > 0 ? round(($jumlah / array_sum($agamaData)) * 100, 2) : 0
                 ];
             }
         }
-
         return $ranking;
     }
 
@@ -189,28 +189,13 @@ class AgamaController extends Controller
     {
         $data = $this->getData($tahun);
         $agamaData = (array)$data['agama'];
-
-        // Filter hanya yang memiliki data > 0
-        $filteredData = array_filter($agamaData, function ($val) {
-            return $val > 0;
-        });
-
+        $filteredData = array_filter($agamaData, function ($val) { return $val > 0; });
         return [
             'labels' => array_map('ucfirst', array_keys($filteredData)),
-            'datasets' => [
-                [
-                    'data' => array_values($filteredData),
-                    'backgroundColor' => [
-                        '#4CAF50', // Islam - Green
-                        '#2196F3', // Katolik - Blue  
-                        '#FF9800', // Kristen - Orange
-                        '#E91E63', // Hindu - Pink
-                        '#9C27B0', // Buddha - Purple
-                        '#607D8B', // Konghucu - Blue Grey
-                        '#795548'  // Kepercayaan Lain - Brown
-                    ]
-                ]
-            ]
+            'datasets' => [[
+                'data' => array_values($filteredData),
+                'backgroundColor' => ['#4CAF50', '#2196F3', '#FF9800', '#E91E63', '#9C27B0', '#607D8B', '#795548']
+            ]]
         ];
     }
 }

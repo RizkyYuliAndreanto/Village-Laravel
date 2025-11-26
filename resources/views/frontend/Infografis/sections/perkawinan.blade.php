@@ -17,17 +17,17 @@
 
         <div id="perkawinan-content" class="grid md:grid-cols-3 gap-6">
             @foreach([
-                'Belum Kawin' => $belumKawin,
-                'Kawin' => $perkawinan?->kawin,
-                'Cerai Mati' => $perkawinan?->cerai_mati,
-                'Cerai Hidup' => $perkawinan?->cerai_hidup,
-                'Kawin Tercatat' => $perkawinan?->kawin_tercatat,
-                'Kawin Tidak Tercatat' => $perkawinan?->kawin_tidak_tercatat,
+                'Belum Kawin' => $belumKawin ?? 0,
+                'Kawin' => $perkawinan->kawin ?? 0,
+                'Cerai Mati' => $perkawinan->cerai_mati ?? 0,
+                'Cerai Hidup' => $perkawinan->cerai_hidup ?? 0,
+                'Kawin Tercatat' => $perkawinan->kawin_tercatat ?? 0,
+                'Kawin Tidak Tercatat' => $perkawinan->kawin_tidak_tercatat ?? 0,
             ] as $label => $value)
             <div class="infografis-card p-6 rounded-xl shadow text-center">
                 <img src="{{ asset('images/logo-placeholder.jpg') }}" class="w-24 mx-auto mb-3" alt="Icon">
                 <div class="text-xl font-semibold">{{ $label }}</div>
-                <div class="text-3xl font-bold text-cyan-600">{{ $value ?? 0 }}</div>
+                <div class="text-3xl font-bold text-cyan-600">{{ $value }}</div>
             </div>
             @endforeach
         </div>

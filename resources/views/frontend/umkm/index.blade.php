@@ -116,9 +116,9 @@
                     <!-- UMKM Logo/Image -->
                     <div class="h-48 bg-gradient-to-br from-cyan-50 to-white flex items-center justify-center p-4">
                         @if($umkm->logo_url)
-                            <img src="{{ $umkm->logo_url }}" 
-                                 alt="{{ $umkm->nama }}" 
-                                 class="max-h-40 max-w-full rounded-lg shadow-sm">
+                        <img src="{{ asset('storage/' . $umkm->logo_url) }}" 
+     alt="{{ $umkm->nama }}" 
+     class="max-h-40 max-w-full rounded-lg shadow-sm">
                         @else
                             <div class="text-center text-cyan-600">
                                 <i class="fas fa-store text-5xl mb-2"></i>

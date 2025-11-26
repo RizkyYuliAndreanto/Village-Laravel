@@ -7,69 +7,47 @@ use App\Models\DemografiPenduduk;
 use App\Models\TahunData;
 use Illuminate\Http\Request;
 
-/**
- * StatistikController - Handle statistik demografi dasar
- * 
- * Responsibilities:
- * - Data total penduduk, laki-laki, perempuan
- * - Penduduk sementara dan mutasi penduduk
- * - Statistik dasar untuk dashboard
- */
 class StatistikController extends Controller
 {
     /**
-     * Get data statistik demografi dasar
-     * 
-     * @param string|null $tahun
-     * @return array
+     * Ambil data statistik demografi berdasarkan tahun tertentu
      */
     public function getData($tahun = null)
     {
+        // Tentukan tahun aktif
         if (!$tahun) {
             $tahunTerbaru = TahunData::orderBy('tahun', 'desc')->first();
-            $tahun = $tahunTerbaru ? $tahunTerbaru->tahun : date('Y');
+            $tahun = $tahunTerbaru->tahun ?? date('Y');
         }
 
+        // Ambil data demografi
         $demografi = DemografiPenduduk::whereHas('tahunData', function ($query) use ($tahun) {
             $query->where('tahun', $tahun);
         })->first();
 
-        if (!$demografi) {
-            // Data dummy jika tidak ada data real
-            $demografi = (object)[
-                'total_penduduk' => 5420,
-                'laki_laki' => 2710,
-                'perempuan' => 2710,
-                'penduduk_sementara' => 150,
-                'mutasi_penduduk' => 85
-            ];
-        }
-
+        // Return data aman tanpa memanggil properti null
         return [
-            'totalPenduduk' => $demografi->total_penduduk ?? 5420,
-            'totalLaki' => $demografi->laki_laki ?? 2710,
-            'totalPerempuan' => $demografi->perempuan ?? 2710,
-            'pendudukSementara' => $demografi->penduduk_sementara ?? 150,
-            'mutasiPenduduk' => $demografi->mutasi_penduduk ?? 85,
-            'demografi' => $demografi,
-            'tahun' => $tahun
+            'totalPenduduk'      => optional($demografi)->total_penduduk ?? 0,
+            'totalLaki'          => optional($demografi)->laki_laki ?? 0,
+            'totalPerempuan'     => optional($demografi)->perempuan ?? 0,
+            'pendudukSementara'  => optional($demografi)->penduduk_sementara ?? 0,
+            'mutasiPenduduk'     => optional($demografi)->mutasi_penduduk ?? 0,
+            'demografi'          => $demografi,
+            'tahun'              => $tahun
         ];
     }
 
     /**
-     * API endpoint untuk data statistik
-     * Route: GET /api/infografis/statistik
+     * Endpoint API
      */
     public function apiData(Request $request)
     {
         $tahun = $request->get('tahun');
-        $data = $this->getData($tahun);
-
-        return response()->json($data);
+        return response()->json($this->getData($tahun));
     }
 
     /**
-     * Get perbandingan dengan tahun sebelumnya
+     * Bandingkan dua tahun
      */
     public function getPerbandingan($tahun = null)
     {

@@ -1,147 +1,91 @@
 <x-filament-panels::page>
     <div class="space-y-6">
-        <!-- Year Selector -->
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center justify-between">
+        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h3 class="text-lg font-medium text-gray-900">Filter Tahun</h3>
-                    <p class="text-sm text-gray-600 mt-1">Pilih tahun untuk melihat data APBDes</p>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Filter Tahun Anggaran</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Pilih tahun untuk menyaring data statistik di atas.</p>
                 </div>
-                <div class="w-48">
+                <div class="w-full md:w-64">
                     {{ $this->form }}
                 </div>
             </div>
         </div>
 
         @if($laporan)
-            <!-- Header Info -->
-            <div class="bg-white rounded-lg shadow p-6">
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-4">
                 <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-xl font-semibold text-gray-900">{{ $laporan->nama_laporan }}</h2>
-                        <p class="text-sm text-gray-600 mt-1">
-                            Tahun {{ $laporan->tahunData->tahun }} • 
-                            Dirilis {{ $laporan->nama_bulan }} {{ $laporan->tahunData->tahun }}
-                        </p>
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
+                            <x-heroicon-o-document-text class="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                        </div>
+                        <div>
+                            <h2 class="text-base font-semibold text-gray-900 dark:text-white">{{ $laporan->nama_laporan }}</h2>
+                            <p class="text-xs text-gray-500">Dirilis: {{ $laporan->nama_bulan }} {{ $laporan->tahunData->tahun }}</p>
+                        </div>
                     </div>
-                    <div class="text-right">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                            {{ $laporan->status === 'diterbitkan' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                            {{ ucfirst($laporan->status) }}
-                        </span>
-                    </div>
+                    <span class="px-3 py-1 text-xs font-medium rounded-full 
+                        {{ $laporan->status === 'diterbitkan' 
+                            ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400' 
+                            : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400' }}">
+                        {{ ucfirst($laporan->status) }}
+                    </span>
                 </div>
             </div>
 
-            <!-- Balance Summary -->
-            @if(isset($statistik['total_pendapatan']))
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-green-50 rounded-lg p-6 border border-green-200">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-green-600">Total Pendapatan</p>
-                            <p class="text-2xl font-semibold text-green-900">
-                                Rp {{ number_format($statistik['total_pendapatan'], 0, ',', '.') }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-orange-50 rounded-lg p-6 border border-orange-200">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-orange-600">Total Belanja</p>
-                            <p class="text-2xl font-semibold text-orange-900">
-                                Rp {{ number_format($statistik['total_belanja'], 0, ',', '.') }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-{{ $statistik['status_balance'] === 'surplus' ? 'blue' : 'red' }}-50 rounded-lg p-6 border border-{{ $statistik['status_balance'] === 'surplus' ? 'blue' : 'red' }}-200">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <div class="w-8 h-8 bg-{{ $statistik['status_balance'] === 'surplus' ? 'blue' : 'red' }}-100 rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5 text-{{ $statistik['status_balance'] === 'surplus' ? 'blue' : 'red' }}-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    @if($statistik['status_balance'] === 'surplus')
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                                    @else
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>
-                                    @endif
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-{{ $statistik['status_balance'] === 'surplus' ? 'blue' : 'red' }}-600">
-                                {{ ucfirst($statistik['status_balance']) }}
-                            </p>
-                            <p class="text-2xl font-semibold text-{{ $statistik['status_balance'] === 'surplus' ? 'blue' : 'red' }}-900">
-                                Rp {{ number_format(abs($statistik['balance']), 0, ',', '.') }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endif
-
-            <!-- Realisasi per Bidang -->
             @if(isset($statistik['realisasi_bidang']) && $statistik['realisasi_bidang']->count() > 0)
-            <div class="bg-white rounded-lg shadow">
-                <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Realisasi Anggaran per Bidang</h3>
-                    <p class="text-sm text-gray-600 mt-1">Persentase realisasi anggaran belanja per bidang</p>
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Realisasi Anggaran per Bidang</h3>
                 </div>
-                <div class="p-6">
-                    <div class="space-y-4">
-                        @foreach($statistik['realisasi_bidang'] as $bidang)
-                        <div class="border rounded-lg p-4">
-                            <div class="flex items-center justify-between mb-2">
-                                <h4 class="text-sm font-medium text-gray-900">{{ $bidang['bidang'] }}</h4>
-                                <span class="text-sm text-gray-600">{{ $bidang['persentase'] }}%</span>
+                <div class="p-6 grid gap-6 md:grid-cols-2">
+                    @foreach($statistik['realisasi_bidang'] as $bidang)
+                    <div class="p-4 rounded-lg border border-gray-100 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-800 transition-colors">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-medium text-gray-800 dark:text-gray-200 text-sm line-clamp-1" title="{{ $bidang['bidang'] }}">
+                                {{ $bidang['bidang'] }}
+                            </h4>
+                            <span class="text-xs font-bold {{ $bidang['persentase'] >= 90 ? 'text-green-600' : ($bidang['persentase'] >= 50 ? 'text-blue-600' : 'text-orange-600') }}">
+                                {{ $bidang['persentase'] }}%
+                            </span>
+                        </div>
+                        
+                        <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2.5 mb-3">
+                            <div class="h-2.5 rounded-full {{ $bidang['persentase'] >= 90 ? 'bg-green-500' : ($bidang['persentase'] >= 50 ? 'bg-blue-500' : 'bg-orange-500') }}" 
+                                 style="width: {{ min($bidang['persentase'], 100) }}%"></div>
+                        </div>
+
+                        <div class="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
+                            <div>
+                                <span class="block">Realisasi</span>
+                                <span class="font-semibold text-gray-700 dark:text-gray-300">Rp {{ number_format($bidang['realisasi'], 0, ',', '.') }}</span>
                             </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-blue-600 h-2 rounded-full" style="width: {{ min($bidang['persentase'], 100) }}%"></div>
-                            </div>
-                            <div class="flex justify-between text-xs text-gray-600 mt-1">
-                                <span>Realisasi: Rp {{ number_format($bidang['realisasi'], 0, ',', '.') }}</span>
-                                <span>Anggaran: Rp {{ number_format($bidang['anggaran'], 0, ',', '.') }}</span>
+                            <div class="text-right">
+                                <span class="block">Anggaran</span>
+                                <span class="font-semibold text-gray-700 dark:text-gray-300">Rp {{ number_format($bidang['anggaran'], 0, ',', '.') }}</span>
                             </div>
                         </div>
-                        @endforeach
                     </div>
+                    @endforeach
                 </div>
             </div>
             @endif
 
         @else
-            <!-- No Data State -->
-            <div class="text-center py-12">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900">Belum ada data APBDes</h3>
-                <p class="mt-1 text-sm text-gray-500">Mulai dengan membuat laporan APBDes baru.</p>
+            <div class="flex flex-col items-center justify-center py-12 bg-white dark:bg-gray-900 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
+                <div class="p-3 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
+                    <x-heroicon-o-document-magnifying-glass class="w-8 h-8 text-gray-400" />
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Data APBDes Tidak Ditemukan</h3>
+                <p class="text-gray-500 text-sm mt-1 max-w-sm text-center">Tidak ada laporan APBDes yang diterbitkan untuk tahun yang dipilih. Silakan pilih tahun lain atau buat laporan baru.</p>
                 <div class="mt-6">
-                    <a href="/admin/laporan-apbdes/create" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                        Buat Laporan APBDes
-                    </a>
+                    <x-filament::button
+                        tag="a"
+                        href="/admin/laporan-apbdes/create"
+                        icon="heroicon-o-plus"
+                    >
+                        Buat Laporan Baru
+                    </x-filament::button>
                 </div>
             </div>
         @endif

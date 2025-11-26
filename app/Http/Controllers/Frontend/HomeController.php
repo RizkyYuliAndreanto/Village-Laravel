@@ -10,117 +10,102 @@ use App\Models\LaporanApbdes;
 use App\Models\DetailApbdes;
 use App\Models\StrukturOrganisasi;
 use App\Models\Umkm; 
+use App\Models\DusunStatistik;
 use Illuminate\Http\Request;
 
-/**
- * HomeController - Handle halaman home/landing page
- */
 class HomeController extends Controller
 {
     protected $statistikController;
 
     public function __construct()
     {
-        // Pastikan StatistikController ada di namespace yang benar
         $this->statistikController = new StatistikController();
     }
 
-    /**
-     * Halaman home utama dengan sections modular
-     */
     public function index(Request $request)
     {
         // 1. Ambil tahun data terbaru
         $tahunDataTerbaru = $this->getTahunTerbaru();
 
-        // 2. Ambil Data Statistik (Array)
+        // 2. Ambil Data Statistik Penduduk
         $stats = $this->getStatistikPenduduk($tahunDataTerbaru->tahun);
 
-        // 3. Kumpulkan data untuk View (Sesuaikan nama variabel dengan View Blade)
+        // 3. Kumpulkan data untuk View
         $data = [
-            // Data Dasar
             'tahunDataTerbaru' => $tahunDataTerbaru->tahun,
 
-            // Statistik Penduduk (Di-unpack agar View bisa baca $totalPenduduk langsung)
+            // Statistik Penduduk
             'totalPenduduk'     => $stats['totalPenduduk'],
             'totalLaki'         => $stats['totalLaki'],
             'totalPerempuan'    => $stats['totalPerempuan'],
             'pendudukSementara' => $stats['pendudukSementara'],
             'mutasiPenduduk'    => $stats['mutasiPenduduk'],
 
-            // Struktur Organisasi (View biasanya pakai $sotk)
-            'sotk' => $this->getStrukturOrganisasi(),
+            // Statistik Wilayah & Ekonomi
+            'jumlahDusun'       => $this->getJumlahDusun($tahunDataTerbaru->tahun),
+            'jumlahUmkm'        => Umkm::where('status_usaha', 'aktif')->count(),
+
+            // Struktur Organisasi (FIXED: Menghapus where is_active yang bikin error)
+            'sotk'              => $this->getStrukturOrganisasi(),
 
             // Data APBD
-            'apbdData' => $this->getAPBDData($tahunDataTerbaru->tahun),
+            'apbdData'          => $this->getAPBDData($tahunDataTerbaru->tahun),
 
-            // Berita Terbaru (PERBAIKAN: Ganti key 'berita' jadi 'beritaTerbaru')
-            'beritaTerbaru' => $this->getBeritaTerbaru(),
+            // Berita Terbaru
+            'beritaTerbaru'     => $this->getBeritaTerbaru(),
 
             // Potensi desa
-            'potensiDesa' => $this->getPotensiDesa(),
+            'potensiDesa'       => $this->getPotensiDesa(),
 
             // Galeri
-            'galeri' => $this->getGaleriTerbaru()
+            'galeri'            => $this->getGaleriTerbaru()
         ];
 
         return view('frontend.home.index', $data);
     }
 
-    /**
-     * ==========================================
-     * PRIVATE HELPER METHODS
-     * ==========================================
-     */
+    // --- Private Helpers ---
 
     private function getTahunTerbaru()
     {
-        $tahunDataTerbaru = TahunData::orderBy('tahun', 'desc')->first();
-
-        if (!$tahunDataTerbaru) {
-            return (object)['tahun' => date('Y')];
-        }
-
-        return $tahunDataTerbaru;
+        // Ambil tahun paling besar yang ada di database
+        $tahun = TahunData::orderBy('tahun', 'desc')->first();
+        return $tahun ?: (object)['tahun' => date('Y')];
     }
 
     private function getStatistikPenduduk($tahun)
     {
         try {
-            // Ambil data dari controller statistik
             $dataRaw = $this->statistikController->getData($tahun);
-            
-            // Konversi object/array dari controller lain ke format array standar
-            // Kita gunakan null coalescing operator (??) untuk safety
-            $total = $dataRaw->total_penduduk ?? $dataRaw['total_penduduk'] ?? 5420;
-            $laki = $dataRaw->laki_laki ?? $dataRaw['laki_laki'] ?? 2710;
-            $perempuan = $dataRaw->perempuan ?? $dataRaw['perempuan'] ?? 2710;
-            $sementara = $dataRaw->penduduk_sementara ?? $dataRaw['penduduk_sementara'] ?? 150;
-            $mutasi = $dataRaw->mutasi_penduduk ?? $dataRaw['mutasi_penduduk'] ?? 85;
+            if (is_object($dataRaw)) $dataRaw = (array) $dataRaw;
 
             return [
-                'totalPenduduk'     => $total,
-                'totalLaki'         => $laki,
-                'totalPerempuan'    => $perempuan,
-                'pendudukSementara' => $sementara,
-                'mutasiPenduduk'    => $mutasi
+                'totalPenduduk'     => $dataRaw['totalPenduduk'] ?? 0,
+                'totalLaki'         => $dataRaw['totalLaki'] ?? 0,
+                'totalPerempuan'    => $dataRaw['totalPerempuan'] ?? 0,
+                'pendudukSementara' => $dataRaw['pendudukSementara'] ?? 0,
+                'mutasiPenduduk'    => $dataRaw['mutasiPenduduk'] ?? 0
             ];
         } catch (\Exception $e) {
-            // Fallback ke data dummy jika error
-            return [
-                'totalPenduduk'     => 5420,
-                'totalLaki'         => 2710,
-                'totalPerempuan'    => 2710,
-                'pendudukSementara' => 150,
-                'mutasiPenduduk'    => 85
-            ];
+            return ['totalPenduduk' => 0, 'totalLaki' => 0, 'totalPerempuan' => 0, 'pendudukSementara' => 0, 'mutasiPenduduk' => 0];
         }
+    }
+
+    private function getJumlahDusun($tahun)
+    {
+        try {
+            return DusunStatistik::whereHas('tahunData', fn($q) => $q->where('tahun', $tahun))->count();
+        } catch (\Exception $e) { return 0; }
     }
 
     private function getStrukturOrganisasi()
     {
         try {
-            return StrukturOrganisasi::orderBy('id_struktur')->take(4)->get();
+            // FIX: Tabel struktur_organisasi Anda TIDAK punya kolom 'is_active' atau 'urutan'
+            // Jadi kita hapus where('is_active') dan ganti sorting pakai primary key
+            return StrukturOrganisasi::orderBy('id_struktur', 'asc')
+                ->take(4)
+                ->get();
         } catch (\Exception $e) {
             return collect();
         }
@@ -129,43 +114,43 @@ class HomeController extends Controller
     private function getAPBDData($tahun)
     {
         try {
+            // Cari Laporan APBDes berdasarkan tahun
             $laporanApbd = LaporanApbdes::whereHas('tahunData', function ($query) use ($tahun) {
                 $query->where('tahun', $tahun);
-            })->first();
+            })
+            ->where('status', 'diterbitkan') // Pastikan statusnya diterbitkan
+            ->latest()
+            ->first();
 
+            // Jika tidak ada data untuk tahun ini, coba cari tahun sebelumnya sebagai fallback
             if (!$laporanApbd) {
-                return ['hasData' => false];
+                $laporanApbd = LaporanApbdes::where('status', 'diterbitkan')->latest()->first();
             }
 
-            // Hitung total pendapatan
-            $totalPendapatan = DetailApbdes::where('laporan_apbdes_id', $laporanApbd->id)
-                ->where('jenis', 'pendapatan')
-                ->sum('nilai');
+            if (!$laporanApbd) return ['hasData' => false];
 
-            $targetPendapatan = DetailApbdes::where('laporan_apbdes_id', $laporanApbd->id)
-                ->where('jenis', 'pendapatan')
-                ->sum('target');
+            // Ambil detail (Pastikan nama kolom sesuai database: 'tipe', 'realisasi', 'anggaran')
+            $pendapatanRealisasi = DetailApbdes::where('laporan_apbdes_id', $laporanApbd->id)
+                ->where('tipe', 'pendapatan')->sum('realisasi');
+            $pendapatanTarget = DetailApbdes::where('laporan_apbdes_id', $laporanApbd->id)
+                ->where('tipe', 'pendapatan')->sum('anggaran');
 
-            // Hitung total belanja
-            $totalBelanja = DetailApbdes::where('laporan_apbdes_id', $laporanApbd->id)
-                ->where('jenis', 'belanja')
-                ->sum('nilai');
-
-            $targetBelanja = DetailApbdes::where('laporan_apbdes_id', $laporanApbd->id)
-                ->where('jenis', 'belanja')
-                ->sum('target');
+            $belanjaRealisasi = DetailApbdes::where('laporan_apbdes_id', $laporanApbd->id)
+                ->where('tipe', 'belanja')->sum('realisasi');
+            $belanjaTarget = DetailApbdes::where('laporan_apbdes_id', $laporanApbd->id)
+                ->where('tipe', 'belanja')->sum('anggaran');
 
             return [
                 'hasData' => true,
                 'pendapatan' => [
-                    'realisasi' => $totalPendapatan,
-                    'target' => $targetPendapatan,
-                    'persentase' => $targetPendapatan > 0 ? ($totalPendapatan / $targetPendapatan) * 100 : 0
+                    'realisasi'  => $pendapatanRealisasi,
+                    'target'     => $pendapatanTarget,
+                    'persentase' => $pendapatanTarget > 0 ? ($pendapatanRealisasi / $pendapatanTarget) * 100 : 0
                 ],
                 'belanja' => [
-                    'realisasi' => $totalBelanja,
-                    'target' => $targetBelanja,
-                    'persentase' => $targetBelanja > 0 ? ($totalBelanja / $targetBelanja) * 100 : 0
+                    'realisasi'  => $belanjaRealisasi,
+                    'target'     => $belanjaTarget,
+                    'persentase' => $belanjaTarget > 0 ? ($belanjaRealisasi / $belanjaTarget) * 100 : 0
                 ]
             ];
         } catch (\Exception $e) {
@@ -176,31 +161,19 @@ class HomeController extends Controller
     private function getBeritaTerbaru($limit = 6)
     {
         try {
-            return Berita::where('status', 'published') // Filter status published
-                ->orderBy('created_at', 'desc')
+            // Prioritaskan published_at, lalu created_at. Hapus where('status') karena kolom tidak ada.
+            return Berita::orderByRaw('COALESCE(created_at) DESC')
                 ->limit($limit)
                 ->get();
-        } catch (\Exception $e) {
-            return collect(); // Return empty collection jika error
-        }
+        } catch (\Exception $e) { return collect(); }
     }
 
     private function getPotensiDesa()
     {
         try {
-            // Gunakan Model UMKM
-            return Umkm::where('status_usaha', 'aktif')
-                ->inRandomOrder()
-                ->limit(3)
-                ->get();
-        } catch (\Exception $e) {
-            return collect();
-        }
+            return Umkm::where('status_usaha', 'aktif')->inRandomOrder()->limit(3)->get();
+        } catch (\Exception $e) { return collect(); }
     }
 
-    private function getGaleriTerbaru($limit = 8)
-    {
-        // Return null sementara agar tidak error jika Model Galeri belum ada
-        return null; 
-    }
+    private function getGaleriTerbaru($limit = 8) { return collect(); }
 }

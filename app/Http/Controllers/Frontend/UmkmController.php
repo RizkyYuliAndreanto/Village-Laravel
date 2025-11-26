@@ -88,13 +88,11 @@ class UmkmController extends Controller
      */
     public function show($slug)
     {
-        // 1. Cari UMKM berdasarkan slug, termasuk data kategori
         $umkm = Umkm::with('kategori')
             ->where('slug', $slug)
             ->where('status_usaha', 'aktif')
-            ->firstOrFail(); // Akan throw 404 jika tidak ditemukan
+            ->firstOrFail();
 
-        // 2. UMKM terkait (kategori sama, kecuali yang sedang dilihat)
         $relatedUmkms = Umkm::where('kategori_id', $umkm->kategori_id)
             ->where('id', '!=', $umkm->id)
             ->where('status_usaha', 'aktif')
@@ -102,46 +100,36 @@ class UmkmController extends Controller
             ->limit(4)
             ->get();
 
-        // 3. Kirim data ke view
-        return view('frontend.umkm.show', compact(
-            'umkm',         // Data UMKM yang sedang dilihat
-            'relatedUmkms'  // UMKM terkait
-        ));
+        return view('frontend.umkm.show', compact('umkm', 'relatedUmkms'));
     }
 
     /**
      * Menampilkan UMKM berdasarkan kategori
-     * Route: GET /umkm/kategori/{slug}
+     * Parameter $slug di sini sebenarnya adalah slug dari nama kategori
      */
     public function kategori($slug)
     {
-        // 1. Cari kategori berdasarkan slug (buat slug dari nama_kategori)
-        $kategori = KategoriUmkm::where('is_active', true)->get()
-            ->filter(function ($k) use ($slug) {
-                return \Str::slug($k->nama_kategori) === $slug;
-            })
-            ->first();
+        // Karena di database KategoriUmkm tidak ada kolom 'slug',
+        // kita harus mencari manual atau menambahkan kolom slug ke database.
+        // Solusi cepat: Cari berdasarkan nama yang di-slug-kan
+        
+        $kategori = KategoriUmkm::where('is_active', true)->get()->first(function ($k) use ($slug) {
+            return Str::slug($k->nama_kategori) === $slug;
+        });
 
         if (!$kategori) {
             abort(404, 'Kategori tidak ditemukan');
         }
 
-        // 2. Ambil UMKM dalam kategori ini
         $umkms = Umkm::where('kategori_id', $kategori->id)
             ->where('status_usaha', 'aktif')
             ->with('kategori')
             ->orderBy('nama', 'asc')
             ->paginate(12);
 
-        // 3. Statistik kategori
         $totalUmkm = $umkms->total();
 
-        // 4. Kirim data ke view
-        return view('frontend.umkm.kategori', compact(
-            'kategori',     // Data kategori
-            'umkms',        // UMKM dalam kategori
-            'totalUmkm'     // Jumlah UMKM dalam kategori
-        ));
+        return view('frontend.umkm.kategori', compact('kategori', 'umkms', 'totalUmkm'));
     }
 
     /**

@@ -7,7 +7,6 @@
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-cyan-300 via-cyan-400 to-teal-400 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Breadcrumb -->
         <nav class="mb-6">
             <ol class="flex items-center space-x-2 text-gray-700 text-sm">
                 <li>
@@ -15,12 +14,17 @@
                         <i class="fas fa-home mr-1"></i>UMKM
                     </a>
                 </li>
+                
+                @if($umkm->kategori)
                 <li class="flex items-center">
                     <i class="fas fa-chevron-right mx-2 text-xs"></i>
-                    <a href="{{ route('umkm.kategori', $umkm->kategori->slug) }}" class="hover:text-gray-800 transition-colors duration-200">
+                    {{-- PERBAIKAN: Generate slug manual dari nama kategori --}}
+                    <a href="{{ route('umkm.kategori', Str::slug($umkm->kategori->nama_kategori)) }}" class="hover:text-gray-800 transition-colors duration-200">
                         {{ $umkm->kategori->nama_kategori }}
                     </a>
                 </li>
+                @endif
+
                 <li class="flex items-center">
                     <i class="fas fa-chevron-right mx-2 text-xs"></i>
                     <span class="text-gray-800 font-medium">{{ $umkm->nama }}</span>

@@ -7,11 +7,11 @@
     <div class="relative container mx-auto px-6">
         <div class="flex flex-col lg:flex-row items-center justify-between gap-16">
             
+            {{-- Image Side --}}
             <div class="flex-shrink-0 lg:w-1/2" data-aos="fade-right">
                 <div class="relative group">
                     <div class="absolute -inset-4 bg-gradient-to-r from-cyan-400 to-teal-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
                     
-                    {{-- Menggunakan Logo Kabupaten Madiun yang ada di folder public/images --}}
                     <img class="relative rounded-2xl shadow-2xl w-3/4 lg:w-2/3 mx-auto transform group-hover:scale-105 transition duration-500 bg-white p-4"
                          src="{{ asset('images/Logo_kabupaten_madiun.gif') }}"
                          onerror="this.src='{{ asset('images/logo-placeholder.jpg') }}'"
@@ -24,6 +24,7 @@
                 </div>
             </div>
 
+            {{-- Content Side --}}
             <div class="lg:w-1/2 space-y-8" data-aos="fade-left">
                 <div class="inline-flex items-center bg-cyan-100 text-cyan-800 px-4 py-2 rounded-full font-medium">
                     <i class="fas fa-map-marker-alt mr-2"></i>
@@ -48,49 +49,49 @@
                     </p>
                 </div>
 
+                {{-- Stats Grid --}}
                 <div class="grid grid-cols-2 gap-6 py-6">
+                    
+                    {{-- Stat 1: Penduduk --}}
                     <div class="flex items-center space-x-3 group">
                         <div class="w-12 h-12 bg-cyan-100 rounded-xl flex items-center justify-center group-hover:bg-cyan-600 transition-colors duration-300">
                             <i class="fas fa-users text-cyan-600 group-hover:text-white transition-colors duration-300"></i>
                         </div>
                         <div>
                             <p class="font-bold text-xl text-gray-900">
-                                {{ isset($totalPenduduk) ? number_format($totalPenduduk) : '5,420' }}
+                                {{ number_format($totalPenduduk ?? 0) }}
                             </p>
                             <p class="text-sm text-gray-600">Penduduk</p>
                         </div>
                     </div>
 
+                    {{-- Stat 2: UMKM --}}
                     <div class="flex items-center space-x-3 group">
                         <div class="w-12 h-12 bg-cyan-100 rounded-xl flex items-center justify-center group-hover:bg-cyan-600 transition-colors duration-300">
                             <i class="fas fa-store text-cyan-600 group-hover:text-white transition-colors duration-300"></i>
                         </div>
                         <div>
                             <p class="font-bold text-xl text-gray-900">
-                                {{-- Hitung langsung dari Model UMKM --}}
-                                {{ \App\Models\Umkm::where('status_usaha', 'aktif')->count() }}+
+                                {{ number_format($jumlahUmkm ?? 0) }}+
                             </p>
                             <p class="text-sm text-gray-600">UMKM Aktif</p>
                         </div>
                     </div>
 
+                    {{-- Stat 3: Dusun --}}
                     <div class="flex items-center space-x-3 group">
                         <div class="w-12 h-12 bg-cyan-100 rounded-xl flex items-center justify-center group-hover:bg-cyan-600 transition-colors duration-300">
                             <i class="fas fa-map text-cyan-600 group-hover:text-white transition-colors duration-300"></i>
                         </div>
                         <div>
                             <p class="font-bold text-xl text-gray-900">
-                                {{-- Cek apakah Model DusunStatistik ada datanya --}}
-                                @if(class_exists('\App\Models\DusunStatistik'))
-                                    {{ \App\Models\DusunStatistik::count() ?: 8 }}
-                                @else
-                                    8
-                                @endif
+                                {{ $jumlahDusun ?? 0 }}
                             </p>
                             <p class="text-sm text-gray-600">Dusun</p>
                         </div>
                     </div>
 
+                    {{-- Stat 4: Digital --}}
                     <div class="flex items-center space-x-3 group">
                         <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-600 transition-colors duration-300">
                             <i class="fas fa-digital-tachograph text-blue-600 group-hover:text-white transition-colors duration-300"></i>

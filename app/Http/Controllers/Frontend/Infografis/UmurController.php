@@ -9,19 +9,12 @@ use Illuminate\Http\Request;
 
 /**
  * UmurController - Handle data kelompok umur
- * 
- * Responsibilities:
- * - Data piramida penduduk berdasarkan umur
- * - Statistik kelompok umur laki-laki dan perempuan
- * - Chart data untuk piramida umur
  */
 class UmurController extends Controller
 {
     /**
-     * Get data kelompok umur untuk piramida penduduk
-     * 
-     * @param string|null $tahun
-     * @return array
+     * Get data untuk view (Initial Load)
+     * Mengembalikan object bersih agar aman di-cast ke array di Blade
      */
     public function getData($tahun = null)
     {
@@ -30,126 +23,75 @@ class UmurController extends Controller
             $tahun = $tahunTerbaru ? $tahunTerbaru->tahun : date('Y');
         }
 
-        // Coba ambil data dari database
-        $statistikUmur = UmurStatistik::whereHas('tahunData', function ($query) use ($tahun) {
+        // Ambil data dari database (1 baris horizontal)
+        $data = UmurStatistik::whereHas('tahunData', function ($query) use ($tahun) {
             $query->where('tahun', $tahun);
-        })->orderBy('kelompok_umur')->get();
+        })->first();
 
-        if ($statistikUmur->isEmpty()) {
-            // Data dummy jika tidak ada data real
-            return $this->getDummyData();
+        // List kolom yang akan diambil
+        $fields = [
+            'umur_0_4', 'umur_5_9', 'umur_10_14', 'umur_15_19', 'umur_20_24',
+            'umur_25_29', 'umur_30_34', 'umur_35_39', 'umur_40_44', 'umur_45_49', 
+            'umur_50_plus'
+        ];
+
+        // Transformasi ke stdClass (Object Standar)
+        $cleanData = [];
+        foreach ($fields as $field) {
+            $cleanData[$field] = $data->$field ?? 0;
         }
 
-        // Transform database data ke format yang dibutuhkan
-        return $this->transformDatabaseData($statistikUmur);
-    }
-
-    /**
-     * Data dummy untuk testing
-     */
-    private function getDummyData()
-    {
         return [
-            'umurData' => (object)[
-                'umur_0_4' => 380,
-                'umur_5_9' => 420,
-                'umur_10_14' => 450,
-                'umur_15_19' => 480,
-                'umur_20_24' => 520,
-                'umur_25_29' => 580,
-                'umur_30_34' => 620,
-                'umur_35_39' => 590,
-                'umur_40_44' => 550,
-                'umur_45_49' => 480,
-                'umur_50_plus' => 540
-            ]
+            'umurData' => (object) $cleanData
         ];
     }
 
     /**
-     * Transform database data ke format view
-     */
-    private function transformDatabaseData($statistikUmur)
-    {
-        $umurData = [];
-
-        foreach ($statistikUmur as $stat) {
-            $key = 'umur_' . str_replace(['-', '+'], ['_', '_plus'], $stat->kelompok_umur);
-            $umurData[$key] = $stat->total_jiwa;
-        }
-
-        return [
-            'umurData' => (object)$umurData
-        ];
-    }
-
-    /**
-     * API endpoint untuk data umur
-     * Route: GET /api/infografis/umur
-     */
-    public function apiData(Request $request)
-    {
-        $tahun = $request->get('tahun');
-        $data = $this->getData($tahun);
-
-        return response()->json($data);
-    }
-
-    /**
-     * Get data chart untuk piramida penduduk
+     * Get data untuk Chart.js (API Call saat ganti tahun)
      */
     public function getChartData($tahun = null)
     {
         $data = $this->getData($tahun);
         $umurData = $data['umurData'];
 
+        // Mapping nama kolom database ke Label Chart
+        $categories = [
+            '0-4'   => 'umur_0_4',
+            '5-9'   => 'umur_5_9',
+            '10-14' => 'umur_10_14',
+            '15-19' => 'umur_15_19',
+            '20-24' => 'umur_20_24',
+            '25-29' => 'umur_25_29',
+            '30-34' => 'umur_30_34',
+            '35-39' => 'umur_35_39',
+            '40-44' => 'umur_40_44',
+            '45-49' => 'umur_45_49',
+            '50+'   => 'umur_50_plus'
+        ];
+
+        $labels = array_keys($categories);
+        $values = [];
+
+        foreach ($categories as $col) {
+            $values[] = $umurData->$col ?? 0;
+        }
+
+        // Estimasi Laki-laki (Negatif agar ke kiri) & Perempuan (Positif ke kanan)
+        // Karena DB hanya menyimpan Total, kita bagi 2 (50:50)
+        $dataLaki = array_map(fn($v) => -($v / 2), $values);
+        $dataPerempuan = array_map(fn($v) => ($v / 2), $values);
+
         return [
-            'labels' => [
-                '0-4',
-                '5-9',
-                '10-14',
-                '15-19',
-                '20-24',
-                '25-29',
-                '30-34',
-                '35-39',
-                '40-44',
-                '45-49',
-                '50+'
-            ],
+            'labels' => $labels,
             'datasets' => [
                 [
-                    'label' => 'Laki-laki',
-                    'data' => [
-                        - ($umurData->umur_0_4 ?? 0) / 2,
-                        - ($umurData->umur_5_9 ?? 0) / 2,
-                        - ($umurData->umur_10_14 ?? 0) / 2,
-                        - ($umurData->umur_15_19 ?? 0) / 2,
-                        - ($umurData->umur_20_24 ?? 0) / 2,
-                        - ($umurData->umur_25_29 ?? 0) / 2,
-                        - ($umurData->umur_30_34 ?? 0) / 2,
-                        - ($umurData->umur_35_39 ?? 0) / 2,
-                        - ($umurData->umur_40_44 ?? 0) / 2,
-                        - ($umurData->umur_45_49 ?? 0) / 2,
-                        - ($umurData->umur_50_plus ?? 0) / 2
-                    ],
+                    'label' => 'Laki-laki (Est.)',
+                    'data' => $dataLaki,
                     'backgroundColor' => 'rgba(56, 161, 105, 0.8)'
                 ],
                 [
-                    'label' => 'Perempuan',
-                    'data' => [
-                        ($umurData->umur_0_4 ?? 0) / 2,
-                        ($umurData->umur_5_9 ?? 0) / 2,
-                        ($umurData->umur_10_14 ?? 0) / 2,
-                        ($umurData->umur_15_19 ?? 0) / 2,
-                        ($umurData->umur_20_24 ?? 0) / 2,
-                        ($umurData->umur_25_29 ?? 0) / 2,
-                        ($umurData->umur_30_34 ?? 0) / 2,
-                        ($umurData->umur_35_39 ?? 0) / 2,
-                        ($umurData->umur_40_44 ?? 0) / 2,
-                        ($umurData->umur_45_49 ?? 0) / 2,
-                        ($umurData->umur_50_plus ?? 0) / 2
-                    ],
+                    'label' => 'Perempuan (Est.)',
+                    'data' => $dataPerempuan,
                     'backgroundColor' => 'rgba(244, 114, 182, 0.8)'
                 ]
             ]
@@ -157,26 +99,44 @@ class UmurController extends Controller
     }
 
     /**
-     * Get insight dari data umur
+     * Get insight text
      */
     public function getInsights($tahun = null)
     {
         $data = $this->getData($tahun);
-        $umurData = $data['umurData'];
+        // Cast object ke array untuk perhitungan PHP
+        $stats = (array) $data['umurData'];
 
-        // Cari kelompok umur terbanyak
-        $dataArray = (array)$umurData;
-        $terbanyak = array_keys($dataArray, max($dataArray));
+        if (empty($stats) || array_sum($stats) == 0) {
+            return [
+                'kelompok_terbanyak' => '-', 
+                'jumlah_terbanyak' => 0,
+                'total_anak' => 0,
+                'total_produktif' => 0,
+                'total_lansia' => 0
+            ];
+        }
+
+        // Cari nilai tertinggi
+        $maxVal = max($stats);
+        $maxKey = array_search($maxVal, $stats);
+        
+        // Format key (umur_25_29 -> 25-29)
+        $labelTerbanyak = str_replace(['umur_', '_plus', '_'], ['', '+', '-'], $maxKey);
 
         return [
-            'kelompok_terbanyak' => $terbanyak[0] ?? 'umur_25_29',
-            'jumlah_terbanyak' => max($dataArray),
-            'total_anak' => ($umurData->umur_0_4 ?? 0) + ($umurData->umur_5_9 ?? 0) + ($umurData->umur_10_14 ?? 0),
-            'total_produktif' => ($umurData->umur_15_19 ?? 0) + ($umurData->umur_20_24 ?? 0) +
-                ($umurData->umur_25_29 ?? 0) + ($umurData->umur_30_34 ?? 0) +
-                ($umurData->umur_35_39 ?? 0) + ($umurData->umur_40_44 ?? 0) +
-                ($umurData->umur_45_49 ?? 0),
-            'total_lansia' => ($umurData->umur_50_plus ?? 0)
+            'kelompok_terbanyak' => $labelTerbanyak,
+            'jumlah_terbanyak' => $maxVal,
+            'total_anak' => ($stats['umur_0_4']??0) + ($stats['umur_5_9']??0) + ($stats['umur_10_14']??0),
+            'total_produktif' => ($stats['umur_15_19']??0) + ($stats['umur_20_24']??0) + ($stats['umur_25_29']??0) + ($stats['umur_30_34']??0) + ($stats['umur_35_39']??0) + ($stats['umur_40_44']??0) + ($stats['umur_45_49']??0),
+            'total_lansia' => ($stats['umur_50_plus']??0)
         ];
+    }
+    
+    // API endpoint standar
+    public function apiData(Request $request)
+    {
+        $tahun = $request->get('tahun');
+        return response()->json($this->getData($tahun));
     }
 }

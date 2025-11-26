@@ -9,8 +9,7 @@ use Illuminate\Http\Request;
 
 /**
  * PekerjaanController - Handle data pekerjaan
- * 
- * Responsibilities:
+ * * Responsibilities:
  * - Data statistik jenis pekerjaan
  * - Tabel dan grid cards pekerjaan
  * - Analisis sebaran mata pencaharian
@@ -19,8 +18,7 @@ class PekerjaanController extends Controller
 {
     /**
      * Get data pekerjaan
-     * 
-     * @param string|null $tahun
+     * * @param string|null $tahun
      * @return array
      */
     public function getData($tahun = null)
@@ -30,61 +28,23 @@ class PekerjaanController extends Controller
             $tahun = $tahunTerbaru ? $tahunTerbaru->tahun : date('Y');
         }
 
-        // Coba ambil data dari database
-        $statistikPekerjaan = PekerjaanStatistik::whereHas('tahunData', function ($query) use ($tahun) {
+        // PERBAIKAN: Ambil satu baris data (first) karena struktur horizontal
+        // Hapus orderBy karena tidak ada kolom total_jiwa di tabel ini
+        $data = PekerjaanStatistik::whereHas('tahunData', function ($query) use ($tahun) {
             $query->where('tahun', $tahun);
-        })->orderBy('total_jiwa', 'desc')->get();
+        })->first();
 
-        if ($statistikPekerjaan->isEmpty()) {
-            // Data dummy jika tidak ada data real
-            return $this->getDummyData();
-        }
-
-        // Transform database data
-        return $this->transformDatabaseData($statistikPekerjaan);
-    }
-
-    /**
-     * Data dummy untuk testing
-     */
-    private function getDummyData()
-    {
+        // Map kolom database ke object
         return [
             'pekerjaan' => (object)[
-                'petani' => 1250,
-                'belum_bekerja' => 890,
-                'pelajar_mahasiswa' => 680,
-                'ibu_rumah_tangga' => 750,
-                'wiraswasta' => 420,
-                'pegawai_swasta' => 380,
-                'lainnya' => 150
+                'petani' => $data->petani ?? 0,
+                'belum_bekerja' => $data->belum_bekerja ?? 0,
+                'pelajar_mahasiswa' => $data->pelajar_mahasiswa ?? 0,
+                'ibu_rumah_tangga' => $data->ibu_rumah_tangga ?? 0,
+                'wiraswasta' => $data->wiraswasta ?? 0,
+                'pegawai_swasta' => $data->pegawai_swasta ?? 0,
+                'lainnya' => $data->lainnya ?? 0,
             ]
-        ];
-    }
-
-    /**
-     * Transform database data ke format view
-     */
-    private function transformDatabaseData($statistikPekerjaan)
-    {
-        $mapping = [
-            'Petani/Pekebun' => 'petani',
-            'Belum/Tidak Bekerja' => 'belum_bekerja',
-            'Pelajar/Mahasiswa' => 'pelajar_mahasiswa',
-            'Mengurus Rumah Tangga' => 'ibu_rumah_tangga',
-            'Wiraswasta' => 'wiraswasta',
-            'Karyawan Swasta' => 'pegawai_swasta',
-            'Buruh Tani/Perkebunan' => 'lainnya'
-        ];
-
-        $data = [];
-        foreach ($statistikPekerjaan as $stat) {
-            $key = $mapping[$stat->jenis_pekerjaan] ?? strtolower(str_replace([' ', '/'], '_', $stat->jenis_pekerjaan));
-            $data[$key] = $stat->total_jiwa;
-        }
-
-        return [
-            'pekerjaan' => (object)$data
         ];
     }
 
@@ -95,9 +55,7 @@ class PekerjaanController extends Controller
     public function apiData(Request $request)
     {
         $tahun = $request->get('tahun');
-        $data = $this->getData($tahun);
-
-        return response()->json($data);
+        return response()->json($this->getData($tahun));
     }
 
     /**
@@ -109,13 +67,13 @@ class PekerjaanController extends Controller
         $pekerjaanData = $data['pekerjaan'];
 
         return [
-            ['jenis' => 'Petani/Pekebun', 'jumlah' => $pekerjaanData->petani ?? 0],
-            ['jenis' => 'Belum/Tidak Bekerja', 'jumlah' => $pekerjaanData->belum_bekerja ?? 0],
-            ['jenis' => 'Pelajar/Mahasiswa', 'jumlah' => $pekerjaanData->pelajar_mahasiswa ?? 0],
-            ['jenis' => 'Mengurus Rumah Tangga', 'jumlah' => $pekerjaanData->ibu_rumah_tangga ?? 0],
-            ['jenis' => 'Wiraswasta', 'jumlah' => $pekerjaanData->wiraswasta ?? 0],
-            ['jenis' => 'Karyawan Swasta', 'jumlah' => $pekerjaanData->pegawai_swasta ?? 0],
-            ['jenis' => 'Buruh Tani/Perkebunan', 'jumlah' => $pekerjaanData->lainnya ?? 0],
+            ['jenis' => 'Petani/Pekebun', 'jumlah' => $pekerjaanData->petani],
+            ['jenis' => 'Belum/Tidak Bekerja', 'jumlah' => $pekerjaanData->belum_bekerja],
+            ['jenis' => 'Pelajar/Mahasiswa', 'jumlah' => $pekerjaanData->pelajar_mahasiswa],
+            ['jenis' => 'Mengurus Rumah Tangga', 'jumlah' => $pekerjaanData->ibu_rumah_tangga],
+            ['jenis' => 'Wiraswasta', 'jumlah' => $pekerjaanData->wiraswasta],
+            ['jenis' => 'Karyawan Swasta', 'jumlah' => $pekerjaanData->pegawai_swasta],
+            ['jenis' => 'Buruh Tani/Perkebunan', 'jumlah' => $pekerjaanData->lainnya],
         ];
     }
 
@@ -128,21 +86,48 @@ class PekerjaanController extends Controller
         $pekerjaanData = (array)$data['pekerjaan'];
 
         $total = array_sum($pekerjaanData);
+        
+        if ($total == 0) {
+            return [
+                'total_angkatan_kerja' => 0,
+                'sektor_primer' => 0,
+                'sektor_tersier' => 0,
+                'tidak_bekerja' => 0,
+                'persentase_petani' => 0,
+                'pekerjaan_terbanyak' => '-',
+                'jumlah_terbanyak' => 0,
+                'tingkat_pengangguran' => 0
+            ];
+        }
+
         $sektor_primer = ($pekerjaanData['petani'] ?? 0) + ($pekerjaanData['lainnya'] ?? 0);
         $sektor_tersier = ($pekerjaanData['wiraswasta'] ?? 0) + ($pekerjaanData['pegawai_swasta'] ?? 0);
         $tidak_bekerja = ($pekerjaanData['belum_bekerja'] ?? 0) +
             ($pekerjaanData['pelajar_mahasiswa'] ?? 0) +
             ($pekerjaanData['ibu_rumah_tangga'] ?? 0);
 
+        // Cari yang terbanyak
+        $terbanyakKey = array_keys($pekerjaanData, max($pekerjaanData))[0] ?? '-';
+        
+        $labelMapping = [
+            'petani' => 'Petani', 
+            'belum_bekerja' => 'Belum Bekerja', 
+            'pelajar_mahasiswa' => 'Pelajar', 
+            'ibu_rumah_tangga' => 'IRT',
+            'wiraswasta' => 'Wiraswasta', 
+            'pegawai_swasta' => 'Karyawan Swasta', 
+            'lainnya' => 'Buruh Tani'
+        ];
+
         return [
             'total_angkatan_kerja' => $total,
             'sektor_primer' => $sektor_primer,
             'sektor_tersier' => $sektor_tersier,
             'tidak_bekerja' => $tidak_bekerja,
-            'persentase_petani' => $total > 0 ? round((($pekerjaanData['petani'] ?? 0) / $total) * 100, 2) : 0,
-            'pekerjaan_terbanyak' => array_keys($pekerjaanData, max($pekerjaanData))[0] ?? 'petani',
+            'persentase_petani' => round((($pekerjaanData['petani'] ?? 0) / $total) * 100, 2),
+            'pekerjaan_terbanyak' => $labelMapping[$terbanyakKey] ?? ucfirst($terbanyakKey),
             'jumlah_terbanyak' => max($pekerjaanData),
-            'tingkat_pengangguran' => $total > 0 ? round((($pekerjaanData['belum_bekerja'] ?? 0) / $total) * 100, 2) : 0
+            'tingkat_pengangguran' => round((($pekerjaanData['belum_bekerja'] ?? 0) / $total) * 100, 2)
         ];
     }
 
@@ -154,14 +139,26 @@ class PekerjaanController extends Controller
         $data = $this->getData($tahun);
         $pekerjaanData = (array)$data['pekerjaan'];
 
+        // Sorting di PHP
         arsort($pekerjaanData);
 
         $ranking = [];
         $no = 1;
+        
+        $labelMapping = [
+            'petani' => 'Petani/Pekebun', 
+            'belum_bekerja' => 'Belum/Tidak Bekerja', 
+            'pelajar_mahasiswa' => 'Pelajar/Mahasiswa', 
+            'ibu_rumah_tangga' => 'Mengurus Rumah Tangga',
+            'wiraswasta' => 'Wiraswasta', 
+            'pegawai_swasta' => 'Karyawan Swasta', 
+            'lainnya' => 'Buruh Tani/Perkebunan'
+        ];
+
         foreach ($pekerjaanData as $jenis => $jumlah) {
             $ranking[] = [
                 'ranking' => $no++,
-                'jenis' => $jenis,
+                'jenis' => $labelMapping[$jenis] ?? ucfirst($jenis),
                 'jumlah' => $jumlah,
                 'persentase' => array_sum($pekerjaanData) > 0 ?
                     round(($jumlah / array_sum($pekerjaanData)) * 100, 2) : 0
@@ -177,7 +174,7 @@ class PekerjaanController extends Controller
     public function getChartData($tahun = null)
     {
         $data = $this->getData($tahun);
-        $pekerjaanData = (array)$data['pekerjaan'];
+        $pekerjaanData = $data['pekerjaan'];
 
         return [
             'labels' => [
@@ -191,7 +188,15 @@ class PekerjaanController extends Controller
             ],
             'datasets' => [
                 [
-                    'data' => array_values($pekerjaanData),
+                    'data' => [
+                        $pekerjaanData->petani ?? 0,
+                        $pekerjaanData->belum_bekerja ?? 0,
+                        $pekerjaanData->pelajar_mahasiswa ?? 0,
+                        $pekerjaanData->ibu_rumah_tangga ?? 0,
+                        $pekerjaanData->wiraswasta ?? 0,
+                        $pekerjaanData->pegawai_swasta ?? 0,
+                        $pekerjaanData->lainnya ?? 0
+                    ],
                     'backgroundColor' => [
                         '#FF6384',
                         '#36A2EB',

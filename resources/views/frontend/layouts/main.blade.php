@@ -37,9 +37,6 @@
     </main>
 
     @include('frontend.layouts.partials.footer')
-
-
-    
     @stack('scripts')
 </body>
 </html>
