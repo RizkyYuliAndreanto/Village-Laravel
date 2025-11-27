@@ -8,157 +8,126 @@ use Carbon\Carbon;
 
 class PpidSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $dokumenData = [
-            // Informasi Berkala
-            [
-                'judul_dokumen' => 'Laporan Keuangan Desa Tahun 2024',
-                'file_url' => 'storage/ppid/laporan-keuangan-2024.pdf',
-                'kategori' => 'informasi_berkala',
-                'tahun' => 2024,
-                'tanggal_upload' => Carbon::now()->subDays(10),
-                'uploader' => 'Bendahara Desa'
-            ],
-            [
-                'judul_dokumen' => 'Rencana Kerja Pemerintah Desa (RKPDesa) 2024',
-                'file_url' => 'storage/ppid/rkpdesa-2024.pdf',
-                'kategori' => 'informasi_berkala',
-                'tahun' => 2024,
-                'tanggal_upload' => Carbon::now()->subDays(20),
-                'uploader' => 'Sekretaris Desa'
-            ],
-            [
-                'judul_dokumen' => 'Laporan Penyelenggaraan Pemerintahan Desa (LPPD) 2023',
-                'file_url' => 'storage/ppid/lppd-2023.pdf',
-                'kategori' => 'informasi_berkala',
-                'tahun' => 2023,
-                'tanggal_upload' => Carbon::now()->subDays(90),
-                'uploader' => 'Kepala Desa'
-            ],
-            [
-                'judul_dokumen' => 'Anggaran Pendapatan dan Belanja Desa (APBDesa) 2024',
-                'file_url' => 'storage/ppid/apbdesa-2024.pdf',
-                'kategori' => 'informasi_berkala',
-                'tahun' => 2024,
-                'tanggal_upload' => Carbon::now()->subDays(30),
-                'uploader' => 'Bendahara Desa'
-            ],
+        $years = range(2020, 2025);
 
-            // Informasi Sertamerta
-            [
-                'judul_dokumen' => 'Pengumuman Penting - Pemadaman Listrik Terjadwal',
-                'file_url' => 'storage/ppid/pengumuman-listrik.pdf',
-                'kategori' => 'informasi_sertamerta',
-                'tahun' => 2024,
-                'tanggal_upload' => Carbon::now()->subDays(2),
-                'uploader' => 'Kepala Desa'
-            ],
-            [
-                'judul_dokumen' => 'Peringatan Dini - Potensi Banjir Musim Hujan',
-                'file_url' => 'storage/ppid/peringatan-banjir.pdf',
-                'kategori' => 'informasi_sertamerta',
-                'tahun' => 2024,
-                'tanggal_upload' => Carbon::now()->subDays(5),
-                'uploader' => 'Kepala Desa'
-            ],
-            [
-                'judul_dokumen' => 'Pengumuman Darurat - Penutupan Jalan Utama',
-                'file_url' => 'storage/ppid/penutupan-jalan.pdf',
-                'kategori' => 'informasi_sertamerta',
-                'tahun' => 2024,
-                'tanggal_upload' => Carbon::now()->subDays(7),
-                'uploader' => 'Kepala Desa'
-            ],
+        foreach ($years as $year) {
+            
+            // --- 1. INFORMASI BERKALA (Wajib ada tiap tahun) ---
+            
+            // APBDes Murni
+            PpidDokumen::updateOrCreate(
+                [
+                    'judul_dokumen' => "Dokumen APBDes Tahun Anggaran $year",
+                    'tahun' => $year,
+                ],
+                [
+                    'file_url' => "storage/ppid/apbdes-$year.pdf",
+                    'kategori' => 'informasi berkala', // Sesuaikan dengan Model constant
+                    'tanggal_upload' => Carbon::create($year, 1, 15),
+                    'uploader' => 'Sekretaris Desa',
+                ]
+            );
 
-            // Informasi Setiap Saat
-            [
-                'judul_dokumen' => 'Struktur Organisasi Pemerintah Desa',
-                'file_url' => 'storage/ppid/struktur-organisasi.pdf',
-                'kategori' => 'informasi_setiap_saat',
-                'tahun' => 2024,
-                'tanggal_upload' => Carbon::now()->subDays(60),
-                'uploader' => 'Sekretaris Desa'
-            ],
-            [
-                'judul_dokumen' => 'Profil Desa dan Potensi Wilayah',
-                'file_url' => 'storage/ppid/profil-desa.pdf',
-                'kategori' => 'informasi_setiap_saat',
-                'tahun' => 2024,
-                'tanggal_upload' => Carbon::now()->subDays(45),
-                'uploader' => 'Kepala Desa'
-            ],
-            [
-                'judul_dokumen' => 'Prosedur Pelayanan Administrasi Kependudukan',
-                'file_url' => 'storage/ppid/prosedur-adminduk.pdf',
-                'kategori' => 'informasi_setiap_saat',
-                'tahun' => 2024,
-                'tanggal_upload' => Carbon::now()->subDays(15),
-                'uploader' => 'Kaur Pemerintahan'
-            ],
-            [
-                'judul_dokumen' => 'Peraturan Desa tentang Retribusi Pelayanan',
-                'file_url' => 'storage/ppid/perdes-retribusi.pdf',
-                'kategori' => 'informasi_setiap_saat',
-                'tahun' => 2024,
-                'tanggal_upload' => Carbon::now()->subDays(25),
-                'uploader' => 'Sekretaris Desa'
-            ],
+            // Laporan Realisasi (Biasanya di akhir tahun / awal tahun depan)
+            PpidDokumen::updateOrCreate(
+                [
+                    'judul_dokumen' => "Laporan Realisasi APBDes Tahun $year",
+                    'tahun' => $year,
+                ],
+                [
+                    'file_url' => "storage/ppid/realisasi-apbdes-$year.pdf",
+                    'kategori' => 'informasi berkala',
+                    'tanggal_upload' => Carbon::create($year, 12, 31),
+                    'uploader' => 'Kaur Keuangan',
+                ]
+            );
 
-            // Informasi Dikecualikan
-            [
-                'judul_dokumen' => 'Dokumen Rahasia - Akses Terbatas',
-                'file_url' => 'storage/ppid/dokumen-rahasia.pdf',
-                'kategori' => 'informasi_dikecualikan',
-                'tahun' => 2024,
-                'tanggal_upload' => Carbon::now()->subDays(50),
-                'uploader' => 'PPID Desa'
-            ],
+            // LPPD
+            PpidDokumen::updateOrCreate(
+                [
+                    'judul_dokumen' => "Laporan Penyelenggaraan Pemerintahan Desa (LPPD) Akhir Tahun $year",
+                    'tahun' => $year,
+                ],
+                [
+                    'file_url' => "storage/ppid/lppd-$year.pdf",
+                    'kategori' => 'informasi berkala',
+                    'tanggal_upload' => Carbon::create($year + 1, 3, 30), // Diupload tahun depannya
+                    'uploader' => 'Kepala Desa',
+                ]
+            );
 
-            // Data tahun sebelumnya
-            [
-                'judul_dokumen' => 'Laporan Keuangan Desa Tahun 2023',
-                'file_url' => 'storage/ppid/laporan-keuangan-2023.pdf',
-                'kategori' => 'informasi_berkala',
-                'tahun' => 2023,
-                'tanggal_upload' => Carbon::now()->subDays(365),
-                'uploader' => 'Bendahara Desa'
-            ],
-            [
-                'judul_dokumen' => 'APBDesa 2023 - Laporan Realisasi',
-                'file_url' => 'storage/ppid/apbdesa-realisasi-2023.pdf',
-                'kategori' => 'informasi_berkala',
-                'tahun' => 2023,
-                'tanggal_upload' => Carbon::now()->subDays(300),
-                'uploader' => 'Bendahara Desa'
-            ],
-            [
-                'judul_dokumen' => 'Profil Desa Tahun 2023',
-                'file_url' => 'storage/ppid/profil-desa-2023.pdf',
-                'kategori' => 'informasi_setiap_saat',
-                'tahun' => 2023,
-                'tanggal_upload' => Carbon::now()->subDays(400),
-                'uploader' => 'Kepala Desa'
-            ],
 
-            // Data 2022
-            [
-                'judul_dokumen' => 'Laporan Keuangan Desa Tahun 2022',
-                'file_url' => 'storage/ppid/laporan-keuangan-2022.pdf',
-                'kategori' => 'informasi_berkala',
-                'tahun' => 2022,
-                'tanggal_upload' => Carbon::now()->subDays(730),
-                'uploader' => 'Bendahara Desa'
-            ]
-        ];
+            // --- 2. INFORMASI SETIAP SAAT (Update jika perlu) ---
+            
+            // Profil Desa (Update berkala setiap 2 tahun sekali misal)
+            if ($year % 2 == 0) {
+                PpidDokumen::updateOrCreate(
+                    [
+                        'judul_dokumen' => "Profil Desa Update Tahun $year",
+                        'tahun' => $year,
+                    ],
+                    [
+                        'file_url' => "storage/ppid/profil-desa-$year.pdf",
+                        'kategori' => 'informasi setiap saat',
+                        'tanggal_upload' => Carbon::create($year, 6, 1),
+                        'uploader' => 'Kasi Pemerintahan',
+                    ]
+                );
+            }
 
-        foreach ($dokumenData as $data) {
-            PpidDokumen::create($data);
+            // Perdes (Acak)
+            if (rand(0, 1)) {
+                PpidDokumen::updateOrCreate(
+                    [
+                        'judul_dokumen' => "Peraturan Desa No. " . rand(1,5) . " Tahun $year tentang Pungutan Desa",
+                        'tahun' => $year,
+                    ],
+                    [
+                        'file_url' => "storage/ppid/perdes-pungutan-$year.pdf",
+                        'kategori' => 'informasi setiap saat',
+                        'tanggal_upload' => Carbon::create($year, rand(2, 10), rand(1, 28)),
+                        'uploader' => 'Sekretaris Desa',
+                    ]
+                );
+            }
+
+
+            // --- 3. INFORMASI SERTAMERTA (Kondisional/Bencana) ---
+            
+            // Simulasi ada kejadian di tahun 2021 (Covid) dan 2024 (Banjir)
+            if ($year == 2021) {
+                PpidDokumen::updateOrCreate(
+                    [
+                        'judul_dokumen' => "Surat Edaran PPKM Darurat Covid-19 Desa",
+                        'tahun' => $year,
+                    ],
+                    [
+                        'file_url' => "storage/ppid/se-ppkm-$year.pdf",
+                        'kategori' => 'informasi sertamerta',
+                        'tanggal_upload' => Carbon::create($year, 7, 5),
+                        'uploader' => 'Satgas Covid Desa',
+                    ]
+                );
+            }
+
+            if ($year == 2024) {
+                PpidDokumen::updateOrCreate(
+                    [
+                        'judul_dokumen' => "Himbauan Waspada Banjir Kiriman",
+                        'tahun' => $year,
+                    ],
+                    [
+                        'file_url' => "storage/ppid/waspada-banjir-$year.pdf",
+                        'kategori' => 'informasi sertamerta',
+                        'tanggal_upload' => Carbon::create($year, 2, 10),
+                        'uploader' => 'Kepala Desa',
+                    ]
+                );
+            }
         }
 
-        $this->command->info('PPID Dokumen sample data berhasil ditambahkan!');
+        $this->command->info('PPID Dokumen berhasil di-seed untuk tahun 2020-2025!');
     }
 }

@@ -2,46 +2,50 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\DusunStatistik;
 use App\Models\TahunData;
+use Illuminate\Database\Seeder;
 
 class DusunStatistikSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $tahunIds = TahunData::pluck('id_tahun', 'tahun')->toArray();
-
-        $dusunNames = [
-            'Dusun Mawar',
-            'Dusun Melati',
-            'Dusun Kenanga',
-            'Dusun Cempaka',
-            'Dusun Anggrek',
+        $years = TahunData::orderBy('tahun', 'asc')->get();
+        
+        // Daftar Dusun
+        $dusuns = [
+            ['nama' => 'Dusun Krajan', 'porsi' => 0.4], // 40% penduduk
+            ['nama' => 'Dusun Melati', 'porsi' => 0.35], // 35% penduduk
+            ['nama' => 'Dusun Mawar', 'porsi' => 0.25], // 25% penduduk
         ];
 
-        foreach ($tahunIds as $tahun => $tahunId) {
-            foreach ($dusunNames as $index => $namaDusun) {
-                // Variasi data berdasarkan tahun dan dusun
-                $basePenduduk = 1500 + ($index * 200);
-                $baseKK = 400 + ($index * 50);
+        // Base total penduduk (harus mirip dengan Demografi)
+        $baseTotal = 3500;
 
-                // Pertumbuhan tiap tahun
-                $growthFactor = ($tahun - 2020) * 0.02 + 1;
+        foreach ($years as $index => $tahunData) {
+            $multiplier = 1 + ($index * 0.02);
+            $totalTahunIni = $baseTotal * $multiplier;
 
-                DusunStatistik::create([
-                    'tahun_id' => $tahunId,
-                    'nama_dusun' => $namaDusun,
-                    'jumlah_penduduk' => (int) ($basePenduduk * $growthFactor),
-                    'jumlah_kk' => (int) ($baseKK * $growthFactor),
-                    'keterangan' => "Data dusun {$namaDusun} tahun {$tahun}",
-                ]);
+            foreach ($dusuns as $dusun) {
+                // Hitung penduduk per dusun
+                $jumlahPenduduk = floor($totalTahunIni * $dusun['porsi']);
+                $jumlahLaki = floor($jumlahPenduduk * 0.51);
+                $jumlahPerempuan = $jumlahPenduduk - $jumlahLaki;
+                $jumlahKK = floor($jumlahPenduduk / 3.5); // Asumsi 1 KK rata-rata 3-4 orang
+
+                DusunStatistik::updateOrCreate(
+                    [
+                        'tahun_id' => $tahunData->id_tahun,
+                        'nama_dusun' => $dusun['nama'],
+                    ],
+                    [
+                        'ketua_dusun' => 'Bapak ' . fake()->name('male'), // Opsional pakai faker
+                        'jumlah_kk' => $jumlahKK,
+                        'jumlah_laki' => $jumlahLaki,
+                        'jumlah_perempuan' => $jumlahPerempuan,
+                        'total_penduduk' => $jumlahPenduduk,
+                    ]
+                );
             }
         }
     }

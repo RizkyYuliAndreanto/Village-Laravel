@@ -12,7 +12,7 @@ class StrukturOrganisasi extends Model
     protected $table = 'struktur_organisasi';
     protected $primaryKey = 'id_struktur';
 
-    // Custom timestamp columns
+    // Sesuaikan nama timestamp jika di migrasi menggunakan nama custom
     const CREATED_AT = 'create_at';
     const UPDATED_AT = 'updated_at';
 
@@ -23,10 +23,15 @@ class StrukturOrganisasi extends Model
         'keterangan',
     ];
 
-    protected $casts = [
-        'nama' => 'string',
-        'jabatan' => 'string',
-        'foto_url' => 'string',
-        'keterangan' => 'string',
-    ];
+    // ACCESSOR: Agar view yang memanggil $pamong->foto tetap jalan
+    public function getFotoAttribute()
+    {
+        return $this->foto_url;
+    }
+
+    // ACCESSOR: Agar view yang memanggil $pamong->image tetap jalan
+    public function getImageAttribute()
+    {
+        return $this->foto_url;
+    }
 }

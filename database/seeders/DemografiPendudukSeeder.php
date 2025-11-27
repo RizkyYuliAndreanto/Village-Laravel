@@ -2,65 +2,46 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\DemografiPenduduk;
 use App\Models\TahunData;
+use Illuminate\Database\Seeder;
 
 class DemografiPendudukSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $tahunIds = TahunData::pluck('id_tahun', 'tahun')->toArray();
+        // Ambil semua tahun (2020-2025)
+        $years = TahunData::orderBy('tahun', 'asc')->get();
 
-        $demografiData = [
-            2020 => [
-                'total_penduduk' => 8500,
-                'laki_laki' => 4200,
-                'perempuan' => 4300,
-                'penduduk_sementara' => 150,
-                'mutasi_penduduk' => 50,
-            ],
-            2021 => [
-                'total_penduduk' => 8650,
-                'laki_laki' => 4280,
-                'perempuan' => 4370,
-                'penduduk_sementara' => 165,
-                'mutasi_penduduk' => 75,
-            ],
-            2022 => [
-                'total_penduduk' => 8820,
-                'laki_laki' => 4360,
-                'perempuan' => 4460,
-                'penduduk_sementara' => 180,
-                'mutasi_penduduk' => 90,
-            ],
-            2023 => [
-                'total_penduduk' => 9000,
-                'laki_laki' => 4450,
-                'perempuan' => 4550,
-                'penduduk_sementara' => 200,
-                'mutasi_penduduk' => 120,
-            ],
-            2024 => [
-                'total_penduduk' => 9200,
-                'laki_laki' => 4550,
-                'perempuan' => 4650,
-                'penduduk_sementara' => 220,
-                'mutasi_penduduk' => 140,
-            ],
-        ];
+        // Base data tahun 2020
+        $basePenduduk = 3500;
+        $baseKK = 1200;
 
-        foreach ($demografiData as $tahun => $data) {
-            if (isset($tahunIds[$tahun])) {
-                $data['tahun_id'] = $tahunIds[$tahun];
-                DemografiPenduduk::create($data);
-            }
+        foreach ($years as $index => $tahunData) {
+            // Simulasi pertumbuhan penduduk ~2% per tahun
+            $multiplier = 1 + ($index * 0.02); 
+            
+            $totalPenduduk = floor($basePenduduk * $multiplier);
+            $totalKK = floor($baseKK * $multiplier);
+            
+            // Rasio Laki-laki ~51%, Perempuan ~49%
+            $laki = floor($totalPenduduk * 0.51);
+            $perempuan = $totalPenduduk - $laki;
+
+            DemografiPenduduk::updateOrCreate(
+                ['tahun_id' => $tahunData->id_tahun],
+                [
+                    'total_penduduk' => $totalPenduduk,
+                    'jumlah_kk' => $totalKK,
+                    'laki_laki' => $laki,
+                    'perempuan' => $perempuan,
+                    // Data mutasi fluktuatif
+                    'kelahiran' => rand(40, 60),
+                    'kematian' => rand(20, 40),
+                    'pindah_masuk' => rand(10, 30),
+                    'pindah_keluar' => rand(15, 35),
+                ]
+            );
         }
     }
 }

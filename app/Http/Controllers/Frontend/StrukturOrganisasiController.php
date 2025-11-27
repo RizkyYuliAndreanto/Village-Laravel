@@ -1,37 +1,65 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers\Frontend;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\Controller;
+use App\Models\StrukturOrganisasi;
+use Illuminate\Http\Request;
 
-class StrukturOrganisasi extends Model
+class StrukturOrganisasiController extends Controller
 {
-    use HasFactory;
-
-    protected $table = 'struktur_organisasi';
-    protected $primaryKey = 'id_struktur';
-
-    // Sesuaikan nama timestamp jika di migrasi menggunakan nama custom
-    const CREATED_AT = 'create_at';
-    const UPDATED_AT = 'updated_at';
-
-    protected $fillable = [
-        'nama',
-        'jabatan',
-        'foto_url',
-        'keterangan',
-    ];
-
-    // ACCESSOR: Agar view yang memanggil $pamong->foto tetap jalan
-    public function getFotoAttribute()
+    /**
+     * Menampilkan halaman daftar struktur organisasi
+     * Route: GET /struktur-organisasi
+     */
+    public function index()
     {
-        return $this->foto_url;
+        // Ambil semua data struktur organisasi
+        // Menggunakan orderBy id_struktur karena kolom 'urutan_tampil' tidak ada di database
+        $strukturOrganisasi = StrukturOrganisasi::orderBy('id_struktur', 'asc')->get();
+
+        // Hitung statistik sederhana (opsional)
+        $totalPejabat = $strukturOrganisasi->count();
+        $totalJabatan = $strukturOrganisasi->pluck('jabatan')->unique()->count();
+
+        // Return ke View
+        return view('frontend.profil-desa.sections.struktur-anggota.index', [
+            // PERBAIKAN: Menggunakan nama 'strukturOrganisasi' agar sesuai dengan View
+            'strukturOrganisasi' => $strukturOrganisasi, 
+            'pageTitle'    => 'Struktur Organisasi Pemerintahan Desa',
+            'totalPejabat' => $totalPejabat,
+            'totalJabatan' => $totalJabatan
+        ]);
     }
 
-    // ACCESSOR: Agar view yang memanggil $pamong->image tetap jalan
-    public function getImageAttribute()
+    /**
+     * Menampilkan detail anggota struktur
+     * Route: GET /struktur-organisasi/{id}
+     */
+    public function show($id)
     {
-        return $this->foto_url;
+        $anggota = StrukturOrganisasi::findOrFail($id);
+
+        return view('frontend.profil-desa.sections.struktur-anggota.show', [
+            'anggota'   => $anggota,
+            'pageTitle' => $anggota->nama . ' - ' . $anggota->jabatan
+        ]);
+    }
+
+    /**
+     * Widget struktur organisasi untuk sidebar/homepage (API)
+     */
+    public function widget()
+    {
+        $pejabatUtama = StrukturOrganisasi::orderBy('id_struktur', 'asc')
+            ->take(4)
+            ->get(['id_struktur as id', 'nama', 'jabatan as nama_jabatan', 'foto_url']);
+
+        $totalPejabat = StrukturOrganisasi::count();
+
+        return [
+            'pejabatUtama' => $pejabatUtama,
+            'totalPejabat' => $totalPejabat
+        ];
     }
 }

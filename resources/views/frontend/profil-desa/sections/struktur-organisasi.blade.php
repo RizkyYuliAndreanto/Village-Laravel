@@ -9,10 +9,10 @@
         </p>
     </div>
 
-    @if($strukturOrganisasi->count() > 0)
+    {{-- PERBAIKAN: Menggunakan $strukturOrganisasi (bukan $sotk) --}}
+    @if(isset($strukturOrganisasi) && $strukturOrganisasi->count() > 0)
     <div class="max-w-6xl mx-auto">
 
-        <!-- Grid 3 item saja -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($strukturOrganisasi->take(3) as $struktur)
             <div class="card-profil rounded-2xl overflow-hidden shadow-lg hover-profil-primary transition-all duration-300 group">
@@ -47,15 +47,17 @@
             @endforeach
         </div>
 
-        <!-- Tombol Lihat Semua -->
         <div class="text-center mt-10">
-        <a href="{{ route('profil-desa.struktur-anggota.index') }}"
-   class="px-6 py-3 bg-profil-primary text-white rounded-full hover:bg-cyan-700 shadow-lg transition-all">
-   Lihat Struktur Lengkap →
-</a>
-
+            <a href="{{ route('profil-desa.struktur-anggota.index') }}"
+               class="px-6 py-3 bg-profil-primary text-white rounded-full hover:bg-cyan-700 shadow-lg transition-all">
+               Lihat Struktur Lengkap →
+            </a>
         </div>
 
+    </div>
+    @else
+    <div class="text-center py-12">
+        <p class="text-gray-500">Data struktur organisasi belum tersedia.</p>
     </div>
     @endif
 </section>
