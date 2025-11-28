@@ -16,16 +16,14 @@
                 @foreach($strukturOrganisasi as $index => $struktur)
                     <div class="card-profil rounded-2xl overflow-hidden shadow-xl hover-profil-primary transition-all duration-300 animate-on-scroll" style="animation-delay: {{ $index * 0.1 }}s">
                         <!-- Photo -->
-                        <div class="relative h-64 bg-gradient-to-br from-cyan-100 to-blue-100">
+                        <div class="relative h-80 bg-gradient-to-br from-cyan-100 to-blue-100">
                             @if($struktur->foto_url)
-                                <img src="{{ asset('storage/' . $struktur->foto_url) }}" 
+                                <img src="{{ $struktur->foto_url }}" 
                                      alt="{{ $struktur->nama }}"
-                                     class="w-full h-full object-cover">
+                                     class="w-full h-full object-contain bg-white">
                             @else
                                 <div class="w-full h-full flex items-center justify-center">
-                                    <div class="w-24 h-24 bg-profil-primary rounded-full flex items-center justify-center">
-                                        <span class="text-3xl text-white">👤</span>
-                                    </div>
+                                    <div class="text-8xl text-white/70">👤</div>
                                 </div>
                             @endif
                             <!-- Overlay -->
