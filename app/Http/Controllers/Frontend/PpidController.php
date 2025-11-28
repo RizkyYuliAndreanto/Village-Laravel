@@ -249,10 +249,13 @@ class PpidController extends Controller
 
         // Log download (optional - bisa ditambahkan model DownloadLog)
 
-        if ($dokumen->file_url && file_exists(public_path($dokumen->file_url))) {
+        // Get the storage path
+        $storagePath = storage_path('app/public/' . str_replace('ppid-dokumen/', 'ppid-dokumen/', $dokumen->getAttributes()['file_url']));
+        
+        if (file_exists($storagePath)) {
             return response()->download(
-                public_path($dokumen->file_url),
-                $dokumen->judul_dokumen . '.pdf'
+                $storagePath,
+                $dokumen->judul_dokumen . '.' . pathinfo($storagePath, PATHINFO_EXTENSION)
             );
         }
 

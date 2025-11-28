@@ -33,6 +33,37 @@ class PpidDokumen extends Model
         'uploader' => 'string',
     ];
 
+    // Mutator untuk file_url
+    public function setFileUrlAttribute($value)
+    {
+        if (is_array($value) && !empty($value)) {
+            // Jika value adalah array (dari file upload), ambil file pertama
+            $filename = $value[0];
+            $this->attributes['file_url'] = 'ppid-dokumen/' . $filename;
+        } elseif (is_string($value) && !empty($value)) {
+            // Jika sudah string, gunakan langsung
+            $this->attributes['file_url'] = $value;
+        } else {
+            $this->attributes['file_url'] = null;
+        }
+    }
+
+    // Accessor untuk mendapatkan full URL
+    public function getFileUrlAttribute($value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+        
+        // Jika sudah full URL, return langsung
+        if (str_starts_with($value, 'http')) {
+            return $value;
+        }
+        
+        // Jika path relatif, buat full URL
+        return asset('storage/' . $value);
+    }
+
     // Enum values untuk kategori
     const KATEGORI_BERKALA = 'informasi berkala';
     const KATEGORI_SERTAMERTA = 'informasi sertamerta';

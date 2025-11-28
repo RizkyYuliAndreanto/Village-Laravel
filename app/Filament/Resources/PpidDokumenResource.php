@@ -87,14 +87,7 @@ class PpidDokumenResource extends Resource
                             ->visibility('public')
                             ->disk(config('media.default_disk', 'local'))
                             ->helperText('Upload file dokumen (PDF, DOC, DOCX, JPG, PNG). Maksimal 10MB.')
-                            ->columnSpanFull()
-                            ->afterStateUpdated(function ($state, callable $set) {
-                                if ($state) {
-                                    $mediaService = app(MediaStorageService::class);
-                                    $url = $mediaService->url($state);
-                                    $set('file_url', $url);
-                                }
-                            }),
+                            ->columnSpanFull(),
                     ])
                     ->columns(1),
 
