@@ -1,35 +1,42 @@
 {{-- Charts Section --}}
 @if($grafikData)
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-    {{-- Pie Chart: Pendapatan vs Belanja --}}
-    <div class="bg-white rounded-2xl shadow-xl p-8 transition-all duration-300 hover:shadow-2xl">
-        <div class="flex items-center mb-6">
-            <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-3 rounded-lg mr-4">
-                <i class="fas fa-chart-pie text-xl"></i>
-            </div>
-            <div>
-                <h3 class="text-2xl font-bold text-gray-900">Perbandingan Keuangan</h3>
-                <p class="text-gray-600">Rasio realisasi pendapatan vs belanja</p>
-            </div>
-        </div>
-        <div class="relative h-80">
-            <canvas id="pendapatanBelanjaChart"></canvas>
-        </div>
+<div class="space-y-8 mb-12">
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold apbdes-title mb-2">Visualisasi Data Keuangan</h2>
+        <p class="text-gray-600">Grafik dan chart untuk mempermudah analisis data APBDes</p>
     </div>
 
-    {{-- Bar Chart: Belanja per Bidang --}}
-    <div class="bg-white rounded-2xl shadow-xl p-8 transition-all duration-300 hover:shadow-2xl">
-        <div class="flex items-center mb-6">
-            <div class="bg-gradient-to-r from-cyan-500 to-teal-500 text-white p-3 rounded-lg mr-4">
-                <i class="fas fa-chart-column text-xl"></i>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {{-- Pie Chart: Pendapatan vs Belanja --}}
+        <div class="apbdes-card p-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-chart-pie text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold apbdes-title">Perbandingan Keuangan</h3>
+                    <p class="text-gray-600 text-sm">Rasio pendapatan vs belanja</p>
+                </div>
             </div>
-            <div>
-                <h3 class="text-2xl font-bold text-gray-900">Distribusi Belanja</h3>
-                <p class="text-gray-600">Total realisasi belanja per bidang</p>
+            <div class="relative bg-white rounded-lg p-3 shadow-inner" style="height: 320px;">
+                <canvas id="pendapatanBelanjaChart" class="w-full h-full"></canvas>
             </div>
         </div>
-        <div class="relative h-80">
-            <canvas id="belanjaBidangChart"></canvas>
+
+        {{-- Bar Chart: Belanja per Bidang --}}
+        <div class="apbdes-card p-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-chart-bar text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold apbdes-title">Distribusi Belanja</h3>
+                    <p class="text-gray-600 text-sm">Belanja per bidang</p>
+                </div>
+            </div>
+            <div class="relative bg-white rounded-lg p-3 shadow-inner" style="height: 320px;">
+                <canvas id="belanjaBidangChart" class="w-full h-full"></canvas>
+            </div>
         </div>
     </div>
 </div>
@@ -45,17 +52,18 @@
             <p class="text-gray-600">Analisis tren pendapatan dan belanja desa dari tahun ke tahun</p>
         </div>
     </div>
-    <div class="relative h-96">
-        <canvas id="yearlyComparisonChart"></canvas>
+    <div class="relative bg-white rounded-lg p-4 shadow-inner" style="height: 400px;">
+        <canvas id="yearlyComparisonChart" class="w-full h-full"></canvas>
     </div>
-    <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-        <div class="flex">
+    <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div class="flex items-start">
             <div class="flex-shrink-0">
-                <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+                <i class="fas fa-info-circle text-blue-500 mt-1"></i>
             </div>
             <div class="ml-3">
-                <p class="text-sm text-yellow-800 font-medium">
-                    Grafik ini menampilkan perbandingan APBDes antar tahun. Saat ini menggunakan data simulasi.
+                <p class="text-sm text-blue-800">
+                    <strong>Informasi:</strong> Grafik tren menampilkan perbandingan data keuangan desa selama 5 tahun terakhir. 
+                    Hover pada titik grafik untuk melihat detail nilai. Data ini diambil dari laporan APBDes resmi.
                 </p>
             </div>
         </div>

@@ -76,4 +76,5 @@ Route::prefix('infografis')->group(function () {
     Route::get('/agama', [AgamaController::class, 'apiData']); // GET /api/infografis/agama
     Route::get('/perkawinan', [PerkawinanController::class, 'apiData']); // GET /api/infografis/perkawinan
     Route::get('/wajib-pilih', [PerkawinanController::class, 'apiWajibPilih']); // GET /api/infografis/wajib-pilih
+    Route::get('/dusun', [App\Http\Controllers\Frontend\DemografiController::class, 'apiDusun']); // GET /api/infografis/dusun
 });

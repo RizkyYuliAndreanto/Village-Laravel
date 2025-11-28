@@ -46,12 +46,20 @@ class WajibPilihStatistikSeeder extends Seeder
                 'perempuan' => 3255,          // 70% dari 4650 P
                 'total' => 6440,              // 70% dari 9200
             ],
+            2025 => [
+                'laki_laki' => 3255,          // 70% dari 4650 L
+                'perempuan' => 3325,          // 70% dari 4750 P
+                'total' => 6580,              // 70% dari 9400
+            ],
         ];
 
         foreach ($wajibPilihData as $tahun => $data) {
             if (isset($tahunIds[$tahun])) {
                 $data['tahun_id'] = $tahunIds[$tahun];
-                WajibPilihStatistik::create($data);
+                WajibPilihStatistik::updateOrCreate(
+                    ['tahun_id' => $tahunIds[$tahun]],
+                    $data
+                );
             }
         }
     }

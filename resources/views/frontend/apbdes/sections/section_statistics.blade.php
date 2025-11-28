@@ -1,14 +1,14 @@
-{{-- Main Financial Summary Card --}}
-<div class="bg-white rounded-2xl shadow-2xl overflow-hidden mb-12">
-    {{-- Header Card Ringkasan --}}
-    <div class="bg-gradient-to-r from-gray-100 to-gray-200 text-black px-8 py-6">
+{{-- Ringkasan Keuangan Section --}}
+<div class="apbdes-card mb-12 overflow-hidden">
+    {{-- Header --}}
+    <div class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-6">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
             <div class="mb-4 md:mb-0">
-                <h2 class="text-3xl md:text-4xl font-bold mb-2 text-gray-900 flex items-center">
-                    <i class="fas fa-wallet mr-3 text-cyan-600"></i>
+                <h2 class="text-3xl font-bold mb-2 flex items-center">
+                    <i class="fas fa-chart-line mr-3"></i>
                     Ringkasan Keuangan {{ $tahunDipilih }}
                 </h2>
-                <p class="text-gray-600 font-medium">Overview lengkap pendapatan, belanja, dan status balance keuangan desa</p>
+                <p class="text-cyan-100">Transparansi pengelolaan keuangan desa</p>
             </div>
             <div class="text-right">
                 <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold text-white 

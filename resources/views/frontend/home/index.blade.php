@@ -17,8 +17,7 @@
 {{-- Statistik Penduduk Section --}}
 @include('frontend.home.sections.statistik-penduduk')
 
-{{-- APBD Desa Section --}}
-@include('frontend.home.sections.apbd-desa')
+
 
 {{-- Berita Desa Section --}}
 @include('frontend.home.sections.berita-desa')

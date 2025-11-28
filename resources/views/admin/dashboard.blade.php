@@ -14,7 +14,7 @@
             <h2 class="text-xl font-bold mb-8">🔒 Security Admin</h2>
             <nav>
                 <ul class="space-y-2">
-                    <li><a href="{{ route('admin.dashboard') }}" class="block p-2 rounded hover:bg-gray-700">Dashboard</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}" class="block p-2 rounded hover:bg-gray-700">Security Dashboard</a></li>
                     <li><a href="{{ route('admin.security.index') }}" class="block p-2 rounded hover:bg-gray-700">Security Monitor</a></li>
                     <li><a href="{{ route('admin.system.info') }}" class="block p-2 rounded hover:bg-gray-700">System Info</a></li>
                     <li><a href="{{ route('admin.config.security') }}" class="block p-2 rounded hover:bg-gray-700">Security Config</a></li>

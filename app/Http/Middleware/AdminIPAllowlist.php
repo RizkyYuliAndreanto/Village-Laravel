@@ -39,8 +39,32 @@ class AdminIPAllowlist
 
         // Check if IP is in allowlist
         if (!$this->isIPAllowed($clientIP, $allowedIPs)) {
+            $enforcementConfig = config('security.admin_ip_enforcement', []);
+            $mode = $enforcementConfig['mode'] ?? 'warning';
+
+            // GOVERNMENT FRIENDLY: Warning mode untuk pemerintahan desa
+            if ($mode === 'warning' || $enforcementConfig['government_friendly'] ?? false) {
+                // Log peringatan tapi TIDAK BLOCK akses
+                Log::channel('security')->warning('Admin access from unregistered IP (ALLOWED in government mode)', [
+                    'ip' => $clientIP,
+                    'route' => $request->path(),
+                    'user_agent' => $request->userAgent(),
+                    'allowed_ips' => $allowedIPs,
+                    'mode' => 'government_friendly_warning'
+                ]);
+
+                // Auto-learn IP jika diaktifkan
+                if ($enforcementConfig['auto_learn_ips'] ?? true) {
+                    $this->learnNewIP($clientIP);
+                }
+
+                // Tetap izinkan akses (government friendly)
+                return $next($request);
+            }
+
+            // STRICT MODE: Block akses (untuk environment dengan IT support)
             // Log unauthorized admin access attempt
-            Log::channel('security')->critical('Unauthorized admin access attempt', [
+            Log::channel('security')->critical('Unauthorized admin access attempt (BLOCKED)', [
                 'ip' => $clientIP,
                 'route' => $request->path(),
                 'user_agent' => $request->userAgent(),
@@ -60,9 +84,12 @@ class AdminIPAllowlist
         }
 
         // Log successful admin access
+        $isKnownIP = $this->isIPAllowed($clientIP, $allowedIPs);
         Log::channel('security')->info('Admin access granted', [
             'ip' => $clientIP,
-            'route' => $request->path()
+            'route' => $request->path(),
+            'ip_status' => $isKnownIP ? 'registered' : 'auto_learned',
+            'government_mode' => config('security.admin_ip_enforcement.government_friendly', false)
         ]);
 
         return $next($request);
@@ -122,10 +149,11 @@ class AdminIPAllowlist
     }
 
     /**
-     * Check if IP is allowed
+     * Check if IP is allowed (including learned IPs)
      */
     private function isIPAllowed(string $clientIP, array $allowedIPs): bool
     {
+        // Check configured IPs first
         foreach ($allowedIPs as $allowedIP) {
             // Support CIDR notation
             if (strpos($allowedIP, '/') !== false) {
@@ -137,6 +165,14 @@ class AdminIPAllowlist
                 if ($clientIP === $allowedIP) {
                     return true;
                 }
+            }
+        }
+
+        // Check auto-learned IPs (government friendly mode)
+        if (config('security.admin_ip_enforcement.auto_learn_ips', true)) {
+            $learnedIPs = cache('learned_admin_ips', []);
+            if (in_array($clientIP, $learnedIPs)) {
+                return true;
             }
         }
 
@@ -160,5 +196,50 @@ class AdminIPAllowlist
         $subnet &= $mask;
 
         return ($ip & $mask) == $subnet;
+    }
+
+    /**
+     * Auto-learn new IP untuk government friendly mode
+     */
+    private function learnNewIP(string $ip): void
+    {
+        try {
+            $cacheKey = 'learned_admin_ips';
+            $learnedIPs = cache($cacheKey, []);
+            $maxIPs = config('security.admin_ip_enforcement.max_learned_ips', 10);
+
+            // Skip jika IP sudah dipelajari
+            if (in_array($ip, $learnedIPs)) {
+                return;
+            }
+
+            // Skip jika sudah mencapai batas maksimal
+            if (count($learnedIPs) >= $maxIPs) {
+                Log::channel('security')->warning('Max learned IPs reached, skipping auto-learn', [
+                    'ip' => $ip,
+                    'max_ips' => $maxIPs,
+                    'current_count' => count($learnedIPs)
+                ]);
+                return;
+            }
+
+            // Tambah IP ke daftar learned
+            $learnedIPs[] = $ip;
+            $gracePeriodHours = config('security.admin_ip_enforcement.grace_period_hours', 24);
+
+            // Cache untuk grace period
+            cache([$cacheKey => $learnedIPs], now()->addHours($gracePeriodHours));
+
+            Log::channel('security')->info('Auto-learned new admin IP for government office', [
+                'ip' => $ip,
+                'total_learned' => count($learnedIPs),
+                'grace_period_hours' => $gracePeriodHours
+            ]);
+        } catch (\Exception $e) {
+            Log::channel('security')->error('Failed to auto-learn IP', [
+                'ip' => $ip,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }

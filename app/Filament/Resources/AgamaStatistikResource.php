@@ -17,7 +17,7 @@ class AgamaStatistikResource extends Resource
 {
     protected static ?string $model = AgamaStatistik::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-star';
+    protected static ?string $navigationIcon = 'heroicon-o-building-library';
 
     protected static ?string $navigationLabel = 'Statistik Agama';
 
@@ -27,7 +27,7 @@ class AgamaStatistikResource extends Resource
 
     protected static ?string $navigationGroup = 'Data Statistik';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {

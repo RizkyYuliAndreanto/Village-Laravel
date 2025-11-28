@@ -6,9 +6,11 @@ use App\Http\Controllers\Frontend\UmkmController;
 use App\Http\Controllers\Frontend\BeritaController;
 use App\Http\Controllers\Frontend\StrukturOrganisasiController;
 use App\Http\Controllers\Frontend\DemografiController;
+use App\Http\Controllers\Frontend\InfografisController;
 use App\Http\Controllers\Frontend\PpidController;
 use App\Http\Controllers\Frontend\ApbdesController;
 use App\Http\Controllers\Frontend\ProfilDesaController;
+use App\Http\Controllers\Frontend\GaleriController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Frontend\TestUmkmController;
 
@@ -41,7 +43,8 @@ Route::view('/test-bootstrap', 'test-bootstrap')->name('test.bootstrap');
 |--------------------------------------------------------------------------
 */
 // Route::view('/profil-desa', 'frontend.profil-desa.index')->name('profil-desa.index'); // Commented out - conflict with ProfilDesaController
-Route::get('/infografis', [DemografiController::class, 'infografis'])->name('infografis.index');
+Route::get('/infografis', [InfografisController::class, 'index'])->name('infografis.index');
+Route::get('/infografis/data', [InfografisController::class, 'getData'])->name('infografis.data');
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +60,16 @@ Route::prefix('apbdes')->name('frontend.apbdes.')->group(function () {
 Route::get('/belanja', function () {
     return redirect()->route('frontend.apbdes.index');
 })->name('belanja.index');
+
+/*
+|--------------------------------------------------------------------------
+| GALERI ROUTES - Galeri Foto dari Berita dan UMKM
+|--------------------------------------------------------------------------
+*/
+Route::prefix('galeri')->name('galeri.')->group(function () {
+    Route::get('/', [GaleriController::class, 'index'])->name('index');
+    Route::get('/api', [GaleriController::class, 'api'])->name('api');
+});
 
 /*
 |--------------------------------------------------------------------------

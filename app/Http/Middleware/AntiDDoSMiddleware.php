@@ -15,6 +15,11 @@ class AntiDDoSMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Skip DDoS protection in local development
+        if (app()->environment('local', 'development')) {
+            return $next($request);
+        }
+
         $ip = $request->ip();
         $userAgent = $request->userAgent();
 

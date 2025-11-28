@@ -1,11 +1,11 @@
 {{-- Section: Berdasarkan Kelompok Umur --}}
-<section class="min-h-screen flex flex-col justify-center py-20 bg-gradient-to-br from-cyan-50 to-teal-50">
-    <div class="container mx-auto px-6 flex flex-col gap-8">
-        <div class="text-left">
-            <h3 class="text-3xl font-extrabold mb-3 infografis-title">
+<section class="min-h-screen flex flex-col justify-center py-8 sm:py-12 lg:py-20 bg-gradient-to-br from-cyan-50 to-teal-50">
+    <div class="container mx-auto px-4 sm:px-6 flex flex-col gap-4 sm:gap-6 lg:gap-8">
+        <div class="text-center">
+            <h3 class="text-xl sm:text-2xl lg:text-3xl font-extrabold mb-2 sm:mb-3 infografis-title">
                 Berdasarkan Kelompok Umur
             </h3>
-            <p class="infografis-subtitle max-w-2xl">
+            <p class="infografis-subtitle max-w-2xl mx-auto text-sm sm:text-base">
                 Jumlah penduduk laki-laki dan perempuan berdasarkan kelompok umur untuk tahun
                 <span id="tahun-display-umur" class="font-semibold text-primary-700">
                     {{ $tahunAktif ?? date('Y') }}
@@ -13,30 +13,25 @@
             </p>
         </div>
 
-        {{-- Tahun Selector --}}
-        @include('frontend.Infografis.partials.tahun-selector', [
-            'sectionId' => 'umur',
-            'tahunTersedia' => $tahunTersedia ?? [],
-            'tahunAktif' => $tahunAktif ?? date('Y')
-        ])
+       
 
-        <div id="umur-content" class="w-full infografis-card p-6 rounded-2xl shadow-md">
-            <div class="h-[500px]">
+        <div id="umur-content" class="w-full infografis-card p-4 sm:p-6 lg:p-10 rounded-2xl shadow-md">
+            <div class="chart-container">
                 <canvas id="chartPiramida"></canvas>
             </div>
         </div>
     </div>
 
-    <div class="container mx-auto px-6 mt-10 space-y-6">
-        <div class="infografis-card border-t-4 border-primary-400 p-6 rounded-xl shadow-md">
-            <p class="text-body">
+    <div class="container mx-auto px-4 sm:px-6 mt-6 sm:mt-8 lg:mt-12 space-y-4 sm:space-y-6 lg:space-y-8">
+        <div class="infografis-card border-t-4 border-primary-400 p-4 sm:p-6 lg:p-10 rounded-xl shadow-md">
+            <p class="text-sm sm:text-base lg:text-xl text-body">
                 Untuk jenis kelamin <strong>laki-laki</strong>, kelompok umur
                 <strong>25–29</strong> adalah yang tertinggi (99 orang / 10.65%).
             </p>
         </div>
 
-        <div class="infografis-card border-t-4 border-primary-600 p-6 rounded-xl shadow-md">
-            <p class="text-body">
+        <div class="infografis-card border-t-4 border-primary-600 p-4 sm:p-6 lg:p-10 rounded-xl shadow-md">
+            <p class="text-sm sm:text-base lg:text-xl text-body">
                 Untuk jenis kelamin <strong>perempuan</strong>, kelompok umur
                 <strong>25–29</strong> adalah yang tertinggi (112 orang / 11.67%).
             </p>
@@ -47,10 +42,20 @@
 @push('scripts')
 <script>
     // Piramida Penduduk Chart
-    if (document.getElementById("chartPiramida")) {
-        const piramida = document.getElementById("chartPiramida").getContext("2d");
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Loading Piramida Chart...');
+        
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded!');
+            return;
+        }
+        
+        const chartElement = document.getElementById("chartPiramida");
+        if (chartElement) {
+            console.log('Chart element found, creating chart...');
+            const piramida = chartElement.getContext("2d");
 
-        new Chart(piramida, {
+            new Chart(piramida, {
             type: "bar",
             data: {
                 labels: [
@@ -60,33 +65,33 @@
                 datasets: [{
                     label: "Laki-laki",
                     data: [
-                        -{{ $umurData->umur_0_4 ?? 0 }},
-                        -{{ $umurData->umur_5_9 ?? 0 }},
-                        -{{ $umurData->umur_10_14 ?? 0 }},
-                        -{{ $umurData->umur_15_19 ?? 0 }},
-                        -{{ $umurData->umur_20_24 ?? 0 }},
-                        -{{ $umurData->umur_25_29 ?? 0 }},
-                        -{{ $umurData->umur_30_34 ?? 0 }},
-                        -{{ $umurData->umur_35_39 ?? 0 }},
-                        -{{ $umurData->umur_40_44 ?? 0 }},
-                        -{{ $umurData->umur_45_49 ?? 0 }},
-                        -{{ $umurData->umur_50_plus ?? 0 }}
+                        -{{ $umur_0_4 ?? 0 }},
+                        -{{ $umur_5_9 ?? 0 }},
+                        -{{ $umur_10_14 ?? 0 }},
+                        -{{ $umur_15_19 ?? 0 }},
+                        -{{ $umur_20_24 ?? 0 }},
+                        -{{ $umur_25_29 ?? 0 }},
+                        -{{ $umur_30_34 ?? 0 }},
+                        -{{ $umur_35_39 ?? 0 }},
+                        -{{ $umur_40_44 ?? 0 }},
+                        -{{ $umur_45_49 ?? 0 }},
+                        -{{ $umur_50_plus ?? 0 }}
                     ],
                     backgroundColor: "rgba(56, 161, 105, 0.8)"
                 }, {
                     label: "Perempuan",
                     data: [
-                        {{ $umurData->umur_0_4 ?? 0 }},
-                        {{ $umurData->umur_5_9 ?? 0 }},
-                        {{ $umurData->umur_10_14 ?? 0 }},
-                        {{ $umurData->umur_15_19 ?? 0 }},
-                        {{ $umurData->umur_20_24 ?? 0 }},
-                        {{ $umurData->umur_25_29 ?? 0 }},
-                        {{ $umurData->umur_30_34 ?? 0 }},
-                        {{ $umurData->umur_35_39 ?? 0 }},
-                        {{ $umurData->umur_40_44 ?? 0 }},
-                        {{ $umurData->umur_45_49 ?? 0 }},
-                        {{ $umurData->umur_50_plus ?? 0 }}
+                        {{ $umur_0_4 ?? 0 }},
+                        {{ $umur_5_9 ?? 0 }},
+                        {{ $umur_10_14 ?? 0 }},
+                        {{ $umur_15_19 ?? 0 }},
+                        {{ $umur_20_24 ?? 0 }},
+                        {{ $umur_25_29 ?? 0 }},
+                        {{ $umur_30_34 ?? 0 }},
+                        {{ $umur_35_39 ?? 0 }},
+                        {{ $umur_40_44 ?? 0 }},
+                        {{ $umur_45_49 ?? 0 }},
+                        {{ $umur_50_plus ?? 0 }}
                     ],
                     backgroundColor: "rgba(244, 114, 182, 0.8)"
                 }]
@@ -99,14 +104,29 @@
                     x: {
                         stacked: true,
                         ticks: {
-                            callback: value => Math.abs(value)
+                            callback: value => Math.abs(value),
+                            font: {
+                                size: window.innerWidth < 640 ? 10 : 12
+                            }
                         }
                     },
                     y: {
-                        stacked: true
+                        stacked: true,
+                        ticks: {
+                            font: {
+                                size: window.innerWidth < 640 ? 10 : 12
+                            }
+                        }
                     }
                 },
                 plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: window.innerWidth < 640 ? 10 : 12
+                            }
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: ctx => ctx.dataset.label + ": " + Math.abs(ctx.raw)
@@ -115,6 +135,7 @@
                 }
             }
         });
-    }
+        }
+    });
 </script>
 @endpush

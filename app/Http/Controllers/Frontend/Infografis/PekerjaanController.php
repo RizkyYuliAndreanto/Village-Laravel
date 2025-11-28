@@ -33,14 +33,14 @@ class PekerjaanController extends Controller
         // Coba ambil data dari database
         $statistikPekerjaan = PekerjaanStatistik::whereHas('tahunData', function ($query) use ($tahun) {
             $query->where('tahun', $tahun);
-        })->orderBy('total_jiwa', 'desc')->get();
+        })->get();
 
         if ($statistikPekerjaan->isEmpty()) {
             // Data dummy jika tidak ada data real
             return $this->getDummyData();
         }
 
-        // Transform database data
+        // Transform database data dan sort berdasarkan total
         return $this->transformDatabaseData($statistikPekerjaan);
     }
 
@@ -67,24 +67,23 @@ class PekerjaanController extends Controller
      */
     private function transformDatabaseData($statistikPekerjaan)
     {
-        $mapping = [
-            'Petani/Pekebun' => 'petani',
-            'Belum/Tidak Bekerja' => 'belum_bekerja',
-            'Pelajar/Mahasiswa' => 'pelajar_mahasiswa',
-            'Mengurus Rumah Tangga' => 'ibu_rumah_tangga',
-            'Wiraswasta' => 'wiraswasta',
-            'Karyawan Swasta' => 'pegawai_swasta',
-            'Buruh Tani/Perkebunan' => 'lainnya'
-        ];
+        // Ambil data pertama (karena per tahun cuma 1 record)
+        $stat = $statistikPekerjaan->first();
 
-        $data = [];
-        foreach ($statistikPekerjaan as $stat) {
-            $key = $mapping[$stat->jenis_pekerjaan] ?? strtolower(str_replace([' ', '/'], '_', $stat->jenis_pekerjaan));
-            $data[$key] = $stat->total_jiwa;
+        if (!$stat) {
+            return $this->getDummyData();
         }
 
         return [
-            'pekerjaan' => (object)$data
+            'pekerjaan' => (object)[
+                'petani' => $stat->petani ?? 0,
+                'belum_bekerja' => $stat->belum_bekerja ?? 0,
+                'pelajar_mahasiswa' => $stat->pelajar_mahasiswa ?? 0,
+                'ibu_rumah_tangga' => $stat->ibu_rumah_tangga ?? 0,
+                'wiraswasta' => $stat->wiraswasta ?? 0,
+                'pegawai_swasta' => $stat->pegawai_swasta ?? 0,
+                'lainnya' => $stat->lainnya ?? 0
+            ]
         ];
     }
 

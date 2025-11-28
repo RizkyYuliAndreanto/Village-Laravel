@@ -17,7 +17,7 @@
                 </li>
                 <li class="flex items-center">
                     <i class="fas fa-chevron-right mx-2 text-xs"></i>
-                    <a href="{{ route('umkm.kategori', $umkm->kategori->slug) }}" class="hover:text-gray-800 transition-colors duration-200">
+                    <a href="{{ route('umkm.kategori', \Str::slug($umkm->kategori->nama_kategori)) }}" class="hover:text-gray-800 transition-colors duration-200">
                         {{ $umkm->kategori->nama_kategori }}
                     </a>
                 </li>
@@ -41,10 +41,10 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="text-center">
                             <!-- UMKM Logo -->
-                            @if($umkm->logo_url)
-                                <img src="{{ $umkm->logo_url }}" 
+                            @if($umkm->logo_path)
+                                <img src="{{ asset('storage/' . $umkm->logo_path) }}" 
                                      alt="{{ $umkm->nama }}" 
-                                     class="max-h-48 max-w-full rounded-lg shadow-md mb-4 mx-auto">
+                                     class="max-h-48 max-w-full rounded-lg shadow-md mb-4 mx-auto object-cover">
                             @else
                                 <div class="bg-cyan-50 rounded-lg p-8 mb-4">
                                     <i class="fas fa-store text-6xl text-cyan-400"></i>
@@ -132,6 +132,25 @@
                         </h3>
                         <div class="text-gray-700 leading-relaxed">
                             {!! nl2br(e($umkm->deskripsi)) !!}
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Galeri Foto -->
+                @if($umkm->foto_galeri_paths && count($umkm->foto_galeri_paths) > 0)
+                    <div class="bg-white rounded-xl shadow-lg border border-cyan-100/50 p-6">
+                        <h3 class="text-xl font-bold text-teal-800 mb-4 flex items-center">
+                            <i class="fas fa-images mr-2"></i>Galeri Foto
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            @foreach($umkm->foto_galeri_paths as $foto)
+                                <div class="aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+                                    <img src="{{ asset('storage/' . $foto) }}" 
+                                         alt="Foto {{ $umkm->nama }}" 
+                                         class="w-full h-full object-cover hover:scale-105 transition-transform duration-200 cursor-pointer"
+                                         onclick="openImageModal(this.src)">
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 @endif
@@ -241,4 +260,47 @@
         </div>
     </div>
 </section>
+
+<!-- Modal untuk melihat gambar penuh -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden items-center justify-center p-4">
+    <div class="relative max-w-4xl max-h-full">
+        <button onclick="closeImageModal()" class="absolute -top-4 -right-4 bg-white rounded-full w-10 h-10 flex items-center justify-center text-black hover:bg-gray-200 transition-colors duration-200 z-10">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="modalImage" src="" alt="Preview" class="max-w-full max-h-full rounded-lg shadow-2xl">
+    </div>
+</div>
+
+@push('scripts')
+<script>
+function openImageModal(imageSrc) {
+    document.getElementById('modalImage').src = imageSrc;
+    const modal = document.getElementById('imageModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside the image
+document.getElementById('imageModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeImageModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeImageModal();
+    }
+});
+</script>
+@endpush
 @endsection

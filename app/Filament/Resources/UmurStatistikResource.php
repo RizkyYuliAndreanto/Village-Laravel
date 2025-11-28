@@ -75,15 +75,15 @@ class UmurStatistikResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationLabel = 'Umur Statistik';
+    protected static ?string $navigationLabel = 'Statistik Umur';
 
-    protected static ?string $modelLabel = 'Umur Statistik';
+    protected static ?string $modelLabel = 'Statistik Umur';
 
-    protected static ?string $pluralModelLabel = 'Umur Statistik';
+    protected static ?string $pluralModelLabel = 'Statistik Umur';
 
-    protected static ?string $navigationGroup = 'Statistik Desa';
+    protected static ?string $navigationGroup = 'Data Statistik';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 2;
 
     public static function getNavigationBadge(): ?string
     {

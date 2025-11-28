@@ -15,6 +15,11 @@ class AntiBruteForceMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Skip security checks in local development
+        if (app()->environment('local')) {
+            return $next($request);
+        }
+
         // Hanya check untuk login attempts
         if ($this->isLoginAttempt($request)) {
             $ip = $request->ip();

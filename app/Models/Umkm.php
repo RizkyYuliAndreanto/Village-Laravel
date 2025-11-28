@@ -42,8 +42,8 @@ class Umkm extends Model
         'omset_per_bulan',
         'skala_usaha',
         'jumlah_karyawan',
-        'logo_url',
-        'foto_galeri',
+        'logo_path',
+        'foto_galeri_paths',
     ];
 
     protected $casts = [
@@ -74,8 +74,8 @@ class Umkm extends Model
         'omset_per_bulan' => 'decimal:2',
         'skala_usaha' => 'string',
         'jumlah_karyawan' => 'integer',
-        'logo_url' => 'string',
-        'foto_galeri' => 'array', // JSON array
+        'logo_path' => 'string',
+        'foto_galeri_paths' => 'array', // JSON array untuk path file
     ];
 
     // Status usaha constants

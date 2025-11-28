@@ -52,7 +52,7 @@
                 <a href="{{ route('berita.arsip', ['tahun' => $tahun]) }}"
                    class="text-center px-4 py-3 rounded-xl font-medium transition-all transform hover:scale-105
                           @if(!$bulan)
-                              btn-primary text-white shadow-lg
+                              btn-primary shadow-lg
                           @else
                               bg-white border-2 border-primary-200 text-primary-700 hover:border-primary-400
                           @endif">
@@ -66,7 +66,7 @@
                     <a href="{{ route('berita.arsip', ['tahun' => $tahun, 'bulan' => $num]) }}"
                        class="text-center px-4 py-3 rounded-xl font-medium transition-all transform hover:scale-105
                               @if($bulan == $num)
-                                  btn-primary text-white shadow-lg
+                                  btn-primary shadow-lg
                               @else
                                   bg-white border-2 border-primary-200 text-primary-700 hover:border-primary-400
                                   @if(($statistikBulan[$num] ?? 0) == 0) opacity-50 @endif
@@ -109,7 +109,7 @@
                             <!-- Image -->
                             <div class="relative overflow-hidden">
                                 @if ($item->gambar_url)
-                                    <img src="{{ $item->gambar_url }}" 
+                                    <img src="{{ $item->image_url }}" 
                                          alt="{{ $item->judul }}"
                                          class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
                                 @else

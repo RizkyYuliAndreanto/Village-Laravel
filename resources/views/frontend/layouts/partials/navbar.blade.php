@@ -8,7 +8,7 @@
           <div class="relative mr-3">
             <img
               class="h-12 w-12 rounded-full border-2 border-white/50 shadow-lg hover:shadow-xl transition-shadow duration-300"
-              src="{{ asset('images/logo-placeholder.jpg') }}"
+              src="{{ asset('images/Logo_kabupaten_madiun.gif') }}"
               alt="Logo {{ config('app.name', 'Laravel') }}"
             />
           </div>
@@ -52,21 +52,21 @@
         </a>
         
         <a href="{{ route('berita.index') }}" 
-           class="flex items-center px-4 py-2 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/20 hover:-translate-y-0.5 {{ request()->routeIs('berita.*') ? 'bg-white/25 shadow-lg' : '' }}">
+           class="flex items-center px-4 py-2 rounded-full navbar-text font-medium transition-all duration-300 navbar-hover hover:-translate-y-0.5 {{ request()->routeIs('berita.*') ? 'bg-white/25 shadow-lg' : '' }}">
           <i class="fas fa-newspaper mr-2"></i>Berita
         </a>
         
         <a href="{{ route('ppid.index') }}" 
-           class="flex items-center px-4 py-2 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/20 hover:-translate-y-0.5 {{ request()->routeIs('ppid.*') ? 'bg-white/25 shadow-lg' : '' }}">
+           class="flex items-center px-4 py-2 rounded-full navbar-text font-medium transition-all duration-300 navbar-hover hover:-translate-y-0.5  {{ request()->routeIs('ppid.*') ? 'bg-white/25 shadow-lg' : '' }}">
           <i class="fas fa-folder-open mr-2"></i>PPID
         </a>
       </div>
 
       <!-- Mobile menu button -->
-      <button id="mobile-menu-toggle" class="lg:hidden p-2 rounded-lg bg-white/30 hover:bg-white/40 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white/50">
-        <div class="w-6 h-0.5 bg-white rounded-full transition-all duration-300"></div>
-        <div class="w-6 h-0.5 bg-white rounded-full mt-1.5 transition-all duration-300"></div>
-        <div class="w-6 h-0.5 bg-white rounded-full mt-1.5 transition-all duration-300"></div>
+      <button id="mobile-menu-toggle" class="lg:hidden p-2 rounded-lg bg-white/30 hover:bg-white/40 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white/50" aria-label="Toggle mobile menu">
+        <div class="w-6 h-0.5 bg-white rounded-full transition-all duration-300 hamburger-line-1"></div>
+        <div class="w-6 h-0.5 bg-white rounded-full mt-1.5 transition-all duration-300 hamburger-line-2"></div>
+        <div class="w-6 h-0.5 bg-white rounded-full mt-1.5 transition-all duration-300 hamburger-line-3"></div>
       </button>
     </div>
 
@@ -118,7 +118,14 @@
 document.addEventListener('DOMContentLoaded', function() {
   const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
-  const bars = mobileMenuToggle.querySelectorAll('div');
+  const hamburgerLine1 = document.querySelector('.hamburger-line-1');
+  const hamburgerLine2 = document.querySelector('.hamburger-line-2');
+  const hamburgerLine3 = document.querySelector('.hamburger-line-3');
+
+  if (!mobileMenuToggle || !mobileMenu) {
+    console.error('Mobile menu elements not found');
+    return;
+  }
 
   mobileMenuToggle.addEventListener('click', function() {
     if (mobileMenu.classList.contains('hidden')) {
@@ -126,17 +133,21 @@ document.addEventListener('DOMContentLoaded', function() {
       mobileMenu.classList.remove('hidden');
       
       // Transform to X
-      bars[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
-      bars[1].style.opacity = '0';
-      bars[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
+      if (hamburgerLine1 && hamburgerLine2 && hamburgerLine3) {
+        hamburgerLine1.style.transform = 'rotate(45deg) translate(6px, 6px)';
+        hamburgerLine2.style.opacity = '0';
+        hamburgerLine3.style.transform = 'rotate(-45deg) translate(6px, -6px)';
+      }
     } else {
       // Hide menu
       mobileMenu.classList.add('hidden');
       
       // Transform back to hamburger
-      bars[0].style.transform = 'none';
-      bars[1].style.opacity = '1';
-      bars[2].style.transform = 'none';
+      if (hamburgerLine1 && hamburgerLine2 && hamburgerLine3) {
+        hamburgerLine1.style.transform = 'none';
+        hamburgerLine2.style.opacity = '1';
+        hamburgerLine3.style.transform = 'none';
+      }
     }
   });
 
@@ -146,9 +157,11 @@ document.addEventListener('DOMContentLoaded', function() {
       mobileMenu.classList.add('hidden');
       
       // Reset hamburger icon
-      bars[0].style.transform = 'none';
-      bars[1].style.opacity = '1';
-      bars[2].style.transform = 'none';
+      if (hamburgerLine1 && hamburgerLine2 && hamburgerLine3) {
+        hamburgerLine1.style.transform = 'none';
+        hamburgerLine2.style.opacity = '1';
+        hamburgerLine3.style.transform = 'none';
+      }
     }
   });
 
@@ -158,9 +171,25 @@ document.addEventListener('DOMContentLoaded', function() {
       mobileMenu.classList.add('hidden');
       
       // Reset hamburger icon
-      bars[0].style.transform = 'none';
-      bars[1].style.opacity = '1';
-      bars[2].style.transform = 'none';
+      if (hamburgerLine1 && hamburgerLine2 && hamburgerLine3) {
+        hamburgerLine1.style.transform = 'none';
+        hamburgerLine2.style.opacity = '1';
+        hamburgerLine3.style.transform = 'none';
+      }
+    }
+  });
+
+  // Handle window resize
+  window.addEventListener('resize', function() {
+    if (window.innerWidth >= 1024) { // lg breakpoint
+      mobileMenu.classList.add('hidden');
+      
+      // Reset hamburger icon
+      if (hamburgerLine1 && hamburgerLine2 && hamburgerLine3) {
+        hamburgerLine1.style.transform = 'none';
+        hamburgerLine2.style.opacity = '1';
+        hamburgerLine3.style.transform = 'none';
+      }
     }
   });
 });

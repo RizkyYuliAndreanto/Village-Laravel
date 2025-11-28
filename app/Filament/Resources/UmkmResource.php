@@ -181,14 +181,24 @@ class UmkmResource extends Resource
 
                 Forms\Components\Section::make('Media')
                     ->schema([
-                        Forms\Components\TextInput::make('logo_url')
-                            ->label('URL Logo')
-                            ->url()
-                            ->maxLength(500),
-                        Forms\Components\Textarea::make('foto_galeri')
-                            ->label('Foto Galeri (JSON)')
-                            ->placeholder('["url1", "url2", "url3"]')
-                            ->helperText('Format JSON array untuk multiple foto')
+                        Forms\Components\FileUpload::make('logo_path')
+                            ->label('Logo UMKM')
+                            ->image()
+                            ->directory('umkm/logos')
+                            ->disk('public')
+                            ->imageEditor()
+                            ->maxSize(2048)
+                            ->helperText('Upload gambar logo UMKM (max 2MB)'),
+                        Forms\Components\FileUpload::make('foto_galeri_paths')
+                            ->label('Foto Galeri')
+                            ->image()
+                            ->multiple()
+                            ->directory('umkm/galeri')
+                            ->disk('public')
+                            ->imageEditor()
+                            ->maxSize(2048)
+                            ->maxFiles(10)
+                            ->helperText('Upload maksimal 10 foto untuk galeri (max 2MB per foto)')
                             ->columnSpanFull(),
                     ]),
             ]);

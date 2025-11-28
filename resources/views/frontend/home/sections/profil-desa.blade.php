@@ -13,7 +13,7 @@
                 <div class="relative group">
                     <div class="absolute -inset-4 bg-gradient-to-r from-cyan-400 to-teal-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
                     <img class="relative rounded-2xl shadow-2xl w-full max-w-lg mx-auto transform group-hover:scale-105 transition duration-500"
-                        src="{{ asset('images/logo-placeholder.jpg') }}"
+                        src="{{ asset('images/hero section 2.jpg') }}"
                         alt="Profil Desa Banyukambang">
                     
                     <!-- Floating badge -->

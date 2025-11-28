@@ -38,51 +38,51 @@
         
         <!-- Judul -->
         <div class="mb-6">
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight" style="text-shadow: 3px 3px 6px rgba(0,0,0,0.9), 1px 1px 3px rgba(0,0,0,0.7);">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white leading-tight px-2" style="text-shadow: 3px 3px 6px rgba(0,0,0,0.9), 1px 1px 3px rgba(0,0,0,0.7);">
                 Selamat Datang di
             </h1>
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight bg-gradient-to-r from-sky-400 via-cyan-300 to-white bg-clip-text text-transparent gradient-text-bright">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight bg-gradient-to-r from-sky-400 via-cyan-300 to-white bg-clip-text text-transparent gradient-text-bright px-2">
                 Desa Banyukambang
             </h1>
         </div>
 
         <!-- Deskripsi -->
-        <p class="text-xl md:text-2xl text-white mb-4 font-light max-w-3xl mx-auto leading-relaxed" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">
+        <p class="text-lg sm:text-xl md:text-2xl text-white mb-4 font-light max-w-3xl mx-auto leading-relaxed px-4" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">
             Portal Informasi dan Layanan Digital untuk Masyarakat Desa
         </p>
-        <p class="text-white/90 mb-10 text-lg max-w-2xl mx-auto" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">
+        <p class="text-white/90 mb-8 sm:mb-10 text-base sm:text-lg max-w-2xl mx-auto px-4" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">
             Temukan informasi lengkap tentang profil desa, data demografis, UMKM lokal, dan berbagai layanan publik dalam satu platform terpadu.
         </p>
 
         <!-- Tombol CTA -->
-        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a href="{{ route('infografis.index') }}" class="btn-primary group" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
+            <a href="{{ route('infografis.index') }}" class="w-full sm:w-auto btn-primary group text-center" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
                 <i class="fas fa-chart-line mr-2 group-hover:rotate-12 transition-transform duration-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);"></i>
                 Lihat Infografis
             </a>
-            <a href="{{ route('profil-desa.index') }}" class="btn-secondary group" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+            <a href="{{ route('profil-desa.index') }}" class="w-full sm:w-auto btn-secondary group text-center" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
                 <i class="fas fa-info-circle mr-2 group-hover:scale-110 transition-transform duration-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);"></i>
                 Profil Desa
             </a>
         </div>
 
         <!-- Quick Stats -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
-            <div class="bg-white/15 backdrop-blur-md rounded-lg p-4 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
-                <div class="text-2xl font-bold text-white mb-1" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">9,200+</div>
-                <div class="text-white/80 text-sm" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">Penduduk</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mt-12 sm:mt-16 max-w-4xl mx-auto px-4">
+            <div class="bg-white/15 backdrop-blur-md rounded-lg p-3 sm:p-4 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
+                <div class="text-xl sm:text-2xl font-bold text-white mb-1" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">9,200+</div>
+                <div class="text-white/80 text-xs sm:text-sm" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">Penduduk</div>
             </div>
-            <div class="bg-white/15 backdrop-blur-md rounded-lg p-4 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
-                <div class="text-2xl font-bold text-white mb-1" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">15+</div>
-                <div class="text-white/80 text-sm" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">UMKM Aktif</div>
+            <div class="bg-white/15 backdrop-blur-md rounded-lg p-3 sm:p-4 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
+                <div class="text-xl sm:text-2xl font-bold text-white mb-1" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">15+</div>
+                <div class="text-white/80 text-xs sm:text-sm" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">UMKM Aktif</div>
             </div>
-            <div class="bg-white/15 backdrop-blur-md rounded-lg p-4 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
-                <div class="text-2xl font-bold text-white mb-1" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">8</div>
-                <div class="text-white/80 text-sm" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">Dusun</div>
+            <div class="bg-white/15 backdrop-blur-md rounded-lg p-3 sm:p-4 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
+                <div class="text-xl sm:text-2xl font-bold text-white mb-1" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">8</div>
+                <div class="text-white/80 text-xs sm:text-sm" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">Dusun</div>
             </div>
-            <div class="bg-white/15 backdrop-blur-md rounded-lg p-4 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
-                <div class="text-2xl font-bold text-white mb-1" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">100%</div>
-                <div class="text-white/80 text-sm" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">Digital</div>
+            <div class="bg-white/15 backdrop-blur-md rounded-lg p-3 sm:p-4 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
+                <div class="text-xl sm:text-2xl font-bold text-white mb-1" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">100%</div>
+                <div class="text-white/80 text-xs sm:text-sm" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">Digital</div>
             </div>
         </div>
     </div>

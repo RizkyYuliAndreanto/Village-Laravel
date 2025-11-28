@@ -15,6 +15,11 @@ class AntiSQLInjectionMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Skip security checks in local development
+        if (app()->environment('local')) {
+            return $next($request);
+        }
+
         $input = $request->all();
 
         // Check untuk SQL injection patterns
