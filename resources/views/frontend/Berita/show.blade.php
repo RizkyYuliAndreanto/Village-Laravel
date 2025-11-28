@@ -27,11 +27,12 @@
                 <article class="card-bg rounded-2xl overflow-hidden shadow-lg">
                     
                     <!-- Featured Image -->
-                    @if ($berita->gambar_url ?? $berita->image_url)
+                    @if ($berita->image_url)
                         <div class="relative">
-                            <img src="{{ $berita->gambar_url ?? $berita->image_url }}" 
+                            <img src="{{ $berita->image_url }}" 
                                  alt="{{ $berita->judul }}"
-                                 class="w-full h-64 lg:h-96 object-cover">
+                                 class="w-full h-64 lg:h-96 object-cover"
+                                 onerror="this.style.display='none'">
                             
                             <!-- Kategori Badge -->
                             <div class="absolute top-6 left-6">
@@ -129,8 +130,8 @@
                         @foreach($beritaTerkait as $item)
                             <article class="card-bg rounded-xl overflow-hidden shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 group">
                                 <a href="{{ route('berita.show', $item->id) }}" class="block">
-                                    @if($item->gambar_url ?? $item->image_url)
-                                        <img src="{{ $item->gambar_url ?? $item->image_url }}" 
+                                    @if($item->gambar_url)
+                                        <img src="{{ $item->image_url }}" 
                                              alt="{{ $item->judul }}"
                                              class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300">
                                     @else
@@ -171,8 +172,8 @@
                             <article class="group">
                                 <a href="{{ route('berita.show', $item->id) }}" class="block">
                                     <div class="flex space-x-3">
-                                        @if($item->gambar_url ?? $item->image_url)
-                                            <img src="{{ $item->gambar_url ?? $item->image_url }}" 
+                                        @if($item->gambar_url)
+                                            <img src="{{ $item->image_url }}" 
                                                  alt="{{ $item->judul }}"
                                                  class="w-16 h-16 object-cover rounded-lg flex-shrink-0 group-hover:scale-105 transition-transform">
                                         @else

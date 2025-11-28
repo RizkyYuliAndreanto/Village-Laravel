@@ -65,28 +65,30 @@ class BeritaResource extends Resource
                             ->helperText('Konten lengkap berita')
                             ->columnSpanFull(),
 
-                        Forms\Components\FileUpload::make('gambar_url')
-                            ->label('Gambar Berita')
-                            ->image()
-                            ->directory(config('media.directories.berita', 'berita/images'))
-                            ->disk(app(MediaStorageService::class)->getDiskForStorage())
-                            ->visibility('public')
-                            ->maxSize(config('media.uploads.max_size', 2048))
-                            ->acceptedFileTypes(array_map(
-                                fn($ext) => "image/{$ext}",
-                                config('media.uploads.allowed_extensions', ['jpeg', 'png', 'jpg', 'gif'])
-                            ))
-                            ->imageResizeMode('cover')
-                            ->imageCropAspectRatio('16:9')
-                            ->imageResizeTargetWidth(config('media.uploads.resize_width', 800))
-                            ->imageResizeTargetHeight(config('media.uploads.resize_height', 450))
-                            ->helperText(function () {
-                                $service = app(MediaStorageService::class);
-                                $maxSize = config('media.uploads.max_size', 2048) / 1024;
-                                $formats = implode(', ', config('media.uploads.allowed_extensions', []));
-                                return "Upload gambar untuk berita (maks {$maxSize}MB, format: {$formats}). Storage: {$service->getDriverName()}";
-                            })
-                            ->columnSpanFull(),
+                        Forms\Components\Group::make([
+                            Forms\Components\ViewField::make('current_image')
+                                ->label('Gambar Saat Ini')
+                                ->view('filament.components.image-preview')
+                                ->viewData(function ($record) {
+                                    return [
+                                        'imageUrl' => $record ? $record->image_url : null,
+                                        'alt' => $record ? $record->judul : 'Preview'
+                                    ];
+                                })
+                                ->visible(fn($record) => $record && $record->gambar_url)
+                                ->columnSpan(1),
+
+                            Forms\Components\FileUpload::make('gambar_url')
+                                ->label('Upload Gambar Baru')
+                                ->image()
+                                ->directory('berita/images')
+                                ->disk('public')
+                                ->maxFiles(1)
+                                ->maxSize(2048)
+                                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/gif'])
+                                ->helperText('Upload gambar baru (maksimal 2MB) - akan mengganti gambar yang ada')
+                                ->columnSpan(1),
+                        ])->columns(2)->columnSpanFull(),
                     ])->columns(1),
             ]);
     }
@@ -124,13 +126,15 @@ class BeritaResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\ImageColumn::make('gambar_url')
+                Tables\Columns\ImageColumn::make('image_url')
                     ->label('Gambar')
                     ->circular()
-                    ->disk(app(MediaStorageService::class)->getDiskForStorage())
                     ->defaultImageUrl(url('/images/no-image.png'))
                     ->size(40)
-                    ->toggleable(),
+                    ->toggleable()
+                    ->getStateUsing(function ($record) {
+                        return $record->image_url; // Use accessor like frontend
+                    }),
 
                 Tables\Columns\TextColumn::make('isi')
                     ->label('Isi')

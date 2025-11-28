@@ -1,48 +1,51 @@
 {{-- Section: Berdasarkan Dusun --}}
-<section class="py-20 infografis-section">
-    <div class="container mx-auto px-6">
-        <h3 class="text-3xl font-extrabold mb-6 infografis-title">
-            Berdasarkan Dusun 
-            <span id="tahun-display-dusun" class="text-lg text-primary-600">
-                ({{ $tahunAktif ?? date('Y') }})
-            </span>
-        </h3>
+<section class="py-8 sm:py-12 lg:py-20 infografis-section">
+    <div class="container mx-auto px-4 sm:px-6">
+        <div class="text-center mb-4 sm:mb-6 lg:mb-8">
+            <h3 class="text-xl sm:text-2xl lg:text-3xl font-extrabold mb-3 sm:mb-4 lg:mb-6 infografis-title">
+                Berdasarkan Dusun 
+                <span id="tahun-display-dusun" class="text-sm sm:text-base lg:text-lg text-primary-600 block sm:inline">
+                    ({{ $tahunAktif ?? date('Y') }})
+                </span>
+            </h3>
+        </div>
 
-        {{-- Tahun Selector --}}
-        @include('frontend.infografis.partials.tahun-selector', [
-            'sectionId' => 'dusun',
-            'tahunTersedia' => $tahunTersedia ?? [],
-            'tahunAktif' => $tahunAktif ?? date('Y')
-        ])
+        
 
-        <div id="dusun-content" class="grid lg:grid-cols-2 gap-8">
+        <div id="dusun-content" class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             
             {{-- Chart Section --}}
-            <div class="infografis-card p-6 rounded-xl shadow">
-                <h4 class="text-xl font-bold infografis-title mb-4 text-center">Distribusi Penduduk per Dusun</h4>
-                <div class="relative h-80 flex items-center justify-center">
-                    <canvas id="chartDusun" width="400" height="400"></canvas>
+            <div class="infografis-card p-4 sm:p-6 rounded-xl shadow">
+                <h4 class="text-lg sm:text-xl font-bold infografis-title mb-4 text-center">Distribusi Penduduk per Dusun</h4>
+                <div class="chart-container">
+                    <canvas id="chartDusun"></canvas>
                 </div>
             </div>
 
             {{-- Data Cards Section --}}
             <div class="space-y-4">
-                <h4 class="text-xl font-bold infografis-title mb-4">Detail Statistik Dusun</h4>
+                <h4 class="text-lg sm:text-xl font-bold infografis-title mb-4">Detail Statistik Dusun</h4>
                 
-                <div class="grid gap-4" id="dusun-cards">
+                <div class="grid gap-4 sm:gap-6 lg:gap-8" id="dusun-cards">
                     @foreach($dusunStatistik as $index => $dusun)
-                        <div class="infografis-card p-4 rounded-lg shadow-sm border-l-4" 
+                        <div class="infografis-card p-4 sm:p-6 lg:p-8 rounded-lg shadow-sm border-l-4" 
                              style="border-left-color: {{ $dusunChartConfig['colors'][$index] ?? '#3B82F6' }}">
                             <div class="flex justify-between items-center">
-                                <div>
-                                    <h5 class="text-lg font-semibold infografis-title">{{ strtoupper($dusun->nama_dusun) }}</h5>
-                                    <p class="text-sm text-gray-600">{{ number_format($dusun->jumlah_kk) }} KK</p>
+                                <div class="flex items-center gap-3 sm:gap-4 lg:gap-6 flex-1 min-w-0">
+                                    <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 rounded-full flex items-center justify-center" 
+                                         style="background-color: {{ $dusunChartConfig['colors'][$index] ?? '#3B82F6' }}">
+                                        <span class="text-white font-bold text-sm lg:text-lg">{{ substr(strtoupper($dusun->nama_dusun), 0, 1) }}</span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h5 class="text-lg sm:text-xl lg:text-2xl font-semibold infografis-title truncate">{{ strtoupper($dusun->nama_dusun) }}</h5>
+                                        <p class="text-sm sm:text-base lg:text-lg text-gray-600 truncate">{{ number_format($dusun->jumlah_kk) }} KK</p>
+                                    </div>
                                 </div>
-                                <div class="text-right">
-                                    <div class="text-2xl font-bold text-primary-600" data-field="penduduk_{{ str_replace(' ', '_', strtolower($dusun->nama_dusun)) }}">
+                                <div class="text-right flex-shrink-0">
+                                    <div class="text-xl sm:text-2xl lg:text-4xl font-bold text-primary-600" data-field="penduduk_{{ str_replace(' ', '_', strtolower($dusun->nama_dusun)) }}">
                                         {{ number_format($dusun->jumlah_penduduk) }}
                                     </div>
-                                    <div class="text-sm text-gray-500">
+                                    <div class="text-sm sm:text-base lg:text-lg text-gray-500">
                                         {{ $dusunChartConfig['percentages'][$index] ?? 0 }}%
                                     </div>
                                 </div>
@@ -52,24 +55,24 @@
                 </div>
 
                 {{-- Summary Card - Dinamis --}}
-                <div class="infografis-card p-6 rounded-xl shadow bg-gradient-to-r from-primary-50 to-primary-100 border border-primary-200">
+                <div class="infografis-card p-6 sm:p-8 lg:p-10 rounded-xl shadow bg-gradient-to-r from-primary-50 to-primary-100 border border-primary-200">
                     <div class="text-center">
-                        <h5 class="text-lg font-semibold infografis-title mb-2">Total Keseluruhan</h5>
-                        <div class="grid grid-cols-2 gap-4">
+                        <h5 class="text-lg sm:text-xl lg:text-2xl font-semibold infografis-title mb-2 sm:mb-3 lg:mb-4">Total Keseluruhan</h5>
+                        <div class="grid grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
                             <div>
-                                <div class="text-2xl font-bold text-primary-600" data-field="total_penduduk_dusun">
+                                <div class="text-xl sm:text-2xl lg:text-4xl font-bold text-primary-600" data-field="total_penduduk_dusun">
                                     {{ number_format($totalPendudukDusun ?? 0) }}
                                 </div>
-                                <div class="text-sm text-gray-600">Total Penduduk</div>
+                                <div class="text-sm sm:text-base lg:text-lg text-gray-600">Total Penduduk</div>
                             </div>
                             <div>
-                                <div class="text-2xl font-bold text-primary-600" data-field="total_kk_dusun">
+                                <div class="text-xl sm:text-2xl lg:text-4xl font-bold text-primary-600" data-field="total_kk_dusun">
                                     {{ number_format($totalKKDusun ?? 0) }}
                                 </div>
-                                <div class="text-sm text-gray-600">Total KK</div>
+                                <div class="text-sm sm:text-base lg:text-lg text-gray-600">Total KK</div>
                             </div>
                         </div>
-                        <div class="text-xs text-gray-500 mt-3">
+                        <div class="text-sm sm:text-base lg:text-lg text-gray-500 mt-3 sm:mt-4 lg:mt-6">
                             Data dari {{ count($dusunStatistik) }} dusun
                         </div>
                     </div>
@@ -140,7 +143,7 @@
                             padding: 20,
                             usePointStyle: true,
                             font: {
-                                size: 12,
+                                size: window.innerWidth < 640 ? 10 : 12,
                                 weight: '500'
                             }
                         }
@@ -165,9 +168,9 @@
                     animateScale: true,
                     animateRotate: true
                 },
-                cutout: '50%',
+                cutout: window.innerWidth < 640 ? '40%' : '50%',
                 layout: {
-                    padding: 10
+                    padding: window.innerWidth < 640 ? 5 : 10
                 }
             }
         });

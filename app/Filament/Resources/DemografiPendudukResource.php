@@ -34,6 +34,10 @@ class DemografiPendudukResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Data Demografi Penduduk';
 
+    protected static ?string $navigationGroup = 'Data Statistik';
+
+    protected static ?int $navigationSort = 3;
+
     public static function form(Form $form): Form
     {
         return $form

@@ -15,8 +15,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         // Create admin user only if it doesn't exist
         if (!User::where('email', 'admin@example.com')->exists()) {
             User::factory()->create([
@@ -26,7 +24,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Run all seeders in proper order
+        // Seeder untuk data aplikasi
         $this->call([
             // Base data first
             TahunDataSeeder::class,
@@ -44,13 +42,6 @@ class DatabaseSeeder extends Seeder
             // Village structure
             StrukturOrganisasiSeeder::class,
 
-            // APBDes related - COMMENTED OUT FOR NOW (features not implemented yet)
-            // ApbdesTahunSeeder::class,
-            // PendapatanSeeder::class,
-            // PengeluaranSeeder::class,
-            // LaporanApbdesSeeder::class,
-            // DetailApbdesSeeder::class,
-
             // PPID Documents
             PpidDokumenSeeder::class,
 
@@ -58,6 +49,12 @@ class DatabaseSeeder extends Seeder
             KategoriUmkmSeeder::class,
             UmkmSeeder::class,
             BeritaSeeder::class,
+
+            // APBDES data
+            BidangApbdesSeeder::class,
+            ContohApbdesSeeder::class,
+            DetailApbdesSeeder::class,
+            LaporanApbdesSeeder::class,
         ]);
     }
 }

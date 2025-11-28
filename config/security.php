@@ -144,13 +144,32 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Admin IP Allowlist Configuration
+    | Admin IP Allowlist Configuration - GOVERNMENT FRIENDLY
     |--------------------------------------------------------------------------
+    | 
+    | Untuk Pemerintahan Desa:
+    | - 'enforcement_mode' => 'warning' = Log saja, tidak block (RECOMMENDED)
+    | - 'enforcement_mode' => 'strict' = Block akses dari IP tidak dikenal
+    | - 'auto_learn_ips' => true = Otomatis belajar IP yang sering digunakan
+    | - 'grace_period_hours' => 24 = Masa tenggang untuk IP baru
+    |
     */
     'admin_ip_allowlist' => [
-        // '127.0.0.1',
-        // '192.168.1.0/24',
-        // 'YOUR_OFFICE_IP_HERE',
+        // Default: Kantor Desa + Rumah Kades/Sekdes (opsional)
+        // '127.0.0.1',           // Localhost (development)
+        // '192.168.1.0/24',      // Jaringan WiFi kantor desa
+        // 'YOUR_OFFICE_IP',      // IP Internet kantor desa
+        // 'KADES_HOME_IP',       // IP rumah Kepala Desa (opsional)
+        // 'SEKDES_HOME_IP',      // IP rumah Sekretaris Desa (opsional)
+    ],
+
+    // Mode enforcement untuk pemerintahan desa
+    'admin_ip_enforcement' => [
+        'mode' => env('ADMIN_IP_MODE', 'warning'), // 'warning' or 'strict'
+        'auto_learn_ips' => env('ADMIN_IP_AUTO_LEARN', true),
+        'grace_period_hours' => env('ADMIN_IP_GRACE_PERIOD', 24),
+        'max_learned_ips' => 10, // Maksimal IP yang dipelajari otomatis
+        'government_friendly' => true, // Mode khusus pemerintahan
     ],
 
     'admin_routes' => [

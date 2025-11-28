@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -9,6 +10,9 @@ use Illuminate\Support\Facades\Route;
 |
 | These routes are protected by AdminIPAllowlist middleware
 | Only IPs configured in security.admin_ip_allowlist can access
+|
+| NOTE: Filament admin panel uses /admin path automatically
+| Login/logout is handled by Filament, no need to define manually
 |
 */
 

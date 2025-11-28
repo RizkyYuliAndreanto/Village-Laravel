@@ -1,9 +1,9 @@
 {{-- Section: Potensi Desa --}}
-<section class="min-h-screen flex flex-col justify-center py-20 section-bg-primary">
-    <div class="container mx-auto px-6">
-        <div class="text-center text-body mb-10">
-            <h2 class="text-3xl font-bold mb-2 text-heading">Potensi Desa Banyukambang</h2>
-            <p class="text-body max-w-4xl mx-auto">
+<section class="min-h-screen flex flex-col justify-center py-10 sm:py-16 section-bg-primary">
+    <div class="container mx-auto px-4 sm:px-6">
+        <div class="text-center text-body mb-8 sm:mb-10">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-2 text-heading">Potensi Desa Banyukambang</h2>
+            <p class="text-body max-w-4xl mx-auto text-sm sm:text-base">
                 Informasi tentang potensi dan kemajuan Desa di berbagai bidang seperti ekonomi,
                 pariwisata, pertanian, industri kreatif, dan kelestarian lingkungan
             </p>
@@ -32,10 +32,10 @@
             </div>
         @else
             {{-- Data potensi berdasarkan data real desa --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div class="text-center">
+            <div class="flex overflow-x-auto space-x-4 pb-4 horizontal-scroll sm:grid sm:grid-cols-2 md:grid-cols-3 sm:gap-6 lg:gap-8 sm:space-x-0 sm:overflow-visible sm:pb-0 max-w-6xl mx-auto">
+                <div class="flex-none w-64 sm:w-auto text-center">
                     <x-circle-image-frame 
-                        image="{{ asset('images/logo-placeholder.jpg') }}" 
+                        image="{{ asset('images/lahan-persawahan.jpg') }}" 
                         alt="Lahan Pertanian" />
                     <h3 class="text-xl font-bold text-heading mt-6">
                         Lahan Pertanian
@@ -48,9 +48,9 @@
                     </span>
                 </div>
                 
-                <div class="text-center">
+                <div class="flex-none w-64 sm:w-auto text-center">
                     <x-circle-image-frame 
-                        image="{{ asset('images/logo-placeholder.jpg') }}" 
+                        image="{{ asset('images/lahan-perkebunan.jpg') }}" 
                         alt="Lahan Perkebunan" />
                     <h3 class="text-xl font-bold text-heading mt-6">
                         Lahan Perkebunan
@@ -65,7 +65,7 @@
                 
                 <div class="text-center">
                     <x-circle-image-frame 
-                        image="{{ asset('images/logo-placeholder.jpg') }}" 
+                        image="{{ asset('images/SDM.jpg') }}" 
                         alt="Sumber Daya Manusia" />
                     <h3 class="text-xl font-bold text-heading mt-6">
                         SDM Berkualitas
@@ -80,7 +80,7 @@
                 
                 <div class="text-center">
                     <x-circle-image-frame 
-                        image="{{ asset('images/logo-placeholder.jpg') }}" 
+                        image="{{ asset('images/pekerja-pertaniaan.jpg') }}" 
                         alt="Tenaga Kerja Pertanian" />
                     <h3 class="text-xl font-bold text-heading mt-6">
                         Tenaga Kerja Pertanian
@@ -95,7 +95,7 @@
                 
                 <div class="text-center">
                     <x-circle-image-frame 
-                        image="{{ asset('images/logo-placeholder.jpg') }}" 
+                        image="{{ asset('images/tenaga-pendidik.jpg') }}" 
                         alt="Tenaga Pendidik" />
                     <h3 class="text-xl font-bold text-heading mt-6">
                         Tenaga Pendidik
@@ -110,7 +110,7 @@
                 
                 <div class="text-center">
                     <x-circle-image-frame 
-                        image="{{ asset('images/logo-placeholder.jpg') }}" 
+                        image="{{ asset('images/fasilitas-umum.jpg') }}" 
                         alt="Fasilitas Umum" />
                     <h3 class="text-xl font-bold text-heading mt-6">
                         Fasilitas Umum
@@ -125,9 +125,9 @@
             </div>
         @endif
         
-        <div class="flex justify-end mt-10">
+        <div class="flex justify-center sm:justify-end mt-8 sm:mt-10 px-2">
             <a href="{{ route('umkm.index') }}" 
-               class="btn-primary px-6 py-2 rounded-lg transition-all duration-300">
+               class="w-full sm:w-auto text-center btn-primary px-6 py-2 rounded-lg transition-all duration-300">
                 Lihat Selengkapnya →
             </a>
         </div>

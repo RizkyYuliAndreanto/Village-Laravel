@@ -117,10 +117,10 @@
                 <div class="bg-white rounded-xl shadow-lg border border-cyan-100/50 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
                     <!-- UMKM Logo/Image -->
                     <div class="h-48 bg-gradient-to-br from-cyan-50 to-white flex items-center justify-center p-4">
-                        @if($umkm->logo_url)
-                            <img src="{{ $umkm->logo_url }}" 
+                        @if($umkm->logo_path)
+                            <img src="{{ asset('storage/' . $umkm->logo_path) }}" 
                                  alt="{{ $umkm->nama }}" 
-                                 class="max-h-40 max-w-full rounded-lg shadow-sm">
+                                 class="max-h-40 max-w-full rounded-lg shadow-sm object-cover">
                         @else
                             <div class="text-center text-cyan-600">
                                 <i class="fas fa-store text-5xl mb-2"></i>

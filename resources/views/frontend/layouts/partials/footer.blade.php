@@ -1,125 +1,143 @@
-<footer class="relative bg-gradient-to-r from-blue-800 via-blue-700 to-blue-800 text-white overflow-hidden">
-    <!-- Background Pattern -->
-    <div class="absolute inset-0 bg-gradient-to-br from-primary-600/10 to-secondary-600/10">
-        <div class="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent"></div>
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400"></div>
-    </div>
+<footer class="relative navbar-bg backdrop-blur-lg text-white overflow-hidden border-t border-white/20">
+    <!-- Pastikan FontAwesome ter-load -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- CSS untuk memastikan visibility -->
+    <style>
+        footer {
+            font-family: system-ui, -apple-system, sans-serif !important;
+        }
+        .footer-icon {
+            display: inline-block;
+            width: 16px;
+            text-align: center;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        .footer-link {
+            color: rgba(255,255,255,0.8) !important;
+            transition: color 0.2s ease;
+        }
+        .footer-link:hover {
+            color: white !important;
+        }
+    </style>
+    
+    <div class="absolute inset-0 bg-white/5"></div>
 
-    <div class="relative container mx-auto py-16 px-4 sm:px-6 lg:px-8">
+    <div class="relative container mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
             {{-- Logo & Deskripsi --}}
             <div class="lg:col-span-2">
-                <div class="flex items-start gap-6 mb-6">
+                <div class="flex items-start gap-4 mb-4">
                     <div class="relative">
-                        <img class="h-16 w-16 rounded-xl shadow-lg border-2 border-blue-300/30"
-                            src="{{ asset('images/logo-placeholder.jpg') }}"
+                        <img class="h-12 w-12 rounded-lg shadow-lg border-2 navbar-logo-border"
+                            src="{{ asset('images/Logo_kabupaten_madiun.gif') }}"
                             alt="Logo Desa Banyukambang">
-                        <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-400/20 to-transparent"></div>
+                        <div class="absolute inset-0 rounded-lg bg-white/10"></div>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold text-white mb-2">Desa Banyukambang</h3>
-                        <p class="text-blue-200 font-medium">Kec. Wonoasri, Kab. Madiun</p>
+                        <h3 class="text-xl font-bold navbar-text mb-1">Desa Banyukambang</h3>
+                        <p class="navbar-text-secondary text-sm font-medium">Kec. Wonoasri, Kab. Madiun</p>
                     </div>
                 </div>
-                <p class="text-blue-100 text-base leading-relaxed max-w-md">
-                    Portal digital terpadu untuk layanan masyarakat, informasi desa, dan pengembangan UMKM lokal. 
-                    Membangun transparansi dan aksesibilitas dalam pemerintahan desa.
+
+                <p class="navbar-text-secondary text-sm leading-relaxed max-w-md mb-4">
+                    Portal digital terpadu untuk layanan masyarakat, informasi desa, dan pengembangan UMKM lokal.
                 </p>
-                
-                <!-- Social Media -->
-                <div class="flex space-x-4 mt-6">
-                    <a href="#" class="bg-blue-600/50 hover:bg-blue-500 p-3 rounded-full transition-all duration-300 hover:scale-110 group">
-                        <i class="fab fa-facebook-f text-white group-hover:rotate-12 transition-transform duration-300"></i>
+
+                <div class="flex space-x-3">
+                    <a href="#" class="bg-white/20 hover:bg-white/30 p-2 px-3 rounded-full transition-all duration-300 hover:scale-110 group text-white font-medium text-sm">
+                        📘 FB
                     </a>
-                    <a href="#" class="bg-blue-600/50 hover:bg-blue-500 p-3 rounded-full transition-all duration-300 hover:scale-110 group">
-                        <i class="fab fa-instagram text-white group-hover:rotate-12 transition-transform duration-300"></i>
+                    <a href="#" class="bg-white/20 hover:bg-white/30 p-2 px-3 rounded-full transition-all duration-300 hover:scale-110 group text-white font-medium text-sm">
+                        📷 IG
                     </a>
-                    <a href="#" class="bg-blue-600/50 hover:bg-blue-500 p-3 rounded-full transition-all duration-300 hover:scale-110 group">
-                        <i class="fab fa-youtube text-white group-hover:rotate-12 transition-transform duration-300"></i>
+                    <a href="#" class="bg-white/20 hover:bg-white/30 p-2 px-3 rounded-full transition-all duration-300 hover:scale-110 group text-white font-medium text-sm">
+                        📺 YT
                     </a>
                 </div>
             </div>
 
             {{-- Tautan Cepat --}}
             <div>
-                <h3 class="text-lg font-bold text-white mb-6 flex items-center">
-                    <i class="fas fa-link mr-2 text-blue-300"></i>
+                <h3 class="text-base font-bold navbar-text mb-4 flex items-center">
+                    <i class="fas fa-link mr-2 navbar-text-secondary text-sm"></i>
                     Tautan Cepat
                 </h3>
-                <ul class="space-y-3">
-                    <li><a href="{{ route('home') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-home w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Beranda</a></li>
-                    <li><a href="{{ route('profil-desa.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-info-circle w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Profil Desa</a></li>
-                    <li><a href="{{ route('infografis.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-chart-bar w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Infografis</a></li>
-                    <li><a href="{{ route('umkm.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-store w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>UMKM</a></li>
+                <ul class="space-y-2">
+                    <li><a href="{{ route('home') }}" class="footer-link hover:text-white flex items-center text-sm group">
+                        <span class="footer-icon">🏠</span>Beranda</a></li>
+                    <li><a href="{{ route('profil-desa.index') }}" class="footer-link hover:text-white flex items-center text-sm group">
+                        <span class="footer-icon">ℹ️</span>Profil Desa</a></li>
+                    <li><a href="{{ route('infografis.index') }}" class="footer-link hover:text-white flex items-center text-sm group">
+                        <span class="footer-icon">📊</span>Infografis</a></li>
+                    <li><a href="{{ route('umkm.index') }}" class="footer-link hover:text-white flex items-center text-sm group">
+                        <span class="footer-icon">🏪</span>UMKM</a></li>
                 </ul>
             </div>
 
             {{-- Layanan --}}
             <div>
-                <h3 class="text-lg font-bold text-white mb-6 flex items-center">
-                    <i class="fas fa-cogs mr-2 text-blue-300"></i>
+                <h3 class="text-base font-bold navbar-text mb-4 flex items-center">
+                    <i class="fas fa-cogs mr-2 navbar-text-secondary text-sm"></i>
                     Layanan
                 </h3>
-                <ul class="space-y-3">
-                    <li><a href="{{ route('belanja.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-coins w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>APBDes</a></li>
-                    <li><a href="{{ route('berita.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-newspaper w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Berita</a></li>
-                    <li><a href="{{ route('ppid.index') }}" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-folder-open w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>PPID</a></li>
-                    <li><a href="/admin" class="text-blue-200 hover:text-white transition-colors duration-200 flex items-center group">
-                        <i class="fas fa-user-shield w-4 mr-2 group-hover:translate-x-1 transition-transform duration-200"></i>Login Admin</a></li>
+                <ul class="space-y-2">
+                    <li><a href="{{ route('belanja.index') }}" class="footer-link hover:text-white flex items-center text-sm group">
+                        <span class="footer-icon">💰</span>APBDes</a></li>
+                    <li><a href="{{ route('berita.index') }}" class="footer-link hover:text-white flex items-center text-sm group">
+                        <span class="footer-icon">📰</span>Berita</a></li>
+                    <li><a href="{{ route('ppid.index') }}" class="footer-link hover:text-white flex items-center text-sm group">
+                        <span class="footer-icon">📁</span>PPID</a></li>
+                    <li><a href="/admin" class="footer-link hover:text-white flex items-center text-sm group">
+                        <span class="footer-icon">🔐</span>Login Admin</a></li>
                 </ul>
             </div>
         </div>
 
-        {{-- Kontak Info --}}
-        <div class="mt-12 pt-8 border-t border-blue-600/30">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {{-- Kontak --}}
+        <div class="mt-8 pt-6 border-t border-white/20">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="flex items-center space-x-3">
-                    <div class="bg-blue-600/50 p-3 rounded-full">
-                        <i class="fas fa-map-marker-alt text-blue-200"></i>
+                    <div class="bg-white/20 p-2 rounded-full text-center">
+                        <span class="text-white text-lg">📍</span>
                     </div>
                     <div>
-                        <p class="text-blue-200 text-sm">Alamat</p>
-                        <p class="text-white font-medium">Desa Banyukambang, Wonoasri</p>
+                        <p class="text-white/70 text-xs">Alamat</p>
+                        <p class="text-white font-medium text-sm">Desa Banyukambang, Wonoasri</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <div class="bg-blue-600/50 p-3 rounded-full">
-                        <i class="fas fa-phone text-blue-200"></i>
+                    <div class="bg-white/20 p-2 rounded-full text-center">
+                        <span class="text-white text-lg">📞</span>
                     </div>
                     <div>
-                        <p class="text-blue-200 text-sm">Telepon</p>
-                        <p class="text-white font-medium">+62 xxx xxxx xxxx</p>
+                        <p class="text-white/70 text-xs">Telepon</p>
+                        <p class="text-white font-medium text-sm">+62 xxx xxxx xxxx</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <div class="bg-blue-600/50 p-3 rounded-full">
-                        <i class="fas fa-envelope text-blue-200"></i>
+                    <div class="bg-white/20 p-2 rounded-full text-center">
+                        <span class="text-white text-lg">📧</span>
                     </div>
                     <div>
-                        <p class="text-blue-200 text-sm">Email</p>
-                        <p class="text-white font-medium">info@desabanyukambang.id</p>
+                        <p class="text-white/70 text-xs">Email</p>
+                        <p class="text-white font-medium text-sm">Desabanyukambang@gmail.com</p>
                     </div>
                 </div>
             </div>
         </div>
 
         {{-- Copyright --}}
-        <div class="mt-12 pt-8 border-t border-blue-600/30 text-center">
-            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                <p class="text-blue-200 text-sm">
-                    &copy; {{ date('Y') }} <strong class="text-white">Desa Banyukambang</strong>. Hak cipta dilindungi undang-undang.
+        <div class="mt-6 pt-4 border-t border-white/20 text-center">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
+                <p class="text-white/80 text-xs">
+                    &copy; {{ date('Y') }} <strong class="text-white">Desa Banyukambang</strong>. Hak cipta dilindungi.
                 </p>
-                <p class="text-blue-300 text-sm">
-                    <i class="fas fa-code mr-1"></i>
-                    Dikembangkan dengan <i class="fas fa-heart text-red-400 mx-1"></i> untuk transparansi desa
+                <p class="text-white/70 text-xs">
+                    💻 Dikembangkan dengan ❤️
                 </p>
             </div>
         </div>
