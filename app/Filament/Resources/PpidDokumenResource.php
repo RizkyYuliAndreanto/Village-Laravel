@@ -101,14 +101,23 @@ class PpidDokumenResource extends Resource
                                 $kategori = $get('kategori');
                                 $tahun = $get('tahun');
 
-                                if (!$fileUrl) {
+                                if (!$fileUrl || (is_array($fileUrl) && empty($fileUrl))) {
                                     return 'Belum ada file yang diupload.';
                                 }
 
                                 $info = "📄 Judul: " . ($judul ?: 'Belum diisi') . "\n";
                                 $info .= "📂 Kategori: " . ($kategori ? PpidDokumen::getKategoriOptions()[$kategori] : 'Belum dipilih') . "\n";
                                 $info .= "📅 Tahun: " . ($tahun ?: 'Belum diisi') . "\n";
-                                $info .= "🔗 File: " . basename($fileUrl);
+                                
+                                // Handle file_url yang bisa berupa array atau string
+                                if (is_array($fileUrl) && count($fileUrl) > 0 && isset($fileUrl[0]) && !empty($fileUrl[0])) {
+                                    $fileName = is_string($fileUrl[0]) ? basename($fileUrl[0]) : 'file.pdf';
+                                    $info .= "🔗 File: " . $fileName;
+                                } elseif (is_string($fileUrl) && !empty($fileUrl)) {
+                                    $info .= "🔗 File: " . basename($fileUrl);
+                                } else {
+                                    $info .= "🔗 File: Belum ada file";
+                                }
 
                                 return $info;
                             })
@@ -166,8 +175,15 @@ class PpidDokumenResource extends Resource
 
                 Tables\Columns\TextColumn::make('file_url')
                     ->label('File')
-                    ->formatStateUsing(fn(string $state): string => basename($state))
-                    ->url(fn(PpidDokumen $record): string => $record->file_url)
+                    ->formatStateUsing(function ($state): string {
+                        if (is_array($state) && count($state) > 0 && isset($state[0]) && !empty($state[0])) {
+                            return basename($state[0]);
+                        } elseif (is_string($state) && !empty($state)) {
+                            return basename($state);
+                        }
+                        return 'No file';
+                    })
+                    ->url(fn(PpidDokumen $record): string => $record->file_url ?? '#')
                     ->openUrlInNewTab()
                     ->icon('heroicon-o-document')
                     ->iconColor('primary')
