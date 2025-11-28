@@ -56,11 +56,19 @@
 
         <!-- Tombol CTA -->
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
-            <a href="{{ route('infografis.index') }}" class="w-full sm:w-auto btn-primary group text-center" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+            <a href="{{ route('infografis.index') }}" 
+               class="inline-block group text-center px-6 py-3 font-semibold rounded-lg transition-all duration-300 text-white" 
+               style="background: linear-gradient(135deg, #14b8a6, #0891b2); text-shadow: 1px 1px 2px rgba(0,0,0,0.5); width: 100%; max-width: 200px;"
+               onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 20px rgba(20, 184, 166, 0.3)'"
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
                 <i class="fas fa-chart-line mr-2 group-hover:rotate-12 transition-transform duration-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);"></i>
                 Lihat Infografis
             </a>
-            <a href="{{ route('profil-desa.index') }}" class="w-full sm:w-auto btn-secondary group text-center" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+            <a href="{{ route('profil-desa.index') }}" 
+               class="inline-block group text-center px-6 py-3 font-semibold rounded-lg transition-all duration-300" 
+               style="background: transparent; color: #0891b2; border: 2px solid #67e8f9; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); width: 100%; max-width: 200px;"
+               onmouseover="this.style.background='#14b8a6'; this.style.color='white'; this.style.borderColor='#14b8a6'"
+               onmouseout="this.style.background='transparent'; this.style.color='#0891b2'; this.style.borderColor='#67e8f9'">
                 <i class="fas fa-info-circle mr-2 group-hover:scale-110 transition-transform duration-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);"></i>
                 Profil Desa
             </a>
