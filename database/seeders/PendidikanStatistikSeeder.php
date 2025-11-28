@@ -2,46 +2,30 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Seeder;
 use App\Models\PendidikanStatistik;
 use App\Models\TahunData;
-use Illuminate\Database\Seeder;
 
 class PendidikanStatistikSeeder extends Seeder
 {
     public function run(): void
     {
-        $years = TahunData::orderBy('tahun', 'asc')->get();
+        $years = TahunData::whereBetween('tahun', [2020, 2025])->get();
 
-        $tingkatPendidikan = [
-            'Tidak/Belum Sekolah' => 0.15,
-            'SD/Sederajat' => 0.30,
-            'SMP/Sederajat' => 0.25,
-            'SMA/Sederajat' => 0.20,
-            'Diploma/Sarjana' => 0.10,
-        ];
-
-        $basePopulasi = 3500;
-
-        foreach ($years as $index => $tahunData) {
-            $multiplier = 1 + ($index * 0.02);
-            $populasi = $basePopulasi * $multiplier;
-
-            foreach ($tingkatPendidikan as $tingkat => $persentase) {
-                // Sedikit variasi: Makin tahun baru, yg sekolah makin banyak
-                $variasi = ($index * 0.005); 
-                if ($tingkat == 'Tidak/Belum Sekolah') $persentase -= $variasi;
-                if ($tingkat == 'Diploma/Sarjana') $persentase += $variasi;
-
-                PendidikanStatistik::updateOrCreate(
-                    [
-                        'tahun_id' => $tahunData->id_tahun,
-                        'tingkat_pendidikan' => $tingkat,
-                    ],
-                    [
-                        'jumlah' => floor($populasi * $persentase),
-                    ]
-                );
-            }
+        foreach ($years as $yearData) {
+            PendidikanStatistik::updateOrCreate(
+                ['tahun_id' => $yearData->id_tahun],
+                [
+                    'tidak_sekolah' => rand(100, 200),
+                    'sd' => rand(800, 1000),
+                    'smp' => rand(600, 800),
+                    'sma' => rand(500, 700),
+                    'd1_d4' => rand(50, 150),
+                    's1' => rand(200, 400),
+                    's2' => rand(10, 50),
+                    's3' => rand(1, 10),
+                ]
+            );
         }
     }
 }

@@ -2,49 +2,23 @@
 
 namespace Database\Seeders;
 
-use App\Models\KategoriUmkm;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
+use App\Models\KategoriUmkm;
 
 class KategoriUmkmSeeder extends Seeder
 {
     public function run(): void
     {
-        $categories = [
-            [
-                'nama_kategori' => 'Kuliner',
-                'deskripsi' => 'Usaha di bidang makanan dan minuman',
-                'icon' => '🍽️',
-                'is_active' => true
-            ],
-            [
-                'nama_kategori' => 'Perdagangan',
-                'deskripsi' => 'Usaha jual beli barang dan komoditas',
-                'icon' => '🛒',
-                'is_active' => true
-            ],
-            [
-                'nama_kategori' => 'Jasa',
-                'deskripsi' => 'Usaha penyedia layanan jasa',
-                'icon' => '🔧',
-                'is_active' => true
-            ],
-            [
-                'nama_kategori' => 'Pertanian',
-                'deskripsi' => 'Usaha di bidang pertanian dan perkebunan',
-                'icon' => '🌾',
-                'is_active' => true
-            ],
-            [
-                'nama_kategori' => 'Fashion',
-                'deskripsi' => 'Usaha di bidang pakaian dan aksesoris',
-                'icon' => '👗',
-                'is_active' => true
-            ],
+        $kategori = [
+            ['nama_kategori' => 'Kuliner', 'icon' => 'fas fa-utensils'],
+            ['nama_kategori' => 'Kerajinan Tangan', 'icon' => 'fas fa-hands'],
+            ['nama_kategori' => 'Pertanian', 'icon' => 'fas fa-leaf'],
+            ['nama_kategori' => 'Jasa', 'icon' => 'fas fa-concierge-bell'],
+            ['nama_kategori' => 'Fashion', 'icon' => 'fas fa-tshirt'],
         ];
 
-        foreach ($categories as $category) {
-            KategoriUmkm::create($category);
+        foreach ($kategori as $cat) {
+            KategoriUmkm::updateOrCreate(['nama_kategori' => $cat['nama_kategori']], $cat);
         }
     }
 }

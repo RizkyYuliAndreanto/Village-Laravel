@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\TahunData;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use App\Models\TahunData; // Pastikan model sudah ada
 
 class TahunDataSeeder extends Seeder
 {
@@ -12,9 +13,10 @@ class TahunDataSeeder extends Seeder
         $years = range(2020, 2025);
 
         foreach ($years as $year) {
-            TahunData::updateOrCreate(
+            // Menggunakan firstOrCreate untuk menghindari duplikasi jika seeder dijalankan ulang
+            TahunData::firstOrCreate(
                 ['tahun' => $year],
-                ['keterangan' => "Data Tahun Anggaran $year"]
+                ['keterangan' => "Periode Data Tahun Anggaran $year"]
             );
         }
     }

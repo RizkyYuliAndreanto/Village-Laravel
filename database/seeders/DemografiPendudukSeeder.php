@@ -2,44 +2,31 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Seeder;
 use App\Models\DemografiPenduduk;
 use App\Models\TahunData;
-use Illuminate\Database\Seeder;
 
 class DemografiPendudukSeeder extends Seeder
 {
     public function run(): void
     {
-        // Ambil semua tahun (2020-2025)
-        $years = TahunData::orderBy('tahun', 'asc')->get();
+        $years = TahunData::whereBetween('tahun', [2020, 2025])->get();
 
-        // Base data tahun 2020
-        $basePenduduk = 3500;
-        $baseKK = 1200;
-
-        foreach ($years as $index => $tahunData) {
-            // Simulasi pertumbuhan penduduk ~2% per tahun
-            $multiplier = 1 + ($index * 0.02); 
+        foreach ($years as $yearData) {
+            // Simulasi kenaikan penduduk setiap tahun
+            $basePop = 3000 + (($yearData->tahun - 2020) * 50); 
             
-            $totalPenduduk = floor($basePenduduk * $multiplier);
-            $totalKK = floor($baseKK * $multiplier);
-            
-            // Rasio Laki-laki ~51%, Perempuan ~49%
-            $laki = floor($totalPenduduk * 0.51);
-            $perempuan = $totalPenduduk - $laki;
+            $laki = rand(floor($basePop / 2) - 50, floor($basePop / 2) + 50);
+            $perempuan = $basePop - $laki;
 
             DemografiPenduduk::updateOrCreate(
-                ['tahun_id' => $tahunData->id_tahun],
+                ['tahun_id' => $yearData->id_tahun],
                 [
-                    'total_penduduk' => $totalPenduduk,
-                    'jumlah_kk' => $totalKK,
+                    'total_penduduk' => $basePop,
                     'laki_laki' => $laki,
                     'perempuan' => $perempuan,
-                    // Data mutasi fluktuatif
-                    'kelahiran' => rand(40, 60),
-                    'kematian' => rand(20, 40),
-                    'pindah_masuk' => rand(10, 30),
-                    'pindah_keluar' => rand(15, 35),
+                    'penduduk_sementara' => rand(10, 50),
+                    'mutasi_penduduk' => rand(5, 25),
                 ]
             );
         }

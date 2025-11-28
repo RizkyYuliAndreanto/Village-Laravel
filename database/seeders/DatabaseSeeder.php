@@ -2,62 +2,44 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        // Create admin user only if it doesn't exist
-        if (!User::where('email', 'admin@example.com')->exists()) {
-            User::factory()->create([
-                'name' => 'Admin User',
-                'email' => 'admin@example.com',
-                'password' => bcrypt('password'),
-            ]);
-        }
-
-        // Run all seeders in proper order
         $this->call([
-            // Base data first
-            TahunDataSeeder::class,
+            //Adin Credentials
+            AdminUserSeeder::class,
 
-            // Demographic statistics
+            // 1. Data Utama / Master Data
+            TahunDataSeeder::class,         
+            
+            // 2. Data Statistik (Bergantung pada TahunData)
             DemografiPendudukSeeder::class,
+            UmurStatistikSeeder::class,
             AgamaStatistikSeeder::class,
             PekerjaanStatistikSeeder::class,
             PendidikanStatistikSeeder::class,
             PerkawinanStatistikSeeder::class,
-            UmurStatistikSeeder::class,
             WajibPilihStatistikSeeder::class,
             DusunStatistikSeeder::class,
-
-            // Village structure
-            StrukturOrganisasiSeeder::class,
-
-            // APBDes related - COMMENTED OUT FOR NOW (features not implemented yet)
+            
+            // 3. APBDes (Bergantung pada TahunData)
             BidangApbdesSeeder::class,
             LaporanApbdesSeeder::class,
             DetailApbdesSeeder::class,
-            // ApbdesTahunSeeder::class,
-            // PendapatanSeeder::class,
-            // PengeluaranSeeder::class,
 
-            // PPID Documents
-            PpidDokumenSeeder::class,
-
-            // UMKM and News
+            // 4. Data UMKM & Ekonomi
             KategoriUmkmSeeder::class,
             UmkmSeeder::class,
+
+            // 5. Data Umum / Lainnya
+            StrukturOrganisasiSeeder::class,
+            PpidDokumenSeeder::class,
             BeritaSeeder::class,
         ]);
     }

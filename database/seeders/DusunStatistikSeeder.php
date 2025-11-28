@@ -2,48 +2,28 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Seeder;
 use App\Models\DusunStatistik;
 use App\Models\TahunData;
-use Illuminate\Database\Seeder;
 
 class DusunStatistikSeeder extends Seeder
 {
     public function run(): void
     {
-        $years = TahunData::orderBy('tahun', 'asc')->get();
-        
-        // Daftar Dusun
-        $dusuns = [
-            ['nama' => 'Dusun Krajan', 'porsi' => 0.4], // 40% penduduk
-            ['nama' => 'Dusun Melati', 'porsi' => 0.35], // 35% penduduk
-            ['nama' => 'Dusun Mawar', 'porsi' => 0.25], // 25% penduduk
-        ];
+        $years = TahunData::whereBetween('tahun', [2020, 2025])->get();
+        $namaDusun = ['Dusun Krajan', 'Dusun Timur', 'Dusun Barat', 'Dusun Selatan'];
 
-        // Base total penduduk (harus mirip dengan Demografi)
-        $baseTotal = 3500;
-
-        foreach ($years as $index => $tahunData) {
-            $multiplier = 1 + ($index * 0.02);
-            $totalTahunIni = $baseTotal * $multiplier;
-
-            foreach ($dusuns as $dusun) {
-                // Hitung penduduk per dusun
-                $jumlahPenduduk = floor($totalTahunIni * $dusun['porsi']);
-                $jumlahLaki = floor($jumlahPenduduk * 0.51);
-                $jumlahPerempuan = $jumlahPenduduk - $jumlahLaki;
-                $jumlahKK = floor($jumlahPenduduk / 3.5); // Asumsi 1 KK rata-rata 3-4 orang
-
+        foreach ($years as $yearData) {
+            foreach ($namaDusun as $dusun) {
                 DusunStatistik::updateOrCreate(
                     [
-                        'tahun_id' => $tahunData->id_tahun,
-                        'nama_dusun' => $dusun['nama'],
+                        'tahun_id' => $yearData->id_tahun,
+                        'nama_dusun' => $dusun
                     ],
                     [
-                        'ketua_dusun' => 'Bapak ' . fake()->name('male'), // Opsional pakai faker
-                        'jumlah_kk' => $jumlahKK,
-                        'jumlah_laki' => $jumlahLaki,
-                        'jumlah_perempuan' => $jumlahPerempuan,
-                        'total_penduduk' => $jumlahPenduduk,
+                        'jumlah_penduduk' => rand(500, 900),
+                        'jumlah_kk' => rand(150, 300),
+                        'keterangan' => 'Data statistik wilayah ' . $dusun
                     ]
                 );
             }

@@ -2,29 +2,44 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Seeder;
 use App\Models\LaporanApbdes;
 use App\Models\TahunData;
-use Illuminate\Database\Seeder;
 
-class LaporanAPBDesSeeder extends Seeder
+class LaporanApbdesSeeder extends Seeder
 {
     public function run(): void
     {
-        // Ambil semua tahun dari 2020-2025
-        $allYears = TahunData::whereBetween('tahun', [2020, 2025])->get();
+        $years = TahunData::whereBetween('tahun', [2020, 2025])->get();
 
-        foreach ($allYears as $tahunData) {
+        foreach ($years as $yearData) {
+            // Laporan Murni (Awal Tahun)
             LaporanApbdes::updateOrCreate(
                 [
-                    'tahun_id' => $tahunData->id_tahun,
-                    'nama_laporan' => 'APBDes Murni T.A. ' . $tahunData->tahun,
+                    'tahun_id' => $yearData->id_tahun,
+                    'nama_laporan' => "APBDes Murni Tahun " . $yearData->tahun
                 ],
                 [
-                    'bulan_rilis' => 1, // Januari
-                    'status' => 'diterbitkan', // Wajib published
-                    'deskripsi' => "Laporan Realisasi Anggaran Pendapatan dan Belanja Desa Tahun {$tahunData->tahun}",
+                    'bulan_rilis' => 1,
+                    'deskripsi' => "Laporan Anggaran Pendapatan dan Belanja Desa Awal Tahun " . $yearData->tahun,
+                    'status' => 'diterbitkan'
                 ]
             );
+
+            // Laporan Perubahan (Hanya untuk tahun yang sudah berlalu atau berjalan)
+            if ($yearData->tahun <= 2024) {
+                LaporanApbdes::updateOrCreate(
+                    [
+                        'tahun_id' => $yearData->id_tahun,
+                        'nama_laporan' => "APBDes Perubahan Tahun " . $yearData->tahun
+                    ],
+                    [
+                        'bulan_rilis' => 10,
+                        'deskripsi' => "Laporan Perubahan Anggaran Tahun " . $yearData->tahun,
+                        'status' => 'diterbitkan'
+                    ]
+                );
+            }
         }
     }
 }
