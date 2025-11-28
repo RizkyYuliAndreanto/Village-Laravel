@@ -127,7 +127,8 @@
         
         <div class="flex justify-center sm:justify-end mt-8 sm:mt-10 px-2">
             <a href="{{ route('umkm.index') }}" 
-               class="w-full sm:w-auto text-center btn-primary px-6 py-2 rounded-lg transition-all duration-300">
+               class="inline-block px-6 py-2 rounded-lg transition-all duration-300 text-white font-semibold text-center"
+               style="background: linear-gradient(135deg, #14b8a6, #0891b2); width: 100%; max-width: 200px;">
                 Lihat Selengkapnya →
             </a>
         </div>

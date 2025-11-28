@@ -17,7 +17,10 @@
         
         <div class="flex mt-6 sm:mt-8 justify-center sm:justify-end px-2">
             <a href="{{ route('galeri.index') }}"
-                class="w-full sm:w-auto text-center inline-block px-6 py-2.5 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition">
+                class="inline-block px-6 py-2.5 font-semibold rounded-lg shadow transition text-white text-center"
+                style="background: #2563eb; width: 100%; max-width: 200px;"
+                onmouseover="this.style.background='#1d4ed8'" 
+                onmouseout="this.style.background='#2563eb'">
                 Lihat Selengkapnya →
             </a>
         </div>

@@ -53,9 +53,10 @@
             </div>
         @endif
         
-        <div class="flex justify-end mt-8">
+        <div class="flex justify-center sm:justify-end mt-8">
             <a href="{{ route('berita.index') }}" 
-               class="btn-primary px-6 py-2 rounded-lg transition-all duration-300">
+               class="inline-block px-6 py-2 rounded-lg transition-all duration-300 text-white font-semibold text-center"
+               style="background: linear-gradient(135deg, #14b8a6, #0891b2); width: 100%; max-width: 200px;">
                 Lihat Selengkapnya →
             </a>
         </div>

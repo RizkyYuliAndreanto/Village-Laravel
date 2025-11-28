@@ -42,7 +42,10 @@
         
         <div class="flex justify-center sm:justify-end mt-8 sm:mt-10 px-2">
             <a href="{{ route('infografis.index') }}" 
-               class="w-full sm:w-auto text-center inline-block px-6 sm:px-8 py-3 bg-cyan-500 text-white font-semibold rounded-lg shadow hover:bg-cyan-600 transition-all duration-300 hover:shadow-lg">
+               class="inline-block px-6 sm:px-8 py-3 font-semibold rounded-lg shadow transition-all duration-300 text-white text-center"
+               style="background: #0891b2; width: 100%; max-width: 200px;"
+               onmouseover="this.style.background='#0e7490'" 
+               onmouseout="this.style.background='#0891b2'">
                 Lihat Data Lengkap →
             </a>
         </div>
