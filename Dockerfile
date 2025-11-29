@@ -100,6 +100,11 @@ RUN echo '<VirtualHost *:80>\n\
 # Expose port
 EXPOSE 80
 
+# Set environment variables to prevent artisan serve detection
+ENV LARAVEL_SERVE_DISABLED=true
+ENV DISABLE_SERVE_COMMAND=true
+ENV USE_APACHE_ONLY=true
+
 # Create startup script for Railway
 RUN echo '#!/bin/bash\n\
 # Wait for MySQL if using Railway MySQL\n\

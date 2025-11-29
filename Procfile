@@ -1,1 +1,0 @@
-release: echo "Using Docker startup script instead"

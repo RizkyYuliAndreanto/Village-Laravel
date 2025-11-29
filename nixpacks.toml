@@ -1,5 +1,0 @@
-# This file is disabled - using Dockerfile instead
-# See railway.json: "builder": "DOCKERFILE"
-
-[start]
-cmd = 'echo "Using Dockerfile startup script instead of nixpacks"'
