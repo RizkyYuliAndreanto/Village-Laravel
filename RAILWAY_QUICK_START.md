@@ -1,6 +1,7 @@
 # 🚀 Railway Quick Deploy Script
 
 ## ⚠️ DEPENDENCY FIXES APPLIED:
+
 ✅ Laravel Framework downgraded to v11.0 (from v12.0) for stability
 ✅ Filament updated to v3.2 for compatibility
 ✅ **DOCKER DEPLOYMENT**: Using custom Dockerfile with PHP 8.3
@@ -8,14 +9,16 @@
 ✅ **DUAL DATABASE SUPPORT**: MySQL + PostgreSQL ready
 
 ## 🐳 Docker-Based Deployment:
-- **Builder**: DOCKERFILE (instead of NIXPACKS) 
-- **Base Image**: PHP 8.3 with Apache (fixes openspout requirement)
-- **Extensions**: zip, intl, pdo_mysql, pdo_pgsql, gd, mbstring, xml, curl, etc.
-- **Port**: 80 (Apache default)
+
+-   **Builder**: DOCKERFILE (instead of NIXPACKS)
+-   **Base Image**: PHP 8.3 with Apache (fixes openspout requirement)
+-   **Extensions**: zip, intl, pdo_mysql, pdo_pgsql, gd, mbstring, xml, curl, etc.
+-   **Port**: 80 (Apache default)
 
 ## 📊 Database Options:
 
 ### Option 1: MySQL (Recommended untuk Anda)
+
 ```bash
 # 1. APP CONFIGURATION
 APP_NAME=Village Laravel
@@ -44,6 +47,7 @@ BCRYPT_ROUNDS=12
 ```
 
 ### Option 2: PostgreSQL (Railway Default)
+
 ```bash
 # 1. APP CONFIGURATION
 APP_NAME=Village Laravel
@@ -101,6 +105,7 @@ php artisan view:cache
 ```
 
 ## 🚀 Fixed Issues:
+
 ✅ **ServeCommand Error**: Menggunakan Apache langsung (port 80)
 ✅ **MySQL Connection**: Auto-wait untuk MySQL service ready
 ✅ **Database Setup**: Post-deploy migration script included

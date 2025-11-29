@@ -43,16 +43,24 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy application code
 COPY . /var/www/html
 
-# Set proper permissions
+# Set proper permissions  
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
+# Verify important files are copied correctly
+RUN ls -la /var/www/html/app/Filament/Resources/DetailApbdes/Pages/
+
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction --no-scripts
 
-# Clear autoload cache and regenerate to fix PSR-4 issues
-RUN composer dump-autoload --optimize --no-scripts
+# Clear any cached autoload files and regenerate completely
+RUN rm -rf vendor/composer/autoload_*.php bootstrap/cache/packages.php bootstrap/cache/services.php \
+    && composer dump-autoload --optimize --no-scripts
+
+# Verify the classes can be found
+RUN php -c "echo 'Testing class autoload...';" \
+    && php -r "require 'vendor/autoload.php'; echo class_exists('App\\Filament\\Resources\\DetailApbdes\\Pages\\ListDetailApbdes') ? 'ListDetailApbdes: OK' : 'ListDetailApbdes: MISSING'; echo PHP_EOL;"
 
 # Run package discovery safely in production mode
 RUN APP_ENV=production php artisan package:discover --ansi || echo "Package discovery completed with warnings"
