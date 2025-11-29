@@ -45,7 +45,7 @@ class HomeController extends Controller
             'jumlahDusun'       => $this->getJumlahDusun($tahunDataTerbaru->tahun),
             'jumlahUmkm'        => Umkm::where('status_usaha', 'aktif')->count(),
 
-            // Struktur Organisasi (FIXED: Menghapus where is_active yang bikin error)
+            // Struktur Organisasi
             'sotk'              => $this->getStrukturOrganisasi(),
 
             // Data APBD
@@ -57,7 +57,7 @@ class HomeController extends Controller
             // Potensi desa
             'potensiDesa'       => $this->getPotensiDesa(),
 
-            // Galeri
+            // Galeri (GABUNGAN BERITA + UMKM)
             'galeri'            => $this->getGaleriTerbaru()
         ];
 
@@ -68,7 +68,6 @@ class HomeController extends Controller
 
     private function getTahunTerbaru()
     {
-        // Ambil tahun paling besar yang ada di database
         $tahun = TahunData::orderBy('tahun', 'desc')->first();
         return $tahun ?: (object)['tahun' => date('Y')];
     }
@@ -101,8 +100,6 @@ class HomeController extends Controller
     private function getStrukturOrganisasi()
     {
         try {
-            // FIX: Tabel struktur_organisasi Anda TIDAK punya kolom 'is_active' atau 'urutan'
-            // Jadi kita hapus where('is_active') dan ganti sorting pakai primary key
             return StrukturOrganisasi::orderBy('id_struktur', 'asc')
                 ->take(4)
                 ->get();
@@ -114,22 +111,19 @@ class HomeController extends Controller
     private function getAPBDData($tahun)
     {
         try {
-            // Cari Laporan APBDes berdasarkan tahun
             $laporanApbd = LaporanApbdes::whereHas('tahunData', function ($query) use ($tahun) {
                 $query->where('tahun', $tahun);
             })
-            ->where('status', 'diterbitkan') // Pastikan statusnya diterbitkan
+            ->where('status', 'diterbitkan')
             ->latest()
             ->first();
 
-            // Jika tidak ada data untuk tahun ini, coba cari tahun sebelumnya sebagai fallback
             if (!$laporanApbd) {
                 $laporanApbd = LaporanApbdes::where('status', 'diterbitkan')->latest()->first();
             }
 
             if (!$laporanApbd) return ['hasData' => false];
 
-            // Ambil detail (Pastikan nama kolom sesuai database: 'tipe', 'realisasi', 'anggaran')
             $pendapatanRealisasi = DetailApbdes::where('laporan_apbdes_id', $laporanApbd->id)
                 ->where('tipe', 'pendapatan')->sum('realisasi');
             $pendapatanTarget = DetailApbdes::where('laporan_apbdes_id', $laporanApbd->id)
@@ -161,7 +155,6 @@ class HomeController extends Controller
     private function getBeritaTerbaru($limit = 6)
     {
         try {
-            // Prioritaskan published_at, lalu created_at. Hapus where('status') karena kolom tidak ada.
             return Berita::orderByRaw('COALESCE(created_at) DESC')
                 ->limit($limit)
                 ->get();
@@ -175,5 +168,49 @@ class HomeController extends Controller
         } catch (\Exception $e) { return collect(); }
     }
 
-    private function getGaleriTerbaru($limit = 8) { return collect(); }
+    private function getGaleriTerbaru($limit = 8)
+    {
+        try {
+            // 1. Ambil Berita (Pastikan menggunakan 'gambar_url' sesuai Model Berita)
+            $galeriBerita = Berita::whereNotNull('gambar_url')
+                ->where('gambar_url', '!=', '')
+                ->latest()
+                ->take($limit)
+                ->get()
+                ->map(function ($item) {
+                    return (object) [
+                        'type' => 'Berita',
+                        'title' => $item->judul,
+                        'image' => $item->gambar_url, // Sesuai kolom di Model Berita
+                        'url' => route('berita.show', $item->id),
+                        'date' => $item->created_at
+                    ];
+                });
+
+            // 2. Ambil UMKM (Asumsi kolom 'gambar' atau 'foto_url' - sesuaikan dengan DB Anda)
+            $galeriUmkm = Umkm::where('status_usaha', 'aktif')
+                ->where(function($q) {
+                    $q->whereNotNull('gambar')->where('gambar', '!=', '');
+                    // Tambahkan orWhereNotNull('foto_url') jika nama kolomnya beda
+                })
+                ->latest()
+                ->take($limit)
+                ->get()
+                ->map(function ($item) {
+                    return (object) [
+                        'type' => 'UMKM',
+                        'title' => $item->nama, 
+                        'image' => $item->gambar, // Pastikan ini sesuai kolom di tabel UMKM
+                        'url' => route('umkm.show', $item->id),
+                        'date' => $item->created_at
+                    ];
+                });
+
+            // 3. Gabung, Acak, dan Batasi jumlah
+            return $galeriBerita->merge($galeriUmkm)->shuffle()->take($limit);
+            
+        } catch (\Exception $e) {
+            return collect();
+        }
+    }
 }

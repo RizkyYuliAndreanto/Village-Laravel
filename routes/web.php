@@ -1,16 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Controllers\Frontend\UmkmController;
-use App\Http\Controllers\Frontend\BeritaController;
-use App\Http\Controllers\Frontend\StrukturOrganisasiController;
-use App\Http\Controllers\Frontend\DemografiController;
-use App\Http\Controllers\Frontend\PpidController;
-use App\Http\Controllers\Frontend\ApbdesController;
-use App\Http\Controllers\Frontend\ProfilDesaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\PpidController;
+use App\Http\Controllers\Frontend\UmkmController;
+use App\Http\Controllers\Frontend\ApbdesController;
+use App\Http\Controllers\Frontend\BeritaController;
+use App\Http\Controllers\Frontend\GaleriController;
 use App\Http\Controllers\Frontend\TestUmkmController;
+use App\Http\Controllers\Frontend\DemografiController;
+use App\Http\Controllers\Frontend\ProfilDesaController;
+use App\Http\Controllers\Frontend\StrukturOrganisasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,7 @@ Route::view('/test-bootstrap', 'test-bootstrap')->name('test.bootstrap');
 */
 // Route::view('/profil-desa', 'frontend.profil-desa.index')->name('profil-desa.index'); // Commented out - conflict with ProfilDesaController
 Route::get('/infografis', [DemografiController::class, 'infografis'])->name('infografis.index');
+Route::get('/galeri', [GaleriController::class, 'index'])->name('galeri.index');
 
 /*
 |--------------------------------------------------------------------------

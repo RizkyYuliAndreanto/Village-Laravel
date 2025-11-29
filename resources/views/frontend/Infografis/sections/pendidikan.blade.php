@@ -1,23 +1,23 @@
-{{-- Section: Berdasarkan Pendidikan --}}
-<section class="py-20 infografis-section">
-    <div class="container mx-auto px-6">
-        <h3 class="text-3xl font-extrabold mb-6 infografis-title">
-            Berdasarkan Pendidikan 
-            <span id="tahun-display-pendidikan" class="text-lg text-primary-600">
-                ({{ $tahunAktif ?? date('Y') }})
-            </span>
-        </h3>
+{{-- File: resources/views/frontend/Infografis/sections/pendidikan.blade.php --}}
+<section class="py-10 lg:py-20 infografis-section border-b border-gray-200">
+    <div class="container mx-auto px-4"> {{-- Gunakan px-4 agar tidak terlalu mepet di HP --}}
+        <div class="text-center lg:text-left mb-6">
+            <h3 class="text-2xl lg:text-3xl font-extrabold mb-2 infografis-title text-gray-800">
+                Berdasarkan Pendidikan 
+            </h3>
+            <p class="text-primary-600 font-medium">
+                Data Tahun {{ $tahunAktif ?? date('Y') }}
+            </p>
+        </div>
 
-        {{-- Tahun Selector --}}
-        @include('frontend.Infografis.partials.tahun-selector', [
-            'sectionId' => 'pendidikan',
-            'tahunTersedia' => $tahunTersedia ?? [],
-            'tahunAktif' => $tahunAktif ?? date('Y')
-        ])
-
-        {{-- Container Chart diperbesar dengan h-[500px] --}}
-        <div id="pendidikan-content" class="infografis-card p-6 rounded-xl shadow w-full">
-            <div class="h-[480px] w-[750px] relative">
+        <div id="pendidikan-content" class="infografis-card bg-white p-4 lg:p-6 rounded-xl shadow-sm border border-gray-100 w-full">
+            {{-- 
+               FIX UTAMA: 
+               1. Hapus w-[750px] yang bikin jebol.
+               2. Ganti dengan w-full.
+               3. Atur tinggi responsive (400px di HP, 500px di Desktop).
+            --}}
+            <div class="relative w-full h-[400px] lg:h-[500px]">
                 <canvas id="chartPendidikan"></canvas>
             </div>
         </div>
@@ -37,7 +37,7 @@
                 data: {
                     labels: [
                         "Tidak/Belum Sekolah", "SD/Sederajat", "SMP/Sederajat",
-                        "SMA/Sederajat", "Diploma I/II/III/IV", "Strata 1", "Strata 2", "Strata 3"
+                        "SMA/Sederajat", "Diploma I-IV", "Strata 1", "Strata 2", "Strata 3"
                     ],
                     datasets: [{
                         label: "Jumlah Jiwa",
@@ -51,15 +51,15 @@
                             {{ $pendidikan->s2 ?? 0 }},
                             {{ $pendidikan->s3 ?? 0 }}
                         ],
-                        backgroundColor: "#2563eb",
-                        borderColor: "#1d4ed8",
-                        borderWidth: 1
+                        backgroundColor: "#3b82f6", // Tailwind blue-500
+                        borderRadius: 4,
+                        barPercentage: 0.7,
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false, // PENTING: Agar chart mengikuti tinggi container (h-[500px])
-                    indexAxis: 'y', // Horizontal bar
+                    maintainAspectRatio: false, // WAJIB FALSE
+                    indexAxis: 'y', // Horizontal bar agar label panjang terbaca di HP
                     plugins: { 
                         legend: { display: false },
                         tooltip: {
@@ -73,18 +73,14 @@
                     scales: { 
                         x: { 
                             beginAtZero: true,
-                            grid: {
-                                color: '#f3f4f6' // Grid yang lebih halus
-                            }
+                            grid: { color: '#f3f4f6' },
+                            ticks: { font: { size: 10 } }
                         },
                         y: {
-                            grid: {
-                                display: false
-                            },
+                            grid: { display: false },
                             ticks: {
-                                font: {
-                                    size: 13 // Ukuran font label sumbu Y sedikit diperbesar
-                                }
+                                autoSkip: false, // Pastikan semua label muncul
+                                font: { size: 11 } // Ukuran font label Y disesuaikan untuk HP
                             }
                         }
                     }

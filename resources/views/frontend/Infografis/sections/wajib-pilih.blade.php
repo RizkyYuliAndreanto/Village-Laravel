@@ -7,14 +7,6 @@
                 ({{ $tahunAktif ?? date('Y') }})
             </span>
         </h3>
-
-        {{-- Tahun Selector --}}
-        @include('frontend.Infografis.partials.tahun-selector', [
-            'sectionId' => 'wajib-pilih',
-            'tahunTersedia' => $tahunTersedia ?? [],
-            'tahunAktif' => $tahunAktif ?? date('Y')
-        ])
-
         <div id="wajib-pilih-content" class="infografis-card p-6 rounded-xl shadow w-full">
             {{-- Container Chart --}}
             <div class="h-[400px] w-full relative flex items-center justify-center">

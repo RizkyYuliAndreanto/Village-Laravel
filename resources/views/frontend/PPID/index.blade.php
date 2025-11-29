@@ -3,9 +3,6 @@
 @section('content')
 <!-- Hero Section dengan Background Gradient -->
 <div class="section-bg-primary py-16">
-<div class="flex justify-end mb-6">
-            @include('frontend.layouts.partials.submenu')
-        </div>
     <div class="container mx-auto px-4 py-16 lg:px-8">
         <!-- Page Title -->
         <div class="text-center mb-12">

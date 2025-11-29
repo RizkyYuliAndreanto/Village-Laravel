@@ -1,8 +1,5 @@
 {{-- Header Section --}}
-<div class="text-center mb-12 px-4">
-    <div class="flex justify-center w-full mb-6">
-            @include('frontend.layouts.partials.submenu')
-        </div>    
+<div class="text-center mb-12 px-4">  
     <div class="bg-white rounded-3xl shadow-2xl p-10 md:p-16 text-black relative overflow-hidden border border-gray-200">
     <div class="flex flex-col items-center justify-center">
             <div class="bg-cyan-500 rounded-full p-8 mb-8 shadow-lg border-4 border-cyan-600">

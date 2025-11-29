@@ -14,21 +14,19 @@
                     <div class="relative">
                         <img class="h-16 w-16 rounded-xl shadow-lg border-2 border-blue-300/30"
                             src="{{ asset('images/Kabupaten_Madiun.png') }}"
-                            alt="Logo Desa Banyukambang">
+                            alt="Logo Desa Ngengor">
                         <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-400/20 to-transparent"></div>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold text-white mb-2">Desa Banyukambang</h3>
-                        <p class="text-blue-200 font-medium">Kec. Wonoasri, Kab. Madiun</p>
+                        <h3 class="text-2xl font-bold text-white mb-2">Desa Ngengor</h3>
+                        <p class="text-blue-200 font-medium">Kec. Pilangkenceng, Kab. Madiun</p>
                     </div>
                 </div>
                 <p class="text-blue-100 text-base leading-relaxed max-w-md">
                     Portal digital terpadu untuk layanan masyarakat, informasi desa, dan pengembangan UMKM lokal.
                     Membangun transparansi dan aksesibilitas dalam pemerintahan desa.
                 </p>
-
-                <!-- Social Media -->
-                <div class="flex space-x-4 mt-6">
+                <!-- <div class="flex space-x-4 mt-6">
                     <a href="#" class="bg-blue-600/50 hover:bg-blue-500 p-3 rounded-full transition-all duration-300 hover:scale-110 group">
                         <i class="fab fa-facebook-f text-white group-hover:rotate-12 transition-transform duration-300"></i>
                     </a>
@@ -38,7 +36,7 @@
                     <a href="#" class="bg-blue-600/50 hover:bg-blue-500 p-3 rounded-full transition-all duration-300 hover:scale-110 group">
                         <i class="fab fa-youtube text-white group-hover:rotate-12 transition-transform duration-300"></i>
                     </a>
-                </div>
+                </div> -->
             </div>
 
             {{-- Tautan Cepat --}}
@@ -82,15 +80,21 @@
         <div class="mt-auto pt-16 border-t border-blue-600/30">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!--Map-->
-                <div class="flex items-center space-x-3">
-                    <div class="bg-blue-600/50 p-3 rounded-full">
-                        <i class="fas fa-map-marker-alt text-blue-200"></i>
+                <a href="https://maps.app.goo.gl/1Qu78cr4bZr6RKpz5" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="flex items-center space-x-3 group hover:bg-white/5 p-2 -ml-2 rounded-xl transition-all duration-300">
+                    <div class="bg-blue-600/50 group-hover:bg-blue-500 p-3 rounded-full transition-colors duration-300">
+                        <i class="fas fa-map-marker-alt text-blue-200 group-hover:text-white"></i>
                     </div>
                     <div>
-                        <p class="text-blue-200 text-sm">Alamat</p>
-                        <p class="text-white font-medium">Desa Banyukambang, Wonoasri</p>
+                        <p class="text-blue-200 text-sm group-hover:text-blue-100">Alamat</p>
+                        <p class="text-white font-medium text-sm leading-snug group-hover:text-blue-50">
+                            Ngengor, Kec. Pilangkenceng,<br>
+                            Kab. Madiun, Jawa Timur
+                        </p>
                     </div>
-                </div>
+                </a>
                 <!--Telpon-->
                 <div class="flex items-center space-x-3">
                     <div class="bg-blue-600/50 p-3 rounded-full">
@@ -116,13 +120,9 @@
 
         {{-- Copyright --}}
         <div class="mt-12 pt-8 border-t border-blue-600/30 text-center">
-            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                <p class="text-blue-200 text-sm">
-                    &copy; {{ date('Y') }} <strong class="text-white">Desa Banyukambang</strong>. Hak cipta dilindungi undang-undang.
-                </p>
-                <p class="text-blue-300 text-sm">
-                    <i class="fas fa-code mr-1"></i>
-                    Dikembangkan dengan <i class="fas fa-heart text-red-400 mx-1"></i> untuk transparansi desa
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0">
+                <p class="text-blue-200 text-sm text-center">
+                    &copy; {{ date('Y') }} <strong class="text-white">Desa Ngengor</strong>. Hak cipta dilindungi undang-undang.
                 </p>
             </div>
         </div>

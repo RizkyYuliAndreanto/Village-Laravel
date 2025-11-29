@@ -1,14 +1,13 @@
 {{-- partials/tahun-selector.blade.php --}}
-<div class="flex items-center justify-center mb-6">
-    <label for="tahun-{{ $sectionId ?? 'default' }}" class="mr-3 font-medium text-gray-700">Pilih Tahun:</label>
+<div class="flex flex-col sm:flex-row items-center justify-center mb-6 gap-2">
+    <label for="tahun-{{ $sectionId ?? 'default' }}" class="font-medium text-gray-700">Pilih Tahun:</label>
     <select 
         id="tahun-{{ $sectionId ?? 'default' }}" 
-        class="tahun-selector form-select block w-32 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-200 focus:ring-opacity-50"
+        class="tahun-selector form-select block w-full sm:w-32 rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-200 focus:ring-opacity-50 text-center sm:text-left"
         data-section="{{ $sectionId ?? '' }}"
     >
         @foreach($tahunTersedia as $t)
             @php
-                // jika $t object (model), ambil property ->tahun, jika int/string, pakai langsung
                 $year = is_object($t) ? ($t->tahun ?? $t) : $t;
             @endphp
 

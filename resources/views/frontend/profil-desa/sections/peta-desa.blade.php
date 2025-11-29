@@ -64,7 +64,7 @@
             <!-- Map - kanan -->
             <div class="lg:col-span-3 relative h-[400px] lg:h-[500px] bg-gray-100">
                 <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15705.828325392877!2d111.65465875092072!3d-7.475045971480052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e79c5a292282275%3A0x8c8fde03ede35c!2sDesa%20ngengor!5e1!3m2!1sen!2sid!4v1763972402016!5m2!1sen!2sid"
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3955.8807379093882!2d111.65373969999999!3d-7.4784199!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e79c5e4d22dfd69%3A0xef94f2465ade7c0e!2sKantor%20Kepala%20Desa%20Ngengor%20Pilangkenceng!5e0!3m2!1sen!2sid!4v1764414720243!5m2!1sen!2sid"
                     width="100%" 
                     height="100%" 
                     style="border:0;" 

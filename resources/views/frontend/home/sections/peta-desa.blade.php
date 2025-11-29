@@ -6,7 +6,7 @@
         
         <div class="rounded-xl overflow-hidden shadow-xl mx-auto max-w-5xl">
         <iframe
-                              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3301.716534966608!2d111.65516857411542!3d-7.478635773736988!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e79c5a292282275%3A0x8c8fde03ede35c!2sDesa%20ngengor!5e1!3m2!1sen!2sid!4v1763925548991!5m2!1sen!2sid"
+                              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3955.8807379093882!2d111.65373969999999!3d-7.4784199!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e79c5e4d22dfd69%3A0xef94f2465ade7c0e!2sKantor%20Kepala%20Desa%20Ngengor%20Pilangkenceng!5e0!3m2!1sen!2sid!4v1764414720243!5m2!1sen!2sid"
                             width="100%"
                             height="480"
                             style="border:0;"

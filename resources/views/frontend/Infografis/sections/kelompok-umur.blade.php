@@ -13,13 +13,6 @@
             </p>
         </div>
 
-        {{-- Tahun Selector --}}
-        @include('frontend.Infografis.partials.tahun-selector', [
-            'sectionId' => 'umur',
-            'tahunTersedia' => $tahunTersedia ?? [],
-            'tahunAktif' => $tahunAktif ?? date('Y')
-        ])
-
         <div id="umur-content" class="w-full infografis-card p-6 rounded-2xl shadow-md">
             <div class="h-[500px]">
                 <canvas id="chartPiramida"></canvas>
