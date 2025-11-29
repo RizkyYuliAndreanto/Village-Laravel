@@ -48,8 +48,14 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Verify important files are copied correctly
-RUN ls -la /var/www/html/app/Filament/Resources/DetailApbdes/Pages/
+# Verify important directories and files are copied correctly
+RUN echo "=== Checking Filament Resources structure ===" \
+    && ls -la /var/www/html/app/Filament/Resources/ \
+    && echo "=== Checking DetailApbdes directory ===" \
+    && ls -la /var/www/html/app/Filament/Resources/DetailApbdes/ \
+    && echo "=== Checking DetailApbdes Pages directory ===" \
+    && ls -la /var/www/html/app/Filament/Resources/DetailApbdes/Pages/ \
+    && echo "=== Files verification completed ==="
 
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction --no-scripts
