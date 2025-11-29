@@ -51,8 +51,11 @@ RUN chown -R www-data:www-data /var/www/html \
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction --no-scripts
 
-# Run post-install scripts manually (safer)
-RUN php artisan package:discover --ansi || echo "Package discovery completed"
+# Clear autoload cache and regenerate to fix PSR-4 issues
+RUN composer dump-autoload --optimize --no-scripts
+
+# Run package discovery safely in production mode
+RUN APP_ENV=production php artisan package:discover --ansi || echo "Package discovery completed with warnings"
 
 # Install and build Node dependencies  
 RUN npm ci && npm run build && npm cache clean --force
