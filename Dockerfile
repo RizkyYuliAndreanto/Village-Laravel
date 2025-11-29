@@ -104,6 +104,7 @@ EXPOSE 80
 ENV LARAVEL_SERVE_DISABLED=true
 ENV DISABLE_SERVE_COMMAND=true
 ENV USE_APACHE_ONLY=true
+ENV APP_ENV=production
 
 # Create startup script for Railway
 RUN echo '#!/bin/bash\n\

@@ -5,4 +5,5 @@ return [
     App\Providers\Filament\AdminPanelProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\SecurityServiceProvider::class,
+    App\Providers\DisableServeCommandProvider::class,
 ];
