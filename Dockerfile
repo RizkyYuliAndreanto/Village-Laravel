@@ -1,5 +1,5 @@
-# Use PHP 8.2 with Apache
-FROM php:8.2-apache
+# Use PHP 8.3 with Apache
+FROM php:8.3-apache
 
 # Set working directory
 WORKDIR /var/www/html
@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpq-dev \
     libicu-dev \
+    default-mysql-client \
     zip \
     unzip \
     nodejs \
@@ -22,6 +23,7 @@ RUN apt-get update && apt-get install -y \
 # Install PHP extensions
 RUN docker-php-ext-install \
     pdo \
+    pdo_mysql \
     pdo_pgsql \
     mbstring \
     exif \
