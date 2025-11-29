@@ -2,11 +2,11 @@
 
 @section('content')
 <!-- Hero Section dengan Background Gradient -->
-<div class="section-bg-primary py-8">
+<div class="section-bg-primary py-4 md:py-8">
     <div class="container mx-auto px-4 lg:px-8">
         <!-- Breadcrumb -->
-        <nav class="mb-6" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-sm">
+        <nav class="mb-4 md:mb-6" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2 text-xs md:text-sm">
                 <li><a href="{{ route('home') }}" class="text-primary-600 hover:text-primary-700 transition-colors">Beranda</a></li>
                 <li class="text-primary-400">/</li>
                 <li><a href="{{ route('berita.index') }}" class="text-primary-600 hover:text-primary-700 transition-colors">Berita</a></li>
@@ -18,32 +18,32 @@
 </div>
 
 <!-- Content Section -->
-<div class="bg-white py-12">
+<div class="bg-white py-6 md:py-12">
     <div class="container mx-auto px-4 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 md:gap-12">
 
             <!-- Konten utama -->
             <main class="lg:col-span-3">
-                <article class="card-bg rounded-2xl overflow-hidden shadow-lg">
+                <article class="card-bg rounded-xl md:rounded-2xl overflow-hidden shadow-lg">
                     
                     <!-- Featured Image -->
                     @if ($berita->image_url)
                         <div class="relative">
                             <img src="{{ $berita->image_url }}" 
                                  alt="{{ $berita->judul }}"
-                                 class="w-full h-64 lg:h-96 object-cover"
+                                 class="w-full h-48 md:h-64 lg:h-96 object-cover"
                                  onerror="this.style.display='none'">
                             
                             <!-- Kategori Badge -->
-                            <div class="absolute top-6 left-6">
-                                <span class="px-4 py-2 bg-primary-500 text-white rounded-full text-sm font-medium shadow-lg">
+                            <div class="absolute top-3 md:top-6 left-3 md:left-6">
+                                <span class="px-3 md:px-4 py-1 md:py-2 bg-primary-500 text-white rounded-full text-xs md:text-sm font-medium shadow-lg">
                                     📂 {{ ucfirst($berita->kategori) }}
                                 </span>
                             </div>
                             
                             <!-- Views Badge -->
-                            <div class="absolute top-6 right-6">
-                                <span class="px-3 py-2 bg-black bg-opacity-50 text-white rounded-full text-sm flex items-center space-x-2">
+                            <div class="absolute top-3 md:top-6 right-3 md:right-6">
+                                <span class="px-2 md:px-3 py-1 md:py-2 bg-black bg-opacity-50 text-white rounded-full text-xs md:text-sm flex items-center space-x-1 md:space-x-2">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -55,14 +55,14 @@
                     @endif
 
                     <!-- Article Content -->
-                    <div class="p-8 lg:p-12">
+                    <div class="p-4 md:p-8 lg:p-12">
                         <!-- Title -->
-                        <h1 class="text-3xl lg:text-4xl font-bold text-heading mb-6 leading-tight">
+                        <h1 class="text-xl md:text-3xl lg:text-4xl font-bold text-heading mb-4 md:mb-6 leading-tight">
                             {{ $berita->judul }}
                         </h1>
 
                         <!-- Meta Information -->
-                        <div class="flex flex-wrap items-center gap-6 mb-8 text-sm text-muted">
+                        <div class="flex flex-wrap items-center gap-3 md:gap-6 mb-6 md:mb-8 text-xs md:text-sm text-muted">
                             <div class="flex items-center space-x-2">
                                 <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -86,14 +86,14 @@
                         </div>
 
                         <!-- Article Content -->
-                        <div class="prose prose-lg max-w-none text-body leading-relaxed">
+                        <div class="prose prose-sm md:prose-lg max-w-none text-body leading-relaxed">
                             {!! $berita->konten ?? $berita->isi !!}
                         </div>
                         
                         <!-- Social Share -->
-                        <div class="mt-12 pt-8 border-t border-primary-100">
-                            <h4 class="text-lg font-semibold text-heading mb-4">📢 Bagikan Berita Ini</h4>
-                            <div class="flex flex-wrap gap-3">
+                        <div class="mt-8 md:mt-12 pt-6 md:pt-8 border-t border-primary-100">
+                            <h4 class="text-base md:text-lg font-semibold text-heading mb-3 md:mb-4">📢 Bagikan Berita Ini</h4>
+                            <div class="flex flex-wrap gap-2 md:gap-3">
                                 <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}" 
                                    target="_blank"
                                    class="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
@@ -120,13 +120,13 @@
 
                 <!-- Berita Terkait -->
                 @if($beritaTerkait->count() > 0)
-                <section class="mt-12">
-                    <h2 class="text-2xl font-bold text-heading mb-8 flex items-center">
-                        <span class="text-3xl mr-3">📰</span>
+                <section class="mt-8 md:mt-12">
+                    <h2 class="text-xl md:text-2xl font-bold text-heading mb-4 md:mb-8 flex items-center">
+                        <span class="text-2xl md:text-3xl mr-2 md:mr-3">📰</span>
                         Berita Terkait
                     </h2>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         @foreach($beritaTerkait as $item)
                             <article class="card-bg rounded-xl overflow-hidden shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 group">
                                 <a href="{{ route('berita.show', $item->id) }}" class="block">
@@ -159,11 +159,11 @@
             </main>
 
             <!-- Sidebar -->
-            <aside class="space-y-8">
+            <aside class="space-y-6 md:space-y-8 mt-8 lg:mt-0">
                 <!-- Berita Terbaru -->
-                <div class="card-bg rounded-2xl p-6">
-                    <h3 class="text-xl font-bold text-heading mb-6 flex items-center">
-                        <span class="text-2xl mr-2">🔥</span>
+                <div class="card-bg rounded-xl md:rounded-2xl p-4 md:p-6">
+                    <h3 class="text-lg md:text-xl font-bold text-heading mb-4 md:mb-6 flex items-center">
+                        <span class="text-xl md:text-2xl mr-2">🔥</span>
                         Berita Terbaru
                     </h3>
 

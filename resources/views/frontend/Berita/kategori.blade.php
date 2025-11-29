@@ -2,11 +2,11 @@
 
 @section('content')
 <!-- Hero Section dengan Background Gradient -->
-<div class="section-bg-primary py-16">
+<div class="section-bg-primary py-8 md:py-16">
     <div class="container mx-auto px-4 lg:px-8">
         <!-- Breadcrumb -->
-        <nav class="mb-8" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-sm">
+        <nav class="mb-4 md:mb-8" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2 text-xs md:text-sm">
                 <li><a href="{{ route('home') }}" class="text-primary-600 hover:text-primary-700 transition-colors">Beranda</a></li>
                 <li class="text-primary-400">/</li>
                 <li><a href="{{ route('berita.index') }}" class="text-primary-600 hover:text-primary-700 transition-colors">Berita</a></li>
@@ -16,43 +16,43 @@
         </nav>
 
         <!-- Page Title -->
-        <div class="text-center mb-12">
-            <h1 class="text-4xl lg:text-5xl font-bold text-heading mb-4">
+        <div class="text-center mb-6 md:mb-12">
+            <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold text-heading mb-2 md:mb-4">
                 📂 Kategori: {{ ucfirst($kategori) }}
             </h1>
-            <p class="text-lg text-body max-w-2xl mx-auto leading-relaxed">
+            <p class="text-sm md:text-lg text-body max-w-2xl mx-auto leading-relaxed px-4">
                 Semua berita dalam kategori <strong>{{ ucfirst($kategori) }}</strong>
             </p>
         </div>
 
         <!-- Statistik Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            <div class="stat-card text-center">
-                <div class="stat-number">{{ $totalBerita }}</div>
-                <div class="stat-label">Berita {{ ucfirst($kategori) }}</div>
+        <div class="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-12">
+            <div class="stat-card text-center p-4 md:p-6">
+                <div class="text-2xl md:text-4xl font-bold mb-1 md:mb-2">{{ $totalBerita }}</div>
+                <div class="text-xs md:text-base">Berita {{ ucfirst($kategori) }}</div>
             </div>
-            <div class="stat-card text-center">
-                <div class="stat-number">{{ $berita->count() }}</div>
-                <div class="stat-label">Ditampilkan</div>
+            <div class="stat-card text-center p-4 md:p-6">
+                <div class="text-2xl md:text-4xl font-bold mb-1 md:mb-2">{{ $berita->count() }}</div>
+                <div class="text-xs md:text-base">Ditampilkan</div>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Content Section -->
-<div class="bg-white py-16">
+<div class="bg-white py-8 md:py-16">
     <div class="container mx-auto px-4 lg:px-8">
         
         <!-- Filter Search -->
-        <div class="card-bg p-6 rounded-2xl mb-12">
-            <h3 class="text-xl font-semibold text-heading mb-6 flex items-center">
-                <svg class="w-6 h-6 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="card-bg p-4 md:p-6 rounded-xl md:rounded-2xl mb-6 md:mb-12">
+            <h3 class="text-base md:text-xl font-semibold text-heading mb-4 md:mb-6 flex items-center">
+                <svg class="w-5 h-5 md:w-6 md:h-6 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
                 Filter & Pencarian
             </h3>
             
-            <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                 <div class="relative">
                     <input 
                         type="text" 
@@ -100,16 +100,16 @@
 
         @if($berita->count() > 0)
             <!-- Berita Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8 mb-6 md:mb-12">
                 @foreach($berita as $item)
-                    <article class="card-bg rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition-all duration-300 group">
+                    <article class="card-bg rounded-xl md:rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition-all duration-300 group">
                         <a href="{{ route('berita.show', $item->id) }}" class="block">
                             <!-- Image -->
                             <div class="relative overflow-hidden">
                                 @if ($item->gambar_url)
                                     <img src="{{ $item->image_url }}" 
                                          alt="{{ $item->judul }}"
-                                         class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                                         class="w-full h-32 md:h-48 object-cover group-hover:scale-110 transition-transform duration-500">
                                 @else
                                     <div class="w-full h-56 bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center">
                                         <svg class="w-16 h-16 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,34 +131,35 @@
                             </div>
 
                             <!-- Content -->
-                            <div class="p-6">
-                                <h3 class="text-xl font-bold text-heading mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">
+                            <div class="p-2 md:p-6">
+                                <h3 class="text-xs md:text-xl font-bold text-heading mb-1 md:mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors leading-tight">
                                     {{ $item->judul }}
                                 </h3>
 
-                                <p class="text-body text-sm leading-relaxed mb-4 line-clamp-3">
+                                <p class="text-body text-xs md:text-sm leading-relaxed mb-2 md:mb-4 line-clamp-2 md:line-clamp-3 hidden sm:block">
                                     {{ strip_tags(Str::limit($item->konten ?? $item->isi, 120)) }}
                                 </p>
 
                                 <!-- Meta Info -->
                                 <div class="flex items-center justify-between text-xs text-muted">
-                                    <div class="flex items-center space-x-3">
-                                        <span class="flex items-center space-x-1">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                                        <span class="flex items-center space-x-1 hidden sm:flex">
+                                            <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                             </svg>
-                                            <span>{{ $item->penulis }}</span>
+                                            <span class="truncate">{{ $item->penulis }}</span>
                                         </span>
                                         <span class="flex items-center space-x-1">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                             </svg>
-                                            <span>{{ $item->created_at?->translatedFormat('d M Y') }}</span>
+                                            <span class="hidden sm:inline">{{ $item->created_at?->translatedFormat('d M Y') }}</span>
+                                            <span class="sm:hidden text-[10px]">{{ $item->created_at?->translatedFormat('d M') }}</span>
                                         </span>
                                     </div>
                                     
-                                    <span class="text-primary-600 font-medium group-hover:text-primary-700">
-                                        Baca Selengkapnya →
+                                    <span class="text-primary-600 font-medium group-hover:text-primary-700 hidden md:inline">
+                                        Baca →
                                     </span>
                                 </div>
                             </div>

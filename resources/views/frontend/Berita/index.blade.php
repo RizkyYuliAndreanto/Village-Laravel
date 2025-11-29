@@ -2,11 +2,11 @@
 
 @section('content')
 <!-- Hero Section dengan Background Gradient -->
-<div class="section-bg-primary py-16">
+<div class="section-bg-primary py-8 md:py-16">
     <div class="container mx-auto px-4 lg:px-8">
         <!-- Breadcrumb -->
-        <nav class="mb-8" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-sm">
+        <nav class="mb-4 md:mb-8" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2 text-xs md:text-sm">
                 <li><a href="{{ route('home') }}" class="text-primary-600 hover:text-primary-700 transition-colors">Beranda</a></li>
                 <li class="text-primary-400">/</li>
                 <li class="text-primary-800 font-medium">Berita</li>
@@ -14,47 +14,47 @@
         </nav>
 
         <!-- Page Title -->
-        <div class="text-center mb-12">
-            <h1 class="text-4xl lg:text-5xl font-bold text-heading mb-4">
+        <div class="text-center mb-6 md:mb-12">
+            <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold text-heading mb-2 md:mb-4">
                 📰 Berita Desa
             </h1>
-            <p class="text-lg text-body max-w-2xl mx-auto leading-relaxed">
+            <p class="text-sm md:text-lg text-body max-w-2xl mx-auto leading-relaxed px-4">
                 Informasi terbaru seputar desa, pengumuman penting, dan kegiatan masyarakat yang dapat Anda ikuti.
             </p>
         </div>
 
         <!-- Statistik Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div class="stat-card text-center">
-                <div class="stat-number">{{ $totalBerita }}</div>
-                <div class="stat-label">Total Berita</div>
+        <div class="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6 mb-6 md:mb-12">
+            <div class="stat-card text-center p-3 md:p-6">
+                <div class="text-2xl md:text-4xl font-bold mb-1 md:mb-2">{{ $totalBerita }}</div>
+                <div class="text-xs md:text-base">Total Berita</div>
             </div>
-            <div class="stat-card text-center">
-                <div class="stat-number">{{ $beritaBulanIni }}</div>
-                <div class="stat-label">Berita Bulan Ini</div>
+            <div class="stat-card text-center p-3 md:p-6">
+                <div class="text-2xl md:text-4xl font-bold mb-1 md:mb-2">{{ $beritaBulanIni }}</div>
+                <div class="text-xs md:text-base">Bulan Ini</div>
             </div>
-            <div class="stat-card text-center">
-                <div class="stat-number">{{ $kategoris->count() }}</div>
-                <div class="stat-label">Kategori Berita</div>
+            <div class="stat-card text-center p-3 md:p-6">
+                <div class="text-2xl md:text-4xl font-bold mb-1 md:mb-2">{{ $kategoris->count() }}</div>
+                <div class="text-xs md:text-base">Kategori</div>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Content Section -->
-<div class="bg-white py-16">
+<div class="bg-white py-8 md:py-16">
     <div class="container mx-auto px-4 lg:px-8">
         
         <!-- Filter Search -->
-        <div class="card-bg p-6 rounded-2xl mb-12">
-            <h3 class="text-xl font-semibold text-heading mb-6 flex items-center">
-                <svg class="w-6 h-6 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="card-bg p-4 md:p-6 rounded-2xl mb-6 md:mb-12">
+            <h3 class="text-base md:text-xl font-semibold text-heading mb-4 md:mb-6 flex items-center">
+                <svg class="w-5 h-5 md:w-6 md:h-6 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
                 Filter & Pencarian
             </h3>
             
-            <form method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <form method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
                 <div class="relative">
                     <input 
                         type="text" 
@@ -77,7 +77,7 @@
                     @endforeach
                 </select>
 
-                <select name="tahun" class="border-2 border-primary-200 rounded-xl px-4 py-3 focus:border-primary-500 focus:ring-0 transition-colors">
+                <select name="tahun" class="text-sm md:text-base border-2 border-primary-200 rounded-xl px-3 md:px-4 py-2 md:py-3 focus:border-primary-500 focus:ring-0 transition-colors">
                     <option value="">📅 Semua Tahun</option>
                     @foreach($tahuns as $th)
                         <option value="{{ $th }}" {{ $tahun == $th ? 'selected' : '' }}>
@@ -86,7 +86,7 @@
                     @endforeach
                 </select>
 
-                <select name="bulan" class="border-2 border-primary-200 rounded-xl px-4 py-3 focus:border-primary-500 focus:ring-0 transition-colors">
+                <select name="bulan" class="text-sm md:text-base border-2 border-primary-200 rounded-xl px-3 md:px-4 py-2 md:py-3 focus:border-primary-500 focus:ring-0 transition-colors">
                     <option value="">🗓️ Semua Bulan</option>
                     @for($b = 1; $b <= 12; $b++)
                         <option value="{{ $b }}" {{ $bulan == $b ? 'selected' : '' }}>
@@ -95,8 +95,8 @@
                     @endfor
                 </select>
 
-                <button type="submit" class="btn-primary flex items-center justify-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all hover:scale-105">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button type="submit" class="btn-primary flex items-center justify-center space-x-2 px-4 md:px-6 py-2 md:py-3 rounded-xl text-sm md:text-base font-medium transition-all hover:scale-105">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                     <span>Cari</span>
@@ -121,34 +121,34 @@
 
         @if($berita->count() > 0)
             <!-- Berita Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8 mb-6 md:mb-12">
                 @foreach($berita as $item)
-                    <article class="card-bg rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition-all duration-300 group">
+                    <article class="card-bg rounded-xl md:rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition-all duration-300 group">
                         <a href="{{ route('berita.show', $item->id) }}" class="block">
                             <!-- Image -->
                             <div class="relative overflow-hidden">
                                 @if ($item->gambar_url)
                                     <img src="{{ $item->image_url }}" 
                                          alt="{{ $item->judul }}"
-                                         class="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500">
+                                         class="w-full h-32 md:h-56 object-cover group-hover:scale-110 transition-transform duration-500">
                                 @else
-                                    <div class="w-full h-56 bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center">
-                                        <svg class="w-16 h-16 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-full h-32 md:h-56 bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center">
+                                        <svg class="w-10 h-10 md:w-16 md:h-16 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
                                         </svg>
                                     </div>
                                 @endif
                                 
                                 <!-- Kategori Badge -->
-                                <div class="absolute top-4 left-4">
-                                    <span class="px-3 py-1 text-xs font-medium bg-primary-500 text-white rounded-full shadow-lg">
-                                        📂 {{ ucfirst($item->kategori) }}
+                                <div class="absolute top-2 md:top-4 left-2 md:left-4">
+                                    <span class="px-2 md:px-3 py-0.5 md:py-1 text-xs font-medium bg-primary-500 text-white rounded-full shadow-lg">
+                                        <span class="hidden sm:inline">📂 </span>{{ ucfirst($item->kategori) }}
                                     </span>
                                 </div>
                                 
                                 <!-- Views Badge -->
-                                <div class="absolute top-4 right-4">
-                                    <span class="px-2 py-1 text-xs bg-black bg-opacity-50 text-white rounded-full flex items-center space-x-1">
+                                <div class="absolute top-2 md:top-4 right-2 md:right-4">
+                                    <span class="px-2 py-0.5 md:py-1 text-xs bg-black bg-opacity-50 text-white rounded-full flex items-center space-x-1">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -159,34 +159,35 @@
                             </div>
 
                             <!-- Content -->
-                            <div class="p-6">
-                                <h3 class="text-xl font-bold text-heading mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">
+                            <div class="p-2 md:p-6">
+                                <h3 class="text-xs md:text-xl font-bold text-heading mb-1 md:mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors leading-tight">
                                     {{ $item->judul }}
                                 </h3>
 
-                                <p class="text-body text-sm leading-relaxed mb-4 line-clamp-3">
+                                <p class="text-body text-xs md:text-sm leading-relaxed mb-2 md:mb-4 line-clamp-2 md:line-clamp-3 hidden sm:block">
                                     {{ strip_tags(Str::limit($item->konten ?? $item->isi, 120)) }}
                                 </p>
 
                                 <!-- Meta Info -->
                                 <div class="flex items-center justify-between text-xs text-muted">
-                                    <div class="flex items-center space-x-3">
-                                        <span class="flex items-center space-x-1">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                                        <span class="flex items-center space-x-1 hidden sm:flex">
+                                            <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                             </svg>
-                                            <span>{{ $item->penulis }}</span>
+                                            <span class="truncate max-w-[80px] md:max-w-none">{{ $item->penulis }}</span>
                                         </span>
                                         <span class="flex items-center space-x-1">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                             </svg>
-                                            <span>{{ $item->created_at?->translatedFormat('d M Y') }}</span>
+                                            <span class="hidden sm:inline">{{ $item->created_at?->translatedFormat('d M Y') }}</span>
+                                            <span class="sm:hidden text-[10px]">{{ $item->created_at?->translatedFormat('d M') }}</span>
                                         </span>
                                     </div>
                                     
-                                    <span class="text-primary-600 font-medium group-hover:text-primary-700">
-                                        Baca Selengkapnya →
+                                    <span class="text-primary-600 font-medium group-hover:text-primary-700 text-xs md:text-sm hidden md:inline">
+                                        Baca →
                                     </span>
                                 </div>
                             </div>

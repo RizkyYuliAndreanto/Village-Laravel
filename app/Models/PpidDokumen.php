@@ -54,12 +54,12 @@ class PpidDokumen extends Model
         if (empty($value)) {
             return null;
         }
-        
+
         // Jika sudah full URL, return langsung
         if (str_starts_with($value, 'http')) {
             return $value;
         }
-        
+
         // Jika path relatif, buat full URL
         return asset('storage/' . $value);
     }

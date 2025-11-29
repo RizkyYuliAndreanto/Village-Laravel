@@ -108,7 +108,7 @@ class PpidDokumenResource extends Resource
                                 $info = "📄 Judul: " . ($judul ?: 'Belum diisi') . "\n";
                                 $info .= "📂 Kategori: " . ($kategori ? PpidDokumen::getKategoriOptions()[$kategori] : 'Belum dipilih') . "\n";
                                 $info .= "📅 Tahun: " . ($tahun ?: 'Belum diisi') . "\n";
-                                
+
                                 // Handle file_url yang bisa berupa array atau string
                                 if (is_array($fileUrl) && count($fileUrl) > 0 && isset($fileUrl[0]) && !empty($fileUrl[0])) {
                                     $fileName = is_string($fileUrl[0]) ? basename($fileUrl[0]) : 'file.pdf';

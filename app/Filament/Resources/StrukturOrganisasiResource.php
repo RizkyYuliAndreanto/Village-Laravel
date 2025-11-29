@@ -68,14 +68,7 @@ class StrukturOrganisasiResource extends Resource
                             ->visibility('public')
                             ->disk(config('media.default_disk', 'local'))
                             ->helperText('Upload foto profil (JPG, PNG). Maksimal 2MB. Rasio yang disarankan 3:4.')
-                            ->columnSpanFull()
-                            ->afterStateUpdated(function ($state, callable $set) {
-                                if ($state) {
-                                    $mediaService = app(MediaStorageService::class);
-                                    $url = $mediaService->url($state);
-                                    $set('foto_url', $url);
-                                }
-                            }),
+                            ->columnSpanFull(),
                     ])
                     ->columns(1),
 
@@ -101,9 +94,19 @@ class StrukturOrganisasiResource extends Resource
                                 $foto = $get('foto_url');
                                 $keterangan = $get('keterangan');
 
+                                // Safe handling for foto_url which might be array or string
+                                $fotoStatus = 'Belum diupload';
+                                if (!empty($foto)) {
+                                    if (is_array($foto) && count($foto) > 0 && isset($foto[0]) && !empty($foto[0])) {
+                                        $fotoStatus = 'Sudah diupload';
+                                    } elseif (is_string($foto) && !empty($foto)) {
+                                        $fotoStatus = 'Sudah diupload';
+                                    }
+                                }
+
                                 $info = "👤 Nama: " . ($nama ?: 'Belum diisi') . "\n";
                                 $info .= "💼 Jabatan: " . ($jabatan ?: 'Belum diisi') . "\n";
-                                $info .= "📷 Foto: " . ($foto ? 'Sudah diupload' : 'Belum diupload') . "\n";
+                                $info .= "📷 Foto: " . $fotoStatus . "\n";
                                 $info .= "📝 Keterangan: " . ($keterangan ? 'Ada' : 'Tidak ada');
 
                                 return $info;
@@ -123,7 +126,7 @@ class StrukturOrganisasiResource extends Resource
                     ->label('Foto')
                     ->circular()
                     ->size(60)
-                    ->defaultImageUrl(asset('images/default-avatar.png')),
+                    ->defaultImageUrl(asset('images/logo-placeholder.jpg')),
 
                 Tables\Columns\TextColumn::make('nama')
                     ->label('Nama Lengkap')

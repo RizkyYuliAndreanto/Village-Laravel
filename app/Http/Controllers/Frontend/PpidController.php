@@ -33,11 +33,11 @@ class PpidController extends Controller
 
         // Query dokumen PPID
         $dokumen = PpidDokumen::when($search, function ($query, $search) {
-                return $query->where(function ($q) use ($search) {
-                    $q->where('judul_dokumen', 'like', "%{$search}%")
-                        ->orWhere('uploader', 'like', "%{$search}%");
-                });
-            })
+            return $query->where(function ($q) use ($search) {
+                $q->where('judul_dokumen', 'like', "%{$search}%")
+                    ->orWhere('uploader', 'like', "%{$search}%");
+            });
+        })
             ->when($kategori, function ($query, $kategori) {
                 return $query->where('kategori', $kategori);
             })
@@ -251,7 +251,7 @@ class PpidController extends Controller
 
         // Get the storage path
         $storagePath = storage_path('app/public/' . str_replace('ppid-dokumen/', 'ppid-dokumen/', $dokumen->getAttributes()['file_url']));
-        
+
         if (file_exists($storagePath)) {
             return response()->download(
                 $storagePath,
