@@ -53,8 +53,8 @@ RUN echo "=== Checking Filament Resources structure ===" \
     && ls -la /var/www/html/app/Filament/Resources/ \
     && echo "=== Checking DetailApbdes directory ===" \
     && ls -la /var/www/html/app/Filament/Resources/DetailApbdes/ \
-    && echo "=== Checking DetailApbdes Pages directory ===" \
-    && ls -la /var/www/html/app/Filament/Resources/DetailApbdes/Pages/ \
+    && echo "=== Checking DetailApbdes pages directory (lowercase) ===" \
+    && ls -la /var/www/html/app/Filament/Resources/DetailApbdes/pages/ \
     && echo "=== Files verification completed ==="
 
 # Install PHP dependencies

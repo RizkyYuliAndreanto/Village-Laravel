@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\DetailApbdes\Pages;
+namespace App\Filament\Resources\DetailApbdes\pages;
 
 use App\Filament\Resources\DetailApbdesResource;
 use Filament\Actions\DeleteAction;

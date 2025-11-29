@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DetailApbdes\Pages;
+use App\Filament\Resources\DetailApbdes\pages;
 use App\Models\DetailApbdes;
 use BackedEnum;
 use Filament\Forms;
@@ -211,9 +211,9 @@ class DetailApbdesResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDetailApbdes::route('/'),
-            'create' => Pages\CreateDetailApbdes::route('/create'),
-            'edit' => Pages\EditDetailApbdes::route('/{record}/edit'),
+            'index' => pages\ListDetailApbdes::route('/'),
+            'create' => pages\CreateDetailApbdes::route('/create'),
+            'edit' => pages\EditDetailApbdes::route('/{record}/edit'),
         ];
     }
 
