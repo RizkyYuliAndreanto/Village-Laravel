@@ -64,11 +64,21 @@ class SecurityServiceProvider extends ServiceProvider
      */
     protected function configureSecureSessions(): void
     {
+        // Skip session configuration during build process
+        if ($this->app->runningInConsole() || !function_exists('session_status') || session_status() === PHP_SESSION_ACTIVE) {
+            return;
+        }
+
         if ($this->app->environment('production')) {
-            ini_set('session.cookie_secure', '1');
-            ini_set('session.cookie_httponly', '1');
-            ini_set('session.cookie_samesite', 'Strict');
-            ini_set('session.use_strict_mode', '1');
+            try {
+                ini_set('session.cookie_secure', '1');
+                ini_set('session.cookie_httponly', '1');
+                ini_set('session.cookie_samesite', 'Strict');
+                ini_set('session.use_strict_mode', '1');
+            } catch (\Exception $e) {
+                // Skip if headers already sent or session active
+                Log::debug('Could not set session configuration: ' . $e->getMessage());
+            }
         }
     }
 

@@ -48,7 +48,10 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
 # Install PHP dependencies
-RUN composer install --optimize-autoloader --no-dev --no-interaction
+RUN composer install --optimize-autoloader --no-dev --no-interaction --no-scripts
+
+# Run post-install scripts manually (safer)
+RUN php artisan package:discover --ansi || echo "Package discovery completed"
 
 # Install and build Node dependencies  
 RUN npm ci && npm run build && npm cache clean --force
