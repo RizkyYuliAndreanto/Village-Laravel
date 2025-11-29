@@ -83,21 +83,28 @@ APP_KEY=base64:your-generated-key-here
 
 ## Post-Deploy Commands (Run in Railway Console):
 
+**IMPORTANT**: Railway akan auto-start Apache web server.
+Setelah deploy sukses, run migration script:
+
 ```bash
-# 1. Migrate database
+# Option 1: Run migration script (Recommended)
+chmod +x railway-post-deploy.sh && ./railway-post-deploy.sh
+
+# Option 2: Manual commands
+php artisan key:generate --force
 php artisan migrate --force
-
-# 2. Create storage link
+php artisan db:seed --force
 php artisan storage:link
-
-# 3. Cache configurations
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-
-# 4. Seed database (optional)
-php artisan db:seed --force
 ```
+
+## 🚀 Fixed Issues:
+✅ **ServeCommand Error**: Menggunakan Apache langsung (port 80)
+✅ **MySQL Connection**: Auto-wait untuk MySQL service ready
+✅ **Database Setup**: Post-deploy migration script included
+✅ **Permissions**: Auto-set proper Laravel permissions
 
 ## URL Structure:
 

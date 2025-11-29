@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libicu-dev \
     default-mysql-client \
+    netcat-traditional \
     zip \
     unzip \
     nodejs \
@@ -67,8 +68,57 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
+# Create Apache virtual host for Laravel
+RUN echo '<VirtualHost *:80>\n\
+    DocumentRoot /var/www/html/public\n\
+    <Directory /var/www/html/public>\n\
+        AllowOverride All\n\
+        Require all granted\n\
+        DirectoryIndex index.php\n\
+    </Directory>\n\
+    ErrorLog ${APACHE_LOG_DIR}/error.log\n\
+    CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
+</VirtualHost>' > /etc/apache2/sites-available/000-default.conf
+
 # Expose port
 EXPOSE 80
 
-# Start Apache
-CMD ["apache2-foreground"]
+# Create startup script for Railway
+RUN echo '#!/bin/bash\n\
+# Wait for MySQL if using Railway MySQL\n\
+if [ ! -z "$MYSQLHOST" ]; then\n\
+    echo "Waiting for MySQL..."\n\
+    timeout=30\n\
+    while [ $timeout -gt 0 ]; do\n\
+        if nc -z "$MYSQLHOST" "$MYSQLPORT"; then\n\
+            echo "MySQL is up!"\n\
+            break\n\
+        fi\n\
+        echo "MySQL is unavailable - sleeping ($timeout seconds left)"\n\
+        sleep 1\n\
+        timeout=$((timeout-1))\n\
+    done\n\
+    if [ $timeout -eq 0 ]; then\n\
+        echo "MySQL connection timeout - continuing anyway"\n\
+    fi\n\
+fi\n\
+\n\
+# Run Laravel optimizations\n\
+php artisan config:cache || echo "Config cache failed"\n\
+php artisan route:cache || echo "Route cache failed"\n\
+php artisan view:cache || echo "View cache failed"\n\
+\n\
+# Create storage link if not exists\n\
+php artisan storage:link || echo "Storage link exists"\n\
+\n\
+# Set proper permissions\n\
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache\n\
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache\n\
+\n\
+# Start Apache in foreground\n\
+apache2-foreground' > /usr/local/bin/start.sh
+
+RUN chmod +x /usr/local/bin/start.sh
+
+# Start with custom script
+CMD ["/usr/local/bin/start.sh"]
