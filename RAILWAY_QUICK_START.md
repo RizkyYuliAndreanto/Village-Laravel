@@ -1,5 +1,11 @@
 # 🚀 Railway Quick Deploy Script
 
+## ⚠️ DEPENDENCY FIX APPLIED:
+✅ Laravel Framework downgraded to v11.0 (from v12.0) for stability
+✅ Filament updated to v3.2 for compatibility
+✅ PHP Extensions (intl) configured via nixpacks.toml
+✅ composer.lock removed for fresh dependency resolution
+
 ## Copy-Paste Commands untuk Railway Environment Variables:
 
 ```bash
@@ -33,6 +39,7 @@ PORT=8080
 ```
 
 ## Generate APP_KEY:
+
 ```bash
 # Run this locally to get APP_KEY:
 php artisan key:generate --show
@@ -42,6 +49,7 @@ APP_KEY=base64:your-generated-key-here
 ```
 
 ## Post-Deploy Commands (Run in Railway Console):
+
 ```bash
 # 1. Migrate database
 php artisan migrate --force
@@ -59,17 +67,19 @@ php artisan db:seed --force
 ```
 
 ## URL Structure:
-- **Main App**: `https://your-app-name.up.railway.app`
-- **Admin Panel**: `https://your-app-name.up.railway.app/admin`
-- **APBDes**: `https://your-app-name.up.railway.app/apbdes`
-- **PPID**: `https://your-app-name.up.railway.app/ppid`
+
+-   **Main App**: `https://your-app-name.up.railway.app`
+-   **Admin Panel**: `https://your-app-name.up.railway.app/admin`
+-   **APBDes**: `https://your-app-name.up.railway.app/apbdes`
+-   **PPID**: `https://your-app-name.up.railway.app/ppid`
 
 ## Testing Checklist:
-- [ ] Homepage loads
-- [ ] Mobile responsive working
-- [ ] APBDes horizontal layout active
-- [ ] PPID cards working
-- [ ] Admin login functional
-- [ ] Database connected
+
+-   [ ] Homepage loads
+-   [ ] Mobile responsive working
+-   [ ] APBDes horizontal layout active
+-   [ ] PPID cards working
+-   [ ] Admin login functional
+-   [ ] Database connected
 
 Ready for Railway! 🎉
