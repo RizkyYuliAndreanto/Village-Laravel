@@ -48,7 +48,7 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Verify important directories and files are copied correctly
+# Verify important directories and files
 RUN echo "=== Checking Filament Resources structure ===" \
     && ls -la /var/www/html/app/Filament/Resources/ \
     && echo "=== Checking DetailApbdes directory ===" \
@@ -60,15 +60,14 @@ RUN echo "=== Checking Filament Resources structure ===" \
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction --no-scripts
 
-# Clear any cached autoload files and regenerate completely
+# Regenerate autoload
 RUN rm -rf vendor/composer/autoload_*.php bootstrap/cache/packages.php bootstrap/cache/services.php \
     && composer dump-autoload --optimize --no-scripts
 
-# Verify the classes can be found
-RUN php -c "echo 'Testing class autoload...';" \
-    && php -r "require 'vendor/autoload.php'; echo class_exists('App\\Filament\\Resources\\DetailApbdes\\Pages\\ListDetailApbdes') ? 'ListDetailApbdes: OK' : 'ListDetailApbdes: MISSING'; echo PHP_EOL;"
+# Verify autoload
+RUN php -r "require 'vendor/autoload.php'; echo class_exists('App\\Filament\\Resources\\DetailApbdes\\Pages\\ListDetailApbdes') ? 'ListDetailApbdes: OK' : 'ListDetailApbdes: MISSING'; echo PHP_EOL;"
 
-# Run package discovery safely in production mode
+# Package discovery
 RUN APP_ENV=production php artisan package:discover --ansi || echo "Package discovery completed with warnings"
 
 # Install and build Node dependencies  
@@ -97,16 +96,21 @@ RUN echo '<VirtualHost *:80>\n\
     CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
+# =========================
+# FIX Apache ServerName warning
+# =========================
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 # Expose port
 EXPOSE 80
 
-# Set environment variables to prevent artisan serve detection
+# Disable artisan serve
 ENV LARAVEL_SERVE_DISABLED=true
 ENV DISABLE_SERVE_COMMAND=true
 ENV USE_APACHE_ONLY=true
 ENV APP_ENV=production
 
-# Create startup script for Railway
+# Startup script for Railway
 RUN echo '#!/bin/bash\n\
 # Wait for MySQL if using Railway MySQL\n\
 if [ ! -z "$MYSQLHOST" ]; then\n\
@@ -126,22 +130,17 @@ if [ ! -z "$MYSQLHOST" ]; then\n\
     fi\n\
 fi\n\
 \n\
-# Run Laravel optimizations\n\
 php artisan config:cache || echo "Config cache failed"\n\
 php artisan route:cache || echo "Route cache failed"\n\
 php artisan view:cache || echo "View cache failed"\n\
 \n\
-# Create storage link if not exists\n\
 php artisan storage:link || echo "Storage link exists"\n\
 \n\
-# Set proper permissions\n\
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache\n\
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache\n\
 \n\
-# Start Apache in foreground\n\
 apache2-foreground' > /usr/local/bin/start.sh
 
 RUN chmod +x /usr/local/bin/start.sh
 
-# Start with custom script
 CMD ["/usr/local/bin/start.sh"]
