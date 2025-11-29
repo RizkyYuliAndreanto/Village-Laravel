@@ -1,10 +1,17 @@
 # 🚀 Railway Quick Deploy Script
 
-## ⚠️ DEPENDENCY FIX APPLIED:
+## ⚠️ DEPENDENCY FIXES APPLIED:
 ✅ Laravel Framework downgraded to v11.0 (from v12.0) for stability
 ✅ Filament updated to v3.2 for compatibility
-✅ PHP Extensions (intl) configured via nixpacks.toml
+✅ **DOCKER DEPLOYMENT**: Using custom Dockerfile instead of nixpacks
+✅ All PHP extensions (zip, intl, pdo_pgsql, etc.) included in Docker image
 ✅ composer.lock removed for fresh dependency resolution
+
+## 🐳 Docker-Based Deployment:
+- **Builder**: DOCKERFILE (instead of NIXPACKS) 
+- **Base Image**: PHP 8.2 with Apache
+- **Extensions**: zip, intl, pdo_pgsql, gd, mbstring, xml, curl, etc.
+- **Port**: 80 (Apache default)
 
 ## Copy-Paste Commands untuk Railway Environment Variables:
 
