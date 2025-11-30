@@ -184,7 +184,10 @@ class UmkmSeeder extends Seeder
         ];
 
         foreach ($umkmData as $data) {
-            Umkm::create($data);
+            // Cek apakah slug sudah ada di database
+            if (!Umkm::where('slug', $data['slug'])->exists()) {
+                Umkm::create($data);
+            }
         }
     }
 }

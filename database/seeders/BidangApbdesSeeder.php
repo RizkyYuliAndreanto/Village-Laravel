@@ -13,15 +13,17 @@ class BidangApbdesSeeder extends Seeder
      */
     public function run(): void
     {
-        // Data Bidang Pendapatan
-        $pendapatan = BidangApbdes::create([
-            'kode_bidang' => 'PDD01',
-            'nama_bidang' => 'Pendapatan Desa',
-            'kategori' => 'pendapatan',
-            'deskripsi' => 'Semua jenis pendapatan desa',
-            'urutan' => 1,
-            'is_active' => true,
-        ]);
+        $pendapatan = BidangApbdes::where('kode_bidang', 'PDD01')->first();
+        if (!$pendapatan) {
+            $pendapatan = BidangApbdes::create([
+                'kode_bidang' => 'PDD01',
+                'nama_bidang' => 'Pendapatan Desa',
+                'kategori' => 'pendapatan',
+                'deskripsi' => 'Semua jenis pendapatan desa',
+                'urutan' => 1,
+                'is_active' => true,
+            ]);
+        }
 
         // Sub bidang pendapatan
         SubBidangApbdes::create([
@@ -75,24 +77,28 @@ class BidangApbdesSeeder extends Seeder
         ];
 
         foreach ($bidangBelanja as $bidang) {
-            BidangApbdes::create([
-                'kode_bidang' => $bidang['kode'],
-                'nama_bidang' => $bidang['nama'],
-                'kategori' => 'belanja',
-                'deskripsi' => "Belanja untuk {$bidang['nama']}",
-                'urutan' => $bidang['urutan'] + 1, // +1 karena pendapatan urutan 1
-                'is_active' => true,
-            ]);
+            if (!BidangApbdes::where('kode_bidang', $bidang['kode'])->exists()) {
+                BidangApbdes::create([
+                    'kode_bidang' => $bidang['kode'],
+                    'nama_bidang' => $bidang['nama'],
+                    'kategori' => 'belanja',
+                    'deskripsi' => "Belanja untuk {$bidang['nama']}",
+                    'urutan' => $bidang['urutan'] + 1, // +1 karena pendapatan urutan 1
+                    'is_active' => true,
+                ]);
+            }
         }
 
         // Bidang Pembiayaan (opsional)
-        BidangApbdes::create([
-            'kode_bidang' => 'PMB01',
-            'nama_bidang' => 'Pembiayaan Desa',
-            'kategori' => 'pembiayaan',
-            'deskripsi' => 'Penerimaan dan pengeluaran pembiayaan desa',
-            'urutan' => 7,
-            'is_active' => true,
-        ]);
+        if (!BidangApbdes::where('kode_bidang', 'PMB01')->exists()) {
+            BidangApbdes::create([
+                'kode_bidang' => 'PMB01',
+                'nama_bidang' => 'Pembiayaan Desa',
+                'kategori' => 'pembiayaan',
+                'deskripsi' => 'Penerimaan dan pengeluaran pembiayaan desa',
+                'urutan' => 7,
+                'is_active' => true,
+            ]);
+        }
     }
 }

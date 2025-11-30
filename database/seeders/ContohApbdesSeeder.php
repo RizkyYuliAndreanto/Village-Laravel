@@ -18,7 +18,7 @@ class ContohApbdesSeeder extends Seeder
         // Pastikan ada data tahun
         $tahun2025 = TahunData::firstOrCreate(['tahun' => 2025], [
             'id_tahun' => 2025,
-            'is_active' => true,
+           
         ]);
 
         // Buat laporan APBDes 2025
