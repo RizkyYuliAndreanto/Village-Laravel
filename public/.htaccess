@@ -26,15 +26,75 @@
 
 # Security Headers for shared hosting
 <IfModule mod_headers.c>
-    Header always set X-Content-Type-Options nosniff
-    Header always set X-Frame-Options DENY
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    Header always set Permissions-Policy "geolocation=(), camera=(), microphone=()"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    
+    # Cache headers for static assets
+    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$">
+        Header set Cache-Control "public, max-age=31536000"
+    </FilesMatch>
+    
+    # No cache for dynamic content
+    <FilesMatch "\.(php|html)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
 </IfModule>
 
-# Block access to sensitive files and directories
-<Files ~ "^\.">
+# Compression for shared hosting
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+    
+    # Remove browser bugs (optional)
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+    Header append Vary User-Agent
+</IfModule>
+
+# Disable server signature for security
+ServerSignature Off
+
+# Hide sensitive files
+<Files ".env">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files ".env.*">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "composer.json">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "composer.lock">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "package.json">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "*.config.js">
     Order allow,deny
     Deny from all
 </Files>
@@ -44,22 +104,37 @@
     Deny from all
 </Files>
 
-<Files ~ "\.env">
-    Order allow,deny
-    Deny from all
-</Files>
+# Prevent access to Laravel directories
+<IfModule mod_rewrite.c>
+    RewriteRule ^storage/.* - [F,L]
+    RewriteRule ^bootstrap/cache/.* - [F,L]
+    RewriteRule ^vendor/.* - [F,L]
+    RewriteRule ^config/.* - [F,L]
+    RewriteRule ^database/.* - [F,L]
+    RewriteRule ^routes/.* - [F,L]
+    RewriteRule ^tests/.* - [F,L]
+</IfModule>
 
-<Files ~ "composer\.(json|lock)">
-    Order allow,deny
-    Deny from all
-</Files>
+# File upload limits (adjust based on your hosting)
+php_value upload_max_filesize 20M
+php_value post_max_size 20M
+php_value max_execution_time 300
+php_value max_input_vars 3000
 
-# Block access to Laravel directories
-RedirectMatch 403 /\..*$
-RedirectMatch 403 /storage/.*$
-RedirectMatch 403 /bootstrap/.*$
-RedirectMatch 403 /database/.*$
-RedirectMatch 403 /vendor/.*$
-RedirectMatch 403 /config/.*$
-RedirectMatch 403 /routes/.*$
-RedirectMatch 403 /tests/.*$
+# Memory limit (adjust based on your shared hosting limits)
+php_value memory_limit 256M
+
+# Session configuration for shared hosting
+php_value session.gc_maxlifetime 7200
+php_value session.cookie_lifetime 7200
+php_value session.cookie_httponly 1
+php_value session.cookie_secure 1
+
+# Timezone (adjust for your location)
+php_value date.timezone "Asia/Jakarta"
+
+# Enable opcache if available (check with your host)
+php_value opcache.enable 1
+php_value opcache.memory_consumption 128
+php_value opcache.max_accelerated_files 4000
+php_value opcache.revalidate_freq 60

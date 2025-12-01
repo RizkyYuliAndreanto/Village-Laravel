@@ -6,11 +6,16 @@ use App\Filament\Widgets\QuickStatsWidget;
 use App\Filament\Widgets\YearFilterWidget;
 use App\Filament\Widgets\PopulationValidationChartWidget;
 use App\Filament\Widgets\YearValidationSummaryWidget;
-use Filament\Pages\Dashboard as BaseDashboard;
+use Filament\Pages\Page;
 
-class Dashboard extends BaseDashboard
+class Dashboard extends Page
 {
+    protected static ?string $navigationIcon = 'heroicon-o-home';
+    protected static string $view = 'filament.pages.dashboard';
     protected static ?string $title = 'Dashboard Validasi Populasi';
+    protected static string $routePath = '/';
+    protected static ?string $slug = 'dashboard';
+    protected static ?int $navigationSort = 1;
 
     public function getWidgets(): array
     {

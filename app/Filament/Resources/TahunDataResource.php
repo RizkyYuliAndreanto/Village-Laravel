@@ -17,7 +17,9 @@ class TahunDataResource extends Resource
 {
     protected static ?string $model = TahunData::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationGroup = 'Data Statistik';
 
     protected static ?string $navigationLabel = 'Tahun Data';
 
@@ -174,7 +176,7 @@ class TahunDataResource extends Resource
                 // TAMBAHKAN INI setelah statistik_count:
                 Tables\Columns\TextColumn::make('apbdes_count')
                     ->label('Laporan APBDes')
-                    
+
                     ->badge()
                     ->color(
                         fn(string $state): string =>
@@ -289,11 +291,6 @@ class TahunDataResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
-    }
-
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Master Data';
     }
 
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool

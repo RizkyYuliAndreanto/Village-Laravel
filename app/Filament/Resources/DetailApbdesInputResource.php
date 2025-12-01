@@ -35,7 +35,7 @@ class DetailApbdesInputResource extends Resource
             ->schema([
                 // Section Header Laporan
                 Forms\Components\Section::make('Informasi Laporan')
-                    ->description('Pilih laporan dan bidang untuk input anggaran')
+                    ->description('Pilih laporan dan tipe anggaran untuk input')
                     ->schema([
                         Forms\Components\Select::make('laporan_apbdes_id')
                             ->relationship('laporanApbdes', 'nama_laporan')
@@ -47,23 +47,55 @@ class DetailApbdesInputResource extends Resource
                             ->placeholder('Pilih Laporan')
                             ->helperText('Pilih laporan APBDes tahun berapa'),
 
+                        Forms\Components\Select::make('tipe')
+                            ->options([
+                                'pendapatan' => 'Pendapatan',
+                                'belanja' => 'Belanja/Pengeluaran',
+                                'pembiayaan' => 'Pembiayaan',
+                            ])
+                            ->required()
+                            ->native(false)
+                            ->label('Tipe Anggaran')
+                            ->placeholder('Pilih Tipe')
+                            ->live()
+                            ->helperText('Pilih tipe anggaran terlebih dahulu'),
+
                         Forms\Components\Select::make('bidang_apbdes_id')
-                            ->relationship('bidangApbdes', 'nama_bidang')
+                            ->relationship(
+                                name: 'bidangApbdes',
+                                titleAttribute: 'nama_bidang',
+                                modifyQueryUsing: function ($query, Get $get) {
+                                    $tipe = $get('tipe');
+                                    if ($tipe === 'pendapatan') {
+                                        return $query->where('kategori', 'pendapatan');
+                                    } elseif (in_array($tipe, ['belanja', 'pembiayaan'])) {
+                                        return $query->where('kategori', 'belanja');
+                                    }
+                                    return $query;
+                                }
+                            )
                             ->required()
                             ->searchable()
                             ->preload()
                             ->native(false)
-                            ->label('Bidang APBDes')
-                            ->placeholder('Pilih Bidang')
-                            ->live()
-                            ->afterStateUpdated(function (Set $set, Get $get, $state) {
-                                // Auto set tipe berdasarkan bidang yang dipilih
-                                if ($state) {
-                                    $bidang = BidangApbdes::find($state);
-                                    if ($bidang) {
-                                        $set('tipe', $bidang->kategori);
-                                    }
-                                }
+                            ->label(fn(Get $get) => match ($get('tipe')) {
+                                'pendapatan' => 'Bidang Pendapatan',
+                                'belanja' => 'Bidang Belanja',
+                                'pembiayaan' => 'Bidang Pembiayaan',
+                                default => 'Bidang APBDes'
+                            })
+                            ->placeholder(fn(Get $get) => match ($get('tipe')) {
+                                'pendapatan' => 'Pilih Bidang Pendapatan',
+                                'belanja' => 'Pilih Bidang Belanja',
+                                'pembiayaan' => 'Pilih Bidang Pembiayaan',
+                                default => 'Pilih Tipe Terlebih Dahulu'
+                            })
+                            ->disabled(fn(Get $get) => !$get('tipe'))
+                            ->helperText(fn(Get $get) => match ($get('tipe')) {
+                                'pendapatan' => 'Pilih bidang pendapatan yang sesuai',
+                                'belanja' => 'Pilih bidang belanja/pengeluaran yang sesuai',
+                                'pembiayaan' => 'Pilih bidang pembiayaan yang sesuai',
+                                default => 'Pilih tipe anggaran terlebih dahulu'
                             }),
 
                         Forms\Components\Select::make('sub_bidang_apbdes_id')
@@ -86,17 +118,6 @@ class DetailApbdesInputResource extends Resource
                 Forms\Components\Section::make('Detail Anggaran')
                     ->description('Input detail uraian dan nominal anggaran')
                     ->schema([
-                        Forms\Components\Select::make('tipe')
-                            ->options([
-                                'pendapatan' => 'Pendapatan',
-                                'belanja' => 'Belanja',
-                                'pembiayaan' => 'Pembiayaan',
-                            ])
-                            ->required()
-                            ->native(false)
-                            ->label('Tipe')
-                            ->disabled() // Auto-filled dari bidang
-                            ->helperText('Otomatis terisi berdasarkan bidang yang dipilih'),
 
                         Forms\Components\TextInput::make('uraian')
                             ->required()
@@ -127,6 +148,8 @@ class DetailApbdesInputResource extends Resource
                             ->label('Realisasi')
                             ->placeholder('0')
                             ->default(0)
+                            ->visible(fn(Get $get) => in_array($get('tipe'), ['belanja', 'pembiayaan']))
+                            ->helperText('Field realisasi hanya untuk belanja dan pembiayaan')
                             ->live(onBlur: true)
                             ->afterStateUpdated(function (Set $set, Get $get, $state) {
                                 // Auto calculate persentase
@@ -142,6 +165,7 @@ class DetailApbdesInputResource extends Resource
                             ->suffix('%')
                             ->label('Persentase Realisasi')
                             ->disabled()
+                            ->visible(fn(Get $get) => in_array($get('tipe'), ['belanja', 'pembiayaan']))
                             ->helperText('Otomatis dihitung dari anggaran dan realisasi'),
 
                         Forms\Components\Select::make('bulan_realisasi')
@@ -162,7 +186,8 @@ class DetailApbdesInputResource extends Resource
                             ->native(false)
                             ->label('Bulan Data Realisasi')
                             ->placeholder('Pilih Bulan')
-                            ->helperText('Bulan data realisasi ini diambil'),
+                            ->visible(fn(Get $get) => in_array($get('tipe'), ['belanja', 'pembiayaan']))
+                            ->helperText('Bulan data realisasi ini diambil (hanya untuk belanja/pembiayaan)'),
 
                         Forms\Components\Textarea::make('keterangan')
                             ->maxLength(65535)

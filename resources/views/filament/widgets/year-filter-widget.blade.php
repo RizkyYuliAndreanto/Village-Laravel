@@ -42,50 +42,6 @@
                         </div>
                     </div>
                     
-                    <!-- Statistics Grid -->
-                    @if(isset($validationResults['statistics']))
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            @foreach($validationResults['statistics'] as $type => $statistic)
-                                <div class="bg-white rounded-lg border p-4 hover:shadow-md transition-shadow">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <h4 class="font-medium text-gray-900">{{ $statistic['name'] }}</h4>
-                                        @if($statistic['isValid'])
-                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                Valid
-                                            </span>
-                                        @else
-                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                Invalid
-                                            </span>
-                                        @endif
-                                    </div>
-                                    
-                                    <div class="space-y-2 text-sm">
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Data Tersedia:</span>
-                                            <span class="font-medium">{{ number_format($statistic['totalCount']) }}</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Yang Diharapkan:</span>
-                                            <span class="font-medium">{{ number_format($statistic['expectedCount']) }}</span>
-                                        </div>
-                                        @if(!$statistic['isValid'])
-                                            <div class="flex justify-between text-red-600">
-                                                <span>Selisih:</span>
-                                                <span class="font-medium">{{ $statistic['difference'] > 0 ? '+' : '' }}{{ number_format($statistic['difference']) }}</span>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    
-                                    @if($statistic['totalCount'] === 0)
-                                        <div class="mt-2 text-xs text-gray-500 italic">
-                                            Belum ada data untuk kategori ini
-                                        </div>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
                 </div>
             @elseif(isset($validationResults['error']))
                 <div class="mt-6">

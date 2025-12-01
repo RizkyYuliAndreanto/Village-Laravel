@@ -17,10 +17,11 @@ use App\Http\Controllers\Frontend\TestUmkmController;
 
 /*
 |--------------------------------------------------------------------------
-| DEBUG ROUTES - untuk troubleshooting Railway
+| DEBUG ROUTES - untuk troubleshooting aplikasi
 |--------------------------------------------------------------------------
 */
-Route::get('/debug', function() {
+
+Route::get('/debug', function () {
     return response()->json([
         'status' => 'ok',
         'environment' => app()->environment(),
@@ -31,7 +32,7 @@ Route::get('/debug', function() {
     ]);
 })->name('debug');
 
-Route::get('/simple-test', function() {
+Route::get('/simple-test', function () {
     return '<h1>Laravel is working!</h1>';
 })->name('simple.test');
 

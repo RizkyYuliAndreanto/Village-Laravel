@@ -79,13 +79,14 @@ class LaporanApbdesResource extends Resource
                 Forms\Components\Select::make('status')
                     ->options([
                         'draft' => 'Draft',
+                        'selesai' => 'Selesai',
                         'diterbitkan' => 'Diterbitkan',
                     ])
                     ->default('draft')
                     ->required()
                     ->native(false)
                     ->label('Status')
-                    ->helperText('Status publikasi laporan'),
+                    ->helperText('Status publikasi laporan. Draft = Masih dikerjakan, Selesai = Siap terbit, Diterbitkan = Sudah dipublikasi'),
             ])
             ->columns(2);
     }
@@ -129,6 +130,7 @@ class LaporanApbdesResource extends Resource
                 Tables\Columns\BadgeColumn::make('status')
                     ->colors([
                         'warning' => 'draft',
+                        'info' => 'selesai',
                         'success' => 'diterbitkan',
                     ])
                     ->label('Status'),
@@ -160,6 +162,7 @@ class LaporanApbdesResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
                         'draft' => 'Draft',
+                        'selesai' => 'Selesai',
                         'diterbitkan' => 'Diterbitkan',
                     ])
                     ->label('Filter Status')

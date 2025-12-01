@@ -13,8 +13,8 @@ return [
     'lifetime' => (int) env('SESSION_LIFETIME', 120),
     'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
 
-    // No encryption untuk shared hosting (performance)
-    'encrypt' => env('SESSION_ENCRYPT', false),
+    // Enable encryption untuk security (slight performance cost untuk better security)
+    'encrypt' => env('SESSION_ENCRYPT', true),
 
     // File storage path
     'files' => storage_path('framework/sessions'),

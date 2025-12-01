@@ -25,14 +25,15 @@ return [
             'lock_table' => env('DB_CACHE_LOCK_TABLE'),
         ],
 
-        // File cache - PRIMARY untuk shared hosting
+        // File cache - PRIMARY untuk shared hosting (SSD Optimized)
         'file' => [
             'driver' => 'file',
             'path' => storage_path('framework/cache/data'),
             'lock_path' => storage_path('framework/cache/data'),
             'options' => [
-                'compress' => true, // Compress cache files
-                'serialize' => 'php', // Use PHP serialization
+                'compress' => env('FILE_CACHE_COMPRESSION', true), // Compress cache files
+                'serialize' => env('FILE_CACHE_SERIALIZE_NATIVE', false) ? 'native' : 'php',
+                'lock_timeout' => env('FILE_CACHE_LOCK_TIMEOUT', 10), // SSD optimization
             ],
         ],
 

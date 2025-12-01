@@ -6,17 +6,15 @@ use App\Filament\Widgets\UmkmStatsWidget;
 use App\Filament\Widgets\UmkmDistributionChartWidget;
 use App\Filament\Widgets\UmkmTableWidget;
 use App\Filament\Widgets\UmkmTrendChartWidget;
-use Filament\Pages\Page;
+use Filament\Pages\Dashboard;
 
-class UmkmDashboard extends Page
+class UmkmDashboard extends Dashboard
 {
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
     protected static ?string $navigationLabel = 'Dashboard UMKM';
     protected static ?string $title = 'Dashboard UMKM';
-    protected static ?string $navigationGroup = 'UMKM';
+    protected static ?string $navigationGroup = 'UMKM Management';
     protected static ?int $navigationSort = 1;
-
-    protected static string $view = 'filament.pages.umkm-dashboard';
 
     public function getWidgets(): array
     {
@@ -30,7 +28,7 @@ class UmkmDashboard extends Page
 
     public function getColumns(): int | string | array
     {
-        return 1;
+        return 2;
     }
 
     protected function getHeaderActions(): array
@@ -51,16 +49,6 @@ class UmkmDashboard extends Page
                 ->icon('heroicon-o-plus-circle')
                 ->color('success')
                 ->url(fn() => \App\Filament\Resources\UmkmResource::getUrl('create')),
-            \Filament\Actions\Action::make('refresh')
-                ->label('Refresh')
-                ->icon('heroicon-o-arrow-path')
-                ->action(function () {
-                    $this->dispatch('$refresh');
-                    \Filament\Notifications\Notification::make()
-                        ->success()
-                        ->title('Dashboard telah diperbarui')
-                        ->send();
-                }),
         ];
     }
 }

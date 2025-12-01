@@ -32,7 +32,7 @@
         </div>
         
         <div class="flex mt-8 sm:mt-10 justify-center sm:justify-end px-2">
-            <a href="{{ route('profil-desa.struktur-organisasi') }}"
+            <a href="{{ route('profil-desa.index') }}"
                 class="inline-block px-6 py-2.5 font-semibold rounded-lg shadow transition-all duration-300 text-white text-center"
                 style="background: linear-gradient(135deg, #14b8a6, #0891b2); width: 100%; max-width: 200px;">
                 Lihat Selengkapnya →

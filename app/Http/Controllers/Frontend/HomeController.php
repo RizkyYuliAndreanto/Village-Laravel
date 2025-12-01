@@ -9,6 +9,8 @@ use App\Models\TahunData;
 use App\Models\LaporanApbdes;
 use App\Models\DetailApbdes;
 use App\Models\StrukturOrganisasi;
+use App\Models\Umkm;
+use App\Models\DusunStatistik;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -51,6 +53,12 @@ class HomeController extends Controller
 
             // Data Struktur Organisasi
             'strukturOrganisasi' => $this->getStrukturOrganisasi(),
+
+            // Data UMKM
+            'umkmData' => $this->getUmkmData(),
+
+            // Data Dusun
+            'dusunData' => $this->getDusunData($tahunDataTerbaru->tahun),
 
             // Data APBD
             'apbdData' => $this->getAPBDData($tahunDataTerbaru->tahun),
@@ -200,6 +208,35 @@ class HomeController extends Controller
 
         // Sementara return null untuk menggunakan data dummy
         return null;
+    }
+
+    /**
+     * Get data UMKM untuk tahun terbaru
+     */
+    private function getUmkmData()
+    {
+        try {
+            return Umkm::where('aktif', true)->count();
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Get data Dusun untuk tahun tertentu
+     */
+    private function getDusunData($tahun)
+    {
+        try {
+            $tahunData = TahunData::where('tahun', $tahun)->first();
+            if (!$tahunData) {
+                return 0;
+            }
+
+            return DusunStatistik::where('tahun_id', $tahunData->id_tahun)->count();
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 
     /**

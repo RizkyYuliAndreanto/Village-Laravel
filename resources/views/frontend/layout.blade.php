@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') - Website Desa</title>
+    <title>@yield('title') -Desa Banyukambang</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -42,7 +42,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
-                <i class="fas fa-home me-2"></i>Website Desa
+                <i class="fas fa-home me-2"></i>Desa Banyukambang
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -81,11 +81,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5>Website Desa</h5>
+                    <h5>Desa Banyukambang</h5>
                     <p class="mb-0">Sistem Informasi Desa dan UMKM</p>
                 </div>
                 <div class="col-md-6 text-end">
-                    <p class="mb-0">&copy; {{ date('Y') }} Website Desa. All rights reserved.</p>
+                    <p class="mb-0">&copy; {{ date('Y') }} Desa Banyukambang. All rights reserved.</p>
                 </div>
             </div>
         </div>

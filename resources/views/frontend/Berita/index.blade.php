@@ -4,14 +4,8 @@
 <!-- Hero Section dengan Background Gradient -->
 <div class="section-bg-primary py-8 md:py-16">
     <div class="container mx-auto px-4 lg:px-8">
-        <!-- Breadcrumb -->
-        <nav class="mb-4 md:mb-8" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-xs md:text-sm">
-                <li><a href="{{ route('home') }}" class="text-primary-600 hover:text-primary-700 transition-colors">Beranda</a></li>
-                <li class="text-primary-400">/</li>
-                <li class="text-primary-800 font-medium">Berita</li>
-            </ol>
-        </nav>
+       
+        
 
         <!-- Page Title -->
         <div class="text-center mb-6 md:mb-12">

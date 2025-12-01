@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Profil Desa') - {{ config('app.name', 'Website Desa') }}</title>
+    <title>@yield('title', 'Profil Desa') - {{ config('app.name', 'Desa Banyukambang') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

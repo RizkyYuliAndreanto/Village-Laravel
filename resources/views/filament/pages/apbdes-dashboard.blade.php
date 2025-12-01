@@ -8,7 +8,32 @@
                     <p class="text-sm text-gray-600 mt-1">Pilih tahun untuk melihat data APBDes</p>
                 </div>
                 <div class="w-48">
-                    {{ $this->form }}
+                    <div class="relative">
+                        {{ $this->form }}
+                        <style>
+                            .fi-select-input {
+                                color: #1f2937 !important;
+                                background-color: #ffffff !important;
+                                border: 1px solid #d1d5db !important;
+                            }
+                            .fi-select-input::placeholder {
+                                color: #6b7280 !important;
+                            }
+                            .fi-select-input option {
+                                color: #1f2937 !important;
+                                background-color: #ffffff !important;
+                            }
+                            /* Override Filament's default select styling */
+                            [x-data*="select"] select {
+                                color: #1f2937 !important;
+                                background-color: #ffffff !important;
+                            }
+                            [x-data*="select"] select option {
+                                color: #1f2937 !important;
+                                background-color: #ffffff !important;
+                            }
+                        </style>
+                    </div>
                 </div>
             </div>
         </div>
@@ -26,7 +51,13 @@
                     </div>
                     <div class="text-right">
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                            {{ $laporan->status === 'diterbitkan' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                            @if($laporan->status === 'diterbitkan') 
+                                bg-green-100 text-green-800
+                            @elseif($laporan->status === 'selesai')
+                                bg-blue-100 text-blue-800
+                            @else
+                                bg-yellow-100 text-yellow-800
+                            @endif">
                             {{ ucfirst($laporan->status) }}
                         </span>
                     </div>

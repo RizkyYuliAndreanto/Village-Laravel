@@ -28,8 +28,9 @@ class ApbdesDashboard extends Page implements HasForms
 
     protected static ?int $navigationSort = 0;
 
-    #[Url]
     public ?string $selectedYear = null;
+
+    public int $widgetRefreshKey = 0;
 
     public function mount(): void
     {
@@ -38,6 +39,11 @@ class ApbdesDashboard extends Page implements HasForms
             $latestYear = TahunData::orderBy('tahun', 'desc')->first();
             $this->selectedYear = $latestYear?->tahun ?? date('Y');
         }
+
+        // Fill form dengan nilai selectedYear
+        $this->form->fill([
+            'selectedYear' => $this->selectedYear
+        ]);
     }
 
     public function form(Form $form): Form
@@ -51,15 +57,27 @@ class ApbdesDashboard extends Page implements HasForms
                             ->pluck('tahun', 'tahun')
                             ->toArray();
                     })
-                    ->default($this->selectedYear)
                     ->selectablePlaceholder(false)
                     ->live()
                     ->afterStateUpdated(function ($state) {
                         $this->selectedYear = $state;
-                        $this->redirect(static::getUrl(['selectedYear' => $state]));
                     })
-            ])
-            ->statePath('data');
+            ]);
+    }
+
+    public function updatedSelectedYear()
+    {
+        // Dispatch event untuk refresh widget
+        $this->dispatch('yearChanged', $this->selectedYear);
+
+        // Reset cached computed properties
+        unset($this->laporan);
+        unset($this->statistik);
+
+        // Form fill ulang dengan tahun yang dipilih
+        $this->form->fill([
+            'selectedYear' => $this->selectedYear
+        ]);
     }
 
     protected function getHeaderWidgets(): array
@@ -69,28 +87,40 @@ class ApbdesDashboard extends Page implements HasForms
         ];
     }
 
-    public function getViewData(): array
+    protected function getHeaderWidgetProperties(): array
     {
-        // Ambil laporan berdasarkan tahun yang dipilih
-        $laporanTerpilih = LaporanApbdes::with(['tahunData', 'detailApbdes.bidangApbdes'])
+        return [
+            'selectedYear' => $this->selectedYear,
+            'refreshKey' => $this->widgetRefreshKey,
+        ];
+    }
+
+    public function getLaporanProperty()
+    {
+        // Computed property untuk laporan yang akan ter-update otomatis saat selectedYear berubah
+        return LaporanApbdes::with(['tahunData', 'detailApbdes.bidangApbdes'])
             ->whereHas('tahunData', function ($query) {
                 $query->where('tahun', $this->selectedYear);
             })
-            ->where('status', 'diterbitkan')
+            ->whereIn('status', ['selesai', 'diterbitkan']) // Tampilkan yang selesai atau diterbitkan
             ->latest()
             ->first();
+    }
 
+    public function getStatistikProperty()
+    {
+        $laporanTerpilih = $this->laporan;
         $statistik = [];
 
         if ($laporanTerpilih) {
             // Hitung statistik dasar
             $totalPendapatan = DetailApbdes::where('laporan_apbdes_id', $laporanTerpilih->id)
                 ->where('tipe', 'pendapatan')
-                ->sum('realisasi');
+                ->sum('anggaran'); // Pendapatan menggunakan anggaran
 
             $totalBelanja = DetailApbdes::where('laporan_apbdes_id', $laporanTerpilih->id)
                 ->where('tipe', 'belanja')
-                ->sum('realisasi');
+                ->sum('realisasi'); // Belanja menggunakan realisasi
 
             $balance = $totalPendapatan - $totalBelanja;
 
@@ -121,9 +151,14 @@ class ApbdesDashboard extends Page implements HasForms
             ];
         }
 
+        return $statistik;
+    }
+
+    public function getViewData(): array
+    {
         return [
-            'laporan' => $laporanTerpilih,
-            'statistik' => $statistik,
+            'laporan' => $this->laporan,
+            'statistik' => $this->statistik,
             'selectedYear' => $this->selectedYear,
             'availableYears' => TahunData::orderBy('tahun', 'desc')->pluck('tahun', 'tahun')->toArray(),
         ];

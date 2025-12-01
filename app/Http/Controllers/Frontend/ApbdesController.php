@@ -58,6 +58,14 @@ class ApbdesController extends Controller
         // Data untuk grafik
         $grafikData = $this->prepareGrafikData($laporan);
 
+        // Debug: Log grafik data
+        \Log::info('Grafik Data Debug:', [
+            'laporan_id' => $laporan->id,
+            'grafik_data' => $grafikData,
+            'has_pendapatan' => !empty($grafikData['pendapatan_vs_belanja']),
+            'has_belanja_bidang' => !empty($grafikData['belanja_per_bidang'])
+        ]);
+
         return view('frontend.apbdes.index', compact(
             'laporan',
             'balance',
@@ -71,10 +79,12 @@ class ApbdesController extends Controller
 
     private function hitungBalance($laporan)
     {
+        // Pendapatan menggunakan anggaran (target yang ditetapkan)
         $totalPendapatan = DetailApbdes::where('laporan_apbdes_id', $laporan->id)
             ->where('tipe', 'pendapatan')
-            ->sum('realisasi');
+            ->sum('anggaran');
 
+        // Belanja menggunakan realisasi (yang sudah dikeluarkan)
         $totalBelanja = DetailApbdes::where('laporan_apbdes_id', $laporan->id)
             ->where('tipe', 'belanja')
             ->sum('realisasi');
@@ -108,31 +118,36 @@ class ApbdesController extends Controller
             ])
             ->groupBy('bidang_apbdes_id')
             ->get()
-            ->map(function ($item) {
+            ->map(function ($item) use ($tipe) {
+                // Untuk pendapatan, gunakan anggaran sebagai nilai utama
+                // Untuk belanja, gunakan realisasi sebagai nilai utama
+                $nilaiUtama = $tipe === 'pendapatan' ? $item->total_anggaran : $item->total_realisasi;
+
                 return [
                     'bidang' => $item->bidangApbdes->nama_bidang ?? 'Tidak Kategorisasi',
                     'kode_bidang' => $item->bidangApbdes->kode_bidang ?? '',
                     'anggaran' => $item->total_anggaran,
                     'realisasi' => $item->total_realisasi,
-                    'persentase' => $item->total_anggaran > 0
+                    'nilai_utama' => $nilaiUtama,
+                    'persentase' => $tipe === 'belanja' && $item->total_anggaran > 0
                         ? round(($item->total_realisasi / $item->total_anggaran) * 100, 1)
-                        : 0,
+                        : null, // Tidak ada persentase untuk pendapatan
                 ];
             });
     }
 
     private function prepareGrafikData($laporan)
     {
-        // Data untuk chart pie pendapatan vs belanja
+        // Pendapatan menggunakan anggaran, belanja menggunakan realisasi
         $pendapatanTotal = DetailApbdes::where('laporan_apbdes_id', $laporan->id)
             ->where('tipe', 'pendapatan')
-            ->sum('realisasi');
+            ->sum('anggaran');
 
         $belanjaTotal = DetailApbdes::where('laporan_apbdes_id', $laporan->id)
             ->where('tipe', 'belanja')
             ->sum('realisasi');
 
-        // Data untuk chart bar per bidang belanja
+        // Data untuk chart bar per bidang belanja (menggunakan realisasi)
         $belanjaBidang = DetailApbdes::with('bidangApbdes')
             ->where('laporan_apbdes_id', $laporan->id)
             ->where('tipe', 'belanja')
@@ -142,17 +157,25 @@ class ApbdesController extends Controller
             ])
             ->groupBy('bidang_apbdes_id')
             ->get()
-            ->pluck('total', 'bidangApbdes.nama_bidang');
+            ->map(function ($item) {
+                return [
+                    'nama' => $item->bidangApbdes->nama_bidang ?? 'Tidak Dikategorikan',
+                    'total' => $item->total
+                ];
+            });
+
+        $labels = $belanjaBidang->pluck('nama')->toArray();
+        $data = $belanjaBidang->pluck('total')->toArray();
 
         return [
             'pendapatan_vs_belanja' => [
-                'labels' => ['Pendapatan', 'Belanja'],
+                'labels' => ['Target Pendapatan', 'Realisasi Belanja'],
                 'data' => [$pendapatanTotal, $belanjaTotal],
                 'colors' => ['#10B981', '#F59E0B'], // green, yellow
             ],
             'belanja_per_bidang' => [
-                'labels' => $belanjaBidang->keys()->toArray(),
-                'data' => $belanjaBidang->values()->toArray(),
+                'labels' => $labels,
+                'data' => $data,
                 'colors' => ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6'],
             ],
         ];

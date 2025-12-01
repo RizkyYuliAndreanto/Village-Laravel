@@ -7,6 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <!-- Font Awesome untuk ikon yang lebih konsisten -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
 @endpush
 
 @section('content')
@@ -36,11 +38,16 @@
 @if($grafikData)
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('APBDes chart script loaded');
+    console.log('Grafik data:', @json($grafikData));
+    
     // Pastikan Chart.js sudah dimuat
     if (typeof Chart === 'undefined') {
-        console.error('Chart.js tidak dimuat');
+        console.error('Chart.js tidak dimuat - pastikan Chart.js CDN bisa diakses');
         return;
     }
+    
+    console.log('Chart.js berhasil dimuat, versi:', Chart.version);
     
     // Set default font untuk Chart.js
     Chart.defaults.font.family = "'Poppins', sans-serif";
@@ -201,7 +208,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         console.log('Bar chart berhasil dibuat');
     }
-    });
 
     // Yearly Comparison Chart
     const lineCanvas = document.getElementById('yearlyComparisonChart');

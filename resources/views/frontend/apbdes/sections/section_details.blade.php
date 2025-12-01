@@ -16,15 +16,15 @@
                         <div class="flex-1 min-w-0">
                             <h4 class="font-semibold text-gray-900 text-sm break-words">{{ $item['bidang'] ?? 'N/A' }}</h4>
                             <p class="text-xs text-gray-700 mt-2 leading-relaxed">
-                                <span class="block">Realisasi: <span class="font-bold text-gray-900">Rp {{ number_format($item['realisasi'] ?? 0, 0, ',', '.') }}</span></span>
-                                <span class="block text-gray-600">Anggaran: Rp {{ number_format($item['anggaran'] ?? 0, 0, ',', '.') }}</span>
+                                <span class="block">Target Pendapatan: <span class="font-bold text-gray-900">Rp {{ number_format($item['anggaran'] ?? 0, 0, ',', '.') }}</span></span>
+                                @if(($item['kode_bidang'] ?? '') !== '')
+                                    <span class="block text-gray-600">Kode: {{ $item['kode_bidang'] }}</span>
+                                @endif
                             </p>
                         </div>
                         <div class="flex-shrink-0 min-w-max">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white whitespace-nowrap
-                                       {{ ($item['persentase'] ?? 0) >= 80 ? 'bg-emerald-500' : 
-                                          (($item['persentase'] ?? 0) >= 60 ? 'bg-amber-500' : 'bg-red-500') }}">
-                                {{ $item['persentase'] ?? 0 }}%
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white whitespace-nowrap bg-green-600">
+                                <i class="fas fa-dollar-sign"></i>
                             </span>
                         </div>
                     </div>
@@ -54,14 +54,23 @@
                             <p class="text-xs text-gray-700 mt-2 leading-relaxed">
                                 <span class="block">Realisasi: <span class="font-bold text-gray-900">Rp {{ number_format($item['realisasi'] ?? 0, 0, ',', '.') }}</span></span>
                                 <span class="block text-gray-600">Anggaran: Rp {{ number_format($item['anggaran'] ?? 0, 0, ',', '.') }}</span>
+                                @if(($item['kode_bidang'] ?? '') !== '')
+                                    <span class="block text-gray-600">Kode: {{ $item['kode_bidang'] }}</span>
+                                @endif
                             </p>
                         </div>
                         <div class="flex-shrink-0 min-w-max">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white whitespace-nowrap
-                                       {{ ($item['persentase'] ?? 0) >= 80 ? 'bg-emerald-500' : 
-                                          (($item['persentase'] ?? 0) >= 60 ? 'bg-amber-500' : 'bg-red-500') }}">
-                                {{ $item['persentase'] ?? 0 }}%
-                            </span>
+                            @if($item['persentase'] !== null)
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white whitespace-nowrap
+                                           {{ ($item['persentase'] ?? 0) >= 80 ? 'bg-emerald-500' : 
+                                              (($item['persentase'] ?? 0) >= 60 ? 'bg-amber-500' : 'bg-red-500') }}">
+                                    {{ $item['persentase'] ?? 0 }}%
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white whitespace-nowrap bg-orange-600">
+                                    <i class="fas fa-receipt"></i>
+                                </span>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -26,9 +26,9 @@ class KategoriUmkmResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Kategori UMKM';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'UMKM Management';
 
-    protected static ?string $navigationGroup = 'Manajemen UMKM';
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

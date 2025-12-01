@@ -74,23 +74,46 @@
             </a>
         </div>
 
-        <!-- Quick Stats -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mt-12 sm:mt-16 max-w-4xl mx-auto px-4">
-            <div class="bg-white/15 backdrop-blur-md rounded-lg p-3 sm:p-4 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
-                <div class="text-xl sm:text-2xl font-bold text-white mb-1" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">9,200+</div>
-                <div class="text-white/80 text-xs sm:text-sm" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">Penduduk</div>
+        <!-- Village Highlights (Narrative Cards) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-12 sm:mt-16 max-w-4xl mx-auto px-4">
+            <div class="bg-white/15 backdrop-blur-md rounded-lg p-4 sm:p-6 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-leaf text-green-300 text-xl mr-3" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);"></i>
+                    <h3 class="text-white font-semibold text-sm sm:text-base" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">Desa Agraris</h3>
+                </div>
+                <p class="text-white/90 text-xs sm:text-sm leading-relaxed" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.6);">
+                    Mayoritas penduduk bermata pencaharian sebagai petani dengan lahan pertanian yang subur dan produktif.
+                </p>
             </div>
-            <div class="bg-white/15 backdrop-blur-md rounded-lg p-3 sm:p-4 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
-                <div class="text-xl sm:text-2xl font-bold text-white mb-1" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">15+</div>
-                <div class="text-white/80 text-xs sm:text-sm" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">UMKM Aktif</div>
+            
+            <div class="bg-white/15 backdrop-blur-md rounded-lg p-4 sm:p-6 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-store text-blue-300 text-xl mr-3" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);"></i>
+                    <h3 class="text-white font-semibold text-sm sm:text-base" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">UMKM Berkembang</h3>
+                </div>
+                <p class="text-white/90 text-xs sm:text-sm leading-relaxed" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.6);">
+                    Usaha mikro dan kecil berkembang pesat, didukung oleh produk lokal berkualitas dan inovasi warga.
+                </p>
             </div>
-            <div class="bg-white/15 backdrop-blur-md rounded-lg p-3 sm:p-4 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
-                <div class="text-xl sm:text-2xl font-bold text-white mb-1" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">8</div>
-                <div class="text-white/80 text-xs sm:text-sm" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">Dusun</div>
+            
+            <div class="bg-white/15 backdrop-blur-md rounded-lg p-4 sm:p-6 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-hands-helping text-yellow-300 text-xl mr-3" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);"></i>
+                    <h3 class="text-white font-semibold text-sm sm:text-base" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">Gotong Royong</h3>
+                </div>
+                <p class="text-white/90 text-xs sm:text-sm leading-relaxed" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.6);">
+                    Tradisi gotong royong masih terjaga kuat dalam setiap kegiatan pembangunan dan kemasyarakatan.
+                </p>
             </div>
-            <div class="bg-white/15 backdrop-blur-md rounded-lg p-3 sm:p-4 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
-                <div class="text-xl sm:text-2xl font-bold text-white mb-1" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 1px 1px 2px rgba(0,0,0,0.6);">100%</div>
-                <div class="text-white/80 text-xs sm:text-sm" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">Digital</div>
+            
+            <div class="bg-white/15 backdrop-blur-md rounded-lg p-4 sm:p-6 border border-white/30 hover:bg-white/25 transition-all duration-300 shadow-lg">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-graduation-cap text-purple-300 text-xl mr-3" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);"></i>
+                    <h3 class="text-white font-semibold text-sm sm:text-base" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7);">Pendidikan Maju</h3>
+                </div>
+                <p class="text-white/90 text-xs sm:text-sm leading-relaxed" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.6);">
+                    Fasilitas pendidikan lengkap dengan tenaga pengajar berkualitas mendukung generasi muda yang cerdas.
+                </p>
             </div>
         </div>
     </div>
