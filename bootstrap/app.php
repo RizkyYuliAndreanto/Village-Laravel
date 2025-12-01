@@ -5,6 +5,9 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Throwable;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -17,49 +20,47 @@ return Application::configure(basePath: dirname(__DIR__))
         }
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Trust all proxies for Railway
+        $middleware->trustProxies(at: ['*']);
 
-        // =========================================================
-        // PENTING: Menambahkan TrustProxies sebagai middleware global
-        // Ini memastikan Laravel mengenali HTTPS dari Railway
-        // (Solusi untuk error CSP Violation & Mixed Content)
-        // =========================================================
-        $middleware->trustProxies(at: [
-            '*',
-        ]);
-
-        // --- Middleware Web Stack ---
+        // Simplified middleware stack for web
         $middleware->web(append: [
-            // Pastikan TrustProxies berjalan sebelum ForceHTTPS
-            // Jika Anda memiliki middleware SecurityHeaders, pastikan tidak ada CSP ganda
-            \App\Http\Middleware\ForceHTTPS::class, // Harus memercayai proxy dulu
+            \App\Http\Middleware\ForceHTTPS::class,
         ]);
 
-        // API Middleware Stack (Dipertahankan)
+        // Minimal API middleware
         $middleware->api(append: [
             \App\Http\Middleware\ForceHTTPS::class,
-            \App\Http\Middleware\BlockMaliciousBots::class,
-            \App\Http\Middleware\DetectSuspiciousRequest::class,
-            \App\Http\Middleware\AntiDDoSMiddleware::class,
-            \App\Http\Middleware\RateLimitMiddleware::class . ':30,1',
-            \App\Http\Middleware\AntiXSSMiddleware::class,
-            \App\Http\Middleware\AntiSQLInjectionMiddleware::class,
         ]);
 
-        // Alias (Dipertahankan)
+        // Aliases
         $middleware->alias([
-            'security.headers' => \App\Http\Middleware\SecurityHeaders::class,
-            'admin.ip' => \App\Http\Middleware\AdminIPAllowlist::class,
-            'block.bots' => \App\Http\Middleware\BlockMaliciousBots::class,
-            'referer.check' => \App\Http\Middleware\RefererCheck::class,
             'force.https' => \App\Http\Middleware\ForceHTTPS::class,
-            'detect.suspicious' => \App\Http\Middleware\DetectSuspiciousRequest::class,
-            'anti.ddos' => \App\Http\Middleware\AntiDDoSMiddleware::class,
-            'rate.limit' => \App\Http\Middleware\RateLimitMiddleware::class,
-            'anti.xss' => \App\Http\Middleware\AntiXSSMiddleware::class,
-            'anti.sqli' => \App\Http\Middleware\AntiSQLInjectionMiddleware::class,
-            'anti.bruteforce' => \App\Http\Middleware\AntiBruteForceMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // Handle errors in production
+        $exceptions->render(function (Throwable $e, $request) {
+            if (app()->environment('production')) {
+                \Log::error('Application Error: ' . $e->getMessage(), [
+                    'exception' => $e,
+                    'url' => $request->fullUrl(),
+                    'method' => $request->method(),
+                    'ip' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                ]);
+                
+                // Return custom error page for production
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'message' => 'An error occurred. Please try again later.',
+                        'error_id' => Str::uuid()
+                    ], 500);
+                }
+                
+                return response()->view('errors.500', [], 500);
+            }
+            
+            return null;
+        });
     })->create();
