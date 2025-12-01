@@ -1,9 +1,89 @@
-@extends('frontend.layouts.main')
-
-@section('title', 'Server Bermasalah')
-
-@section('content')
-<div class="min-h-screen bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 flex items-center justify-center relative overflow-hidden">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Error - Desa Banyukambang</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fee2e2, #fef3c7);
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            color: #374151;
+        }
+        .error-container { 
+            text-align: center; 
+            padding: 2rem; 
+            max-width: 600px; 
+            background: white; 
+            border-radius: 1rem; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
+        }
+        .error-code { 
+            font-size: 6rem; 
+            font-weight: bold; 
+            color: #dc2626; 
+            margin-bottom: 1rem; 
+        }
+        .error-title { 
+            font-size: 2rem; 
+            margin-bottom: 1rem; 
+            color: #991b1b; 
+        }
+        .error-message { 
+            font-size: 1.125rem; 
+            margin-bottom: 2rem; 
+            color: #6b7280; 
+        }
+        .error-actions { 
+            display: flex; 
+            gap: 1rem; 
+            justify-content: center; 
+            flex-wrap: wrap; 
+        }
+        .btn { 
+            padding: 0.75rem 1.5rem; 
+            border: none; 
+            border-radius: 0.5rem; 
+            cursor: pointer; 
+            text-decoration: none; 
+            font-weight: 500; 
+            transition: all 0.3s; 
+        }
+        .btn-primary { 
+            background: #3b82f6; 
+            color: white; 
+        }
+        .btn-primary:hover { 
+            background: #2563eb; 
+        }
+        .btn-secondary { 
+            background: #6b7280; 
+            color: white; 
+        }
+        .btn-secondary:hover { 
+            background: #4b5563; 
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">500</div>
+        <h1 class="error-title">Server Error</h1>
+        <p class="error-message">
+            Maaf, terjadi kesalahan pada server. Tim teknis kami sedang memperbaiki masalah ini.
+        </p>
+        <div class="error-actions">
+            <a href="/" class="btn btn-primary">Kembali ke Beranda</a>
+            <button onclick="window.location.reload()" class="btn btn-secondary">Coba Lagi</button>
+        </div>
+    </div>
+</body>
+</html>
     
     <!-- Background Pattern -->
     <div class="absolute inset-0 opacity-5">
