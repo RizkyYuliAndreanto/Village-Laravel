@@ -78,7 +78,7 @@ Route::prefix('security-admin')->name('admin.')->group(function () {
 ### Filament Admin (Utama) ✅
 
 ```
-http://127.0.0.1:8000/admin
+    127.0.0.1:8000/admin
 ```
 
 ### Security Dashboard ✅

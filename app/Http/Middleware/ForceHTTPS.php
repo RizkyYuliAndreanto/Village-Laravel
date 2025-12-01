@@ -72,7 +72,7 @@ class ForceHTTPS
         // Tapi kita biarkan untuk keamanan tambahan.
         $referer = $request->header('Referer');
 
-        if ($referer && str_starts_with($referer, 'http://') && $request->isSecure()) {
+        if ($referer && str_starts_with($referer, '') && $request->isSecure()) {
             return true;
         }
 
