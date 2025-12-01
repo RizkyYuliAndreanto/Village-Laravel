@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Throwable;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -40,7 +39,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Handle errors in production
-        $exceptions->render(function (Throwable $e, $request) {
+        $exceptions->render(function (\Throwable $e, $request) {
             if (app()->environment('production')) {
                 \Log::error('Application Error: ' . $e->getMessage(), [
                     'exception' => $e,
