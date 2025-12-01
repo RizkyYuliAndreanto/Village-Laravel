@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\UmkmController;
 use App\Http\Controllers\Frontend\BeritaController;
@@ -13,6 +14,26 @@ use App\Http\Controllers\Frontend\ProfilDesaController;
 use App\Http\Controllers\Frontend\GaleriController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Frontend\TestUmkmController;
+
+/*
+|--------------------------------------------------------------------------
+| DEBUG ROUTES - untuk troubleshooting Railway
+|--------------------------------------------------------------------------
+*/
+Route::get('/debug', function() {
+    return response()->json([
+        'status' => 'ok',
+        'environment' => app()->environment(),
+        'laravel_version' => app()->version(),
+        'php_version' => phpversion(),
+        'database_connection' => DB::connection()->getPdo() ? 'connected' : 'failed',
+        'timestamp' => now()->toDateTimeString()
+    ]);
+})->name('debug');
+
+Route::get('/simple-test', function() {
+    return '<h1>Laravel is working!</h1>';
+})->name('simple.test');
 
 /*
 |--------------------------------------------------------------------------
