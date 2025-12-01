@@ -1,0 +1,16 @@
+# Nixpacks Configuration for Laravel + Vite
+[variables]
+NODE_VERSION = "18"
+PHP_VERSION = "8.3"
+
+[phases.setup]
+nixPkgs = ["nodejs-18_x", "npm", "php83", "php83Packages.composer"]
+
+[phases.build]
+cmds = [
+    "chmod +x railway-build.sh",
+    "./railway-build.sh"
+]
+
+[start]
+cmd = "chmod +x railway-start.sh && ./railway-start.sh"
