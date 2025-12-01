@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
         // Force HTTPS in production
         if (env('APP_ENV') === 'production') {
             URL::forceScheme('https');
-            
+
             // Force secure asset URLs
             if (env('FORCE_HTTPS', false)) {
                 $this->app['request']->server->set('HTTPS', 'on');

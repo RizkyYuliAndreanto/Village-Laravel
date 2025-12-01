@@ -23,14 +23,21 @@ if [ -z "$APP_KEY" ]; then
     php artisan key:generate --no-interaction
 fi
 
-# Clear and cache config
-echo "⚙️ Optimizing Laravel..."
+# Clear ALL caches completely
+echo "🧹 Clearing all caches..."
+php artisan cache:clear
 php artisan config:clear
-php artisan config:cache
 php artisan route:clear
-php artisan route:cache
 php artisan view:clear
+php artisan event:clear
+php artisan queue:clear
+
+# Cache for production
+echo "⚙️ Caching for production..."
+php artisan config:cache
+php artisan route:cache
 php artisan view:cache
+php artisan event:cache
 
 # Run migrations
 echo "🗄️ Running database migrations..."
