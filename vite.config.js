@@ -8,19 +8,4 @@ export default defineConfig({
       refresh: true,
     }),
   ],
-  server: {
-    https: false,
-    hmr: {
-      host: "localhost",
-    },
-  },
-  build: {
-    manifest: true,
-    outDir: "public/build",
-    rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      },
-    },
-  },
 });

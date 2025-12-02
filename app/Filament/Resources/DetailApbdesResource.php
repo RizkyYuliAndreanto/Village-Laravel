@@ -211,9 +211,9 @@ class DetailApbdesResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => pages\ListDetailApbdes::route('/'),
-            'create' => pages\CreateDetailApbdes::route('/create'),
-            'edit' => pages\EditDetailApbdes::route('/{record}/edit'),
+            'index' => Pages\ListDetailApbdes::route('/'),
+            'create' => Pages\CreateDetailApbdes::route('/create'),
+            'edit' => Pages\EditDetailApbdes::route('/{record}/edit'),
         ];
     }
 
