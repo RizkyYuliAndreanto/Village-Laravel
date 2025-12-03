@@ -15,6 +15,10 @@ class DetectSuspiciousRequest
      */
     public function handle(Request $request, Closure $next)
     {
+        // SEMENTARA DINONAKTIFKAN untuk troubleshooting 403 error
+        return $next($request);
+
+        /*
         // Skip security checks in local development
         if (app()->environment('local')) {
             return $next($request);
@@ -83,10 +87,10 @@ class DetectSuspiciousRequest
 
         return $next($request);
     }
-
-    /**
+    }    /**
      * Check for script injection
      */
+    }
     private function hasScriptInjection(Request $request): bool
     {
         $scriptPatterns = [

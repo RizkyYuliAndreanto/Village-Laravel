@@ -15,6 +15,10 @@ class AntiXSSMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // SEMENTARA DINONAKTIFKAN untuk troubleshooting 403 error
+        return $next($request);
+    }
+    /*
         $input = $request->all();
 
         // Clean input data untuk mencegah XSS

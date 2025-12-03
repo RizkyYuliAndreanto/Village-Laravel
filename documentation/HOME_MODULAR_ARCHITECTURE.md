@@ -45,7 +45,7 @@ resources/views/frontend/home/
 
 -   **Content**: Google Maps embed, koordinat alamat
 -   **Features**: Responsive iframe, loading lazy
--   **Data**: Static coordinates untuk Desa Ngengor
+-   **Data**: Static coordinates untuk Des
 
 ### 4. SOTK (`sotk.blade.php`)
 

@@ -188,7 +188,15 @@ class InfografisController extends Controller
             'tahunTersedia' => TahunData::orderBy('tahun', 'desc')->get()
         ];
 
-        return view('frontend.infografis.index', array_merge(
+        // Coba path yang lebih eksplisit untuk shared hosting
+        $viewPath = 'frontend.infografis.index';
+
+        // Debug: Cek apakah view ada
+        if (!view()->exists($viewPath)) {
+            throw new \Exception("View file tidak ditemukan: $viewPath");
+        }
+
+        return view($viewPath, array_merge(
             $baseData,
             $demografiData,
             $umurData,

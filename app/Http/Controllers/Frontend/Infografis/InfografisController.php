@@ -67,7 +67,7 @@ class InfografisController extends Controller
         // Pastikan tahun data tersedia untuk semua sections
         $data = $this->addTahunDataToAll($data, $tahunAktif, $tahunTersedia);
 
-        return view('frontend.Infografis.index', $data);
+        return view('frontend.infografis.index', $data);
     }
 
     /**

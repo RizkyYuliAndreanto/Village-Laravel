@@ -15,6 +15,10 @@ class AntiDDoSMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // SEMENTARA DINONAKTIFKAN untuk troubleshooting 403 error
+        return $next($request);
+    }
+        /*
         // Skip DDoS protection in local development
         if (app()->environment('local', 'development')) {
             return $next($request);

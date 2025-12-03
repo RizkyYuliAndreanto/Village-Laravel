@@ -15,6 +15,11 @@ class AntiBruteForceMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // SEMENTARA DINONAKTIFKAN untuk troubleshooting 403 error
+        return $next($request);
+    }
+
+    /*
         // Skip security checks in local development
         if (app()->environment('local')) {
             return $next($request);

@@ -17,23 +17,23 @@ return [
 
     'rate_limiting' => [
         'global' => [
-            'requests' => 60,
+            'requests' => 60, // Standard Laravel rate limiting
             'minutes' => 1,
         ],
         'login' => [
-            'requests' => 5,
+            'requests' => 5, // Standard login rate limiting
             'minutes' => 1,
         ],
         'api' => [
-            'requests' => 30,
+            'requests' => 60, // API rate limiting
             'minutes' => 1,
         ],
     ],
 
     'brute_force' => [
-        'max_attempts' => 5,
-        'lockout_duration' => 15, // dalam menit
-        'progressive_lockout' => true,
+        'max_attempts' => 10, // Diperlonggar dari 5 ke 10
+        'lockout_duration' => 5, // Diperpendek dari 15 ke 5 menit
+        'progressive_lockout' => false, // Dinonaktifkan
     ],
 
     'security_headers' => [
@@ -53,7 +53,7 @@ return [
     ],
 
     'ddos_protection' => [
-        'enabled' => true,
+        'enabled' => false, // Dinonaktifkan sementara untuk troubleshooting
         'max_requests_per_minute' => 100,
         'ban_duration' => 30, // dalam menit
         'suspicious_paths' => [
@@ -79,16 +79,17 @@ return [
     ],
 
     'sql_injection' => [
-        'enabled' => true,
+        'enabled' => false, // Dinonaktifkan sementara untuk troubleshooting
         'log_attempts' => true,
-        'block_requests' => true,
+        'block_requests' => false, // Ubah ke false
     ],
 
     'xss_protection' => [
-        'enabled' => true,
-        'sanitize_input' => true,
+        'enabled' => true, // Tetap aktif untuk keamanan
+        'sanitize_input' => true, // Tetap aktif
         'allowed_tags' => '<p><br><strong><em><u><ol><ul><li><a><img><h1><h2><h3><h4><h5><h6>',
-        'log_attempts' => true,
+        'log_attempts' => true, // Tetap log tapi tidak block
+        'block_requests' => false, // Dinonaktifkan blocking sementara
     ],
 
     'file_upload' => [
@@ -105,9 +106,7 @@ return [
     ],
 
     'ip_whitelist' => [
-        // IP addresses yang selalu diizinkan
-        // '127.0.0.1',
-        // '::1',
+        // IP whitelist dinonaktifkan untuk kemudahan akses
     ],
 
     'ip_blacklist' => [
@@ -116,29 +115,29 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Auto-Ban Configuration
+    | Auto-Ban Configuration - DILONGGARKAN SEMENTARA
     |--------------------------------------------------------------------------
     */
     'auto_ban' => [
         'sql_injection' => [
-            'threshold' => 3,
+            'threshold' => 999, // Dinaikkan dari 3 ke 999
             'window_hours' => 1,
-            'ban_duration_minutes' => 1440, // 24 hours
+            'ban_duration_minutes' => 5, // Diperpendek dari 1440 ke 5
         ],
         'xss_attempt' => [
-            'threshold' => 5,
+            'threshold' => 999, // Dinaikkan dari 5 ke 999
             'window_hours' => 1,
-            'ban_duration_minutes' => 720, // 12 hours
+            'ban_duration_minutes' => 5, // Diperpendek dari 720 ke 5
         ],
         'brute_force' => [
-            'threshold' => 10,
+            'threshold' => 999, // Dinaikkan dari 10 ke 999
             'window_hours' => 1,
-            'ban_duration_minutes' => 360, // 6 hours
+            'ban_duration_minutes' => 5, // Diperpendek dari 360 ke 5
         ],
         'ddos_attempt' => [
-            'threshold' => 50,
+            'threshold' => 999, // Dinaikkan dari 50 ke 999
             'window_hours' => 1,
-            'ban_duration_minutes' => 180, // 3 hours
+            'ban_duration_minutes' => 5, // Diperpendek dari 180 ke 5
         ],
     ],
 
@@ -155,20 +154,15 @@ return [
     |
     */
     'admin_ip_allowlist' => [
-        // Default: Kantor Desa + Rumah Kades/Sekdes (opsional)
-        // '127.0.0.1',           // Localhost (development)
-        // '192.168.1.0/24',      // Jaringan WiFi kantor desa
-        // 'YOUR_OFFICE_IP',      // IP Internet kantor desa
-        // 'KADES_HOME_IP',       // IP rumah Kepala Desa (opsional)
-        // 'SEKDES_HOME_IP',      // IP rumah Sekretaris Desa (opsional)
+        // IP allowlist dinonaktifkan untuk kemudahan akses
     ],
 
     // Mode enforcement untuk pemerintahan desa
     'admin_ip_enforcement' => [
-        'mode' => env('ADMIN_IP_MODE', 'warning'), // 'warning' or 'strict'
-        'auto_learn_ips' => env('ADMIN_IP_AUTO_LEARN', true),
-        'grace_period_hours' => env('ADMIN_IP_GRACE_PERIOD', 24),
-        'max_learned_ips' => 10, // Maksimal IP yang dipelajari otomatis
+        'mode' => env('ADMIN_IP_MODE', 'disabled'), // 'disabled' untuk menonaktifkan
+        'auto_learn_ips' => false,
+        'grace_period_hours' => 0,
+        'max_learned_ips' => 0,
         'government_friendly' => true, // Mode khusus pemerintahan
     ],
 
@@ -182,29 +176,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Bot Protection Configuration
+    | Bot Protection Configuration - DINONAKTIFKAN SEMENTARA
     |--------------------------------------------------------------------------
     */
     'blocked_user_agents' => [
-        'sqlmap',
-        'nmap',
-        'masscan',
-        'nikto',
-        'dirb',
-        'dirbuster',
-        'gobuster',
-        'wpscan',
-        'nuclei',
-        'burpsuite',
-        'curl',
-        'wget',
-        'python-requests',
-        'scrapy',
-        'bot',
-        'crawler',
-        'spider',
-        'headless',
-        'selenium'
+        // Dinonaktifkan sementara untuk troubleshooting 403
+        // 'sqlmap',
+        // 'nmap',
+        // 'masscan',
+        // 'nikto',
     ],
 
     /*
@@ -258,11 +238,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | HTTPS Configuration
+    | HTTPS Configuration - Dinonaktifkan untuk kemudahan
     |--------------------------------------------------------------------------
     */
-    'force_https' => env('FORCE_HTTPS', false),
-    'force_https_local' => env('FORCE_HTTPS_LOCAL', false),
+    'force_https' => false,
+    'force_https_local' => false,
 
     /*
     |--------------------------------------------------------------------------

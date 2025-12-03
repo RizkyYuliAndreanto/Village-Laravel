@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\UmkmController;
 use App\Http\Controllers\Frontend\BeritaController;
@@ -13,28 +12,6 @@ use App\Http\Controllers\Frontend\ApbdesController;
 use App\Http\Controllers\Frontend\ProfilDesaController;
 use App\Http\Controllers\Frontend\GaleriController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Frontend\TestUmkmController;
-
-/*
-|--------------------------------------------------------------------------
-| DEBUG ROUTES - untuk troubleshooting aplikasi
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/debug', function () {
-    return response()->json([
-        'status' => 'ok',
-        'environment' => app()->environment(),
-        'laravel_version' => app()->version(),
-        'php_version' => phpversion(),
-        'database_connection' => DB::connection()->getPdo() ? 'connected' : 'failed',
-        'timestamp' => now()->toDateTimeString()
-    ]);
-})->name('debug');
-
-Route::get('/simple-test', function () {
-    return '<h1>Laravel is working!</h1>';
-})->name('simple.test');
 
 /*
 |--------------------------------------------------------------------------
@@ -44,9 +21,10 @@ Route::get('/simple-test', function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Dashboard redirect to UMKM dashboard
+// Dashboard routes - untuk compatibility dengan Laravel auth
 Route::get('/dashboard', function () {
-    return redirect()->route('umkm.dashboard');
+    // Redirect ke Filament admin panel (karena kita pakai Filament untuk admin)
+    return redirect('/admin');
 })->name('dashboard');
 
 // Profile routes
@@ -55,9 +33,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-// Test Bootstrap Route
-Route::view('/test-bootstrap', 'test-bootstrap')->name('test.bootstrap');
 
 /*
 |--------------------------------------------------------------------------
@@ -199,14 +174,6 @@ Route::prefix('umkm')->name('umkm.')->group(function () {
     Route::get('/search-ajax', [UmkmController::class, 'searchAjax'])->name('search.ajax');
     Route::get('/{umkm:slug}', [UmkmController::class, 'show'])->name('show');
 });
-
-/*
-|--------------------------------------------------------------------------
-| TESTING ROUTES - Hapus di Production
-|--------------------------------------------------------------------------
-*/
-Route::get('/test-umkm', [TestUmkmController::class, 'testAll'])->name('test.umkm');
-Route::get('/test-umkm-data', [TestUmkmController::class, 'testData'])->name('test.umkm.data');
 
 /*
 |--------------------------------------------------------------------------

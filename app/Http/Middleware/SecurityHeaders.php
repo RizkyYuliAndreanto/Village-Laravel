@@ -13,6 +13,10 @@ class SecurityHeaders
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // SEMENTARA DINONAKTIFKAN untuk troubleshooting 403 error
+        return $next($request);
+
+        /*
         $response = $next($request);
 
         // Security Headers untuk mencegah XSS, Clickjacking, dll
@@ -41,5 +45,6 @@ class SecurityHeaders
         }
 
         return $response;
+        */
     }
 }

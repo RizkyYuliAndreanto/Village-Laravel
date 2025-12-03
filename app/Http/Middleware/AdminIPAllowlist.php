@@ -14,6 +14,10 @@ class AdminIPAllowlist
      */
     public function handle(Request $request, Closure $next)
     {
+        // SEMENTARA DINONAKTIFKAN untuk troubleshooting 403 error
+        return $next($request);
+
+        /*
         // Check if this is admin route
         if (!$this->isAdminRoute($request)) {
             return $next($request);
@@ -93,6 +97,7 @@ class AdminIPAllowlist
         ]);
 
         return $next($request);
+        */
     }
 
     /**

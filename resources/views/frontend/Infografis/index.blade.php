@@ -1,4 +1,4 @@
-@extends('frontend.layouts.infografis')
+    @extends('frontend.layouts.infografis')
 
 @section('content')
     <div class="margin-top-navbar">

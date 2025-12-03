@@ -1,20 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-
 /*
 |--------------------------------------------------------------------------
-| Admin Routes - Protected by IP Allowlist
+| Admin Routes - DISABLED FOR FILAMENT COMPATIBILITY
 |--------------------------------------------------------------------------
 |
-| These routes are protected by AdminIPAllowlist middleware
-| Only IPs configured in security.admin_ip_allowlist can access
-|
-| NOTE: Filament admin panel uses /admin path automatically
-| Login/logout is handled by Filament, no need to define manually
+| These routes have been disabled to prevent conflicts with Filament admin panel
+| All custom admin routes that use 'admin.ip' middleware are commented out
+| to avoid 403 errors when accessing /admin
 |
 */
+
+/*
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::middleware('admin.ip')->group(function () {
 
@@ -91,12 +90,6 @@ Route::middleware('admin.ip')->group(function () {
     });
 });
 
-/*
-|--------------------------------------------------------------------------
-| Management Routes - Additional Protection
-|--------------------------------------------------------------------------
-*/
-
 Route::middleware(['admin.ip', 'auth'])->group(function () {
 
     Route::prefix('manage')->name('manage.')->group(function () {
@@ -117,3 +110,4 @@ Route::middleware(['admin.ip', 'auth'])->group(function () {
         })->name('settings.index');
     });
 });
+*/

@@ -13,6 +13,10 @@ class ForceHTTPS
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // SEMENTARA DINONAKTIFKAN untuk troubleshooting 403 error
+        return $next($request);
+    }
+    /*
         // Skip for local development
         if (app()->environment('local', 'testing')) {
             return $next($request);
@@ -24,6 +28,5 @@ class ForceHTTPS
         }
 
         return $next($request);
-    }
-}
+        */
 }

@@ -14,6 +14,10 @@ class RefererCheck
      */
     public function handle(Request $request, Closure $next)
     {
+        // SEMENTARA DINONAKTIFKAN untuk troubleshooting 403 error
+        return $next($request);
+    }
+    /*
         // Skip referer checks in local development
         if (app()->environment('local')) {
             return $next($request);

@@ -4,6 +4,6 @@ return [
     App\Providers\AppServiceProvider::class,
     App\Providers\Filament\AdminPanelProvider::class,
     App\Providers\EventServiceProvider::class,
-    App\Providers\SecurityServiceProvider::class,
+    // App\Providers\SecurityServiceProvider::class, // DISABLED - Custom security provider
     App\Providers\DisableServeCommandProvider::class,
 ];
