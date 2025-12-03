@@ -54,11 +54,7 @@
                     <p class="text-body font-medium">Meningkatkan derajat kesehatan masyarakat</p>
                 </div>
                 <div class="flex items-start space-x-4 p-4 bg-gradient-to-r from-cyan-50 to-transparent rounded-xl">
-                    <div class="w-8 h-8 bg-profil-primary text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">5</div>
-                    <p class="text-body font-medium">Meningkatkan bidang keamanan</p>
-                </div>
-                <div class="flex items-start space-x-4 p-4 bg-gradient-to-r from-cyan-50 to-transparent rounded-xl">
-                    <div class="w-8 h-8 bg-profil-primary text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">5</div>
+                    <div class="w-8 h-8 bg-profil-primary text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">6</div>
                     <p class="text-body font-medium">Meningkatkan bidang keamanan</p>
                 </div>
             </div>

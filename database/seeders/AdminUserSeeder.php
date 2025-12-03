@@ -21,14 +21,10 @@ class AdminUserSeeder extends Seeder
             [
                 'name' => 'Admin Desa Banyukambang',
                 'email' => 'admin@banyukambang.desa.id',
-                'password' => bcrypt('admin123'),
+                'password' => bcrypt('Pandansili123#'),
                 'email_verified_at' => now(),
             ]
         );
 
-        echo "✅ Admin user created successfully!\n";
-        echo "📧 Email: admin@banyukambang.desa.id\n";
-        echo "🔑 Password: admin123\n";
-        echo "🎥 Ready for tutorial video!\n";
     }
 }
