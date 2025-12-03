@@ -2,7 +2,7 @@
 <section class="min-h-screen flex flex-col justify-center pb-10 bg-gradient-to-br from-cyan-50 to-teal-50">
     <div class="container mx-auto px-6 text-center">
         <h3 class="text-4xl font-bold text-blue-800 dark:text-blue-200">Peta Desa</h3>
-        <p class="text-blue-600 dark:text-blue-300 mt-2 mb-4">Menampilkan lokasi Desa Ngengor</p>
+        <p class="text-blue-600 dark:text-blue-300 mt-2 mb-4">Menampilkan lokasi Desa Banyukambang</p>
         
         <div class="rounded-xl overflow-hidden shadow-xl mx-auto max-w-5xl">
             <iframe
