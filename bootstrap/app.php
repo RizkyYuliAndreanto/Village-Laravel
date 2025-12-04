@@ -13,15 +13,15 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Trust proxies for shared hosting/load balancers
         $middleware->trustProxies(at: ['*']);
-        
+
         // Standard Laravel security middleware
         $middleware->web(append: [
             \App\Http\Middleware\TrustProxies::class,
         ]);
-        
+
         // Rate limiting
         $middleware->throttleApi();
-        
+
         // CSRF protection (default untuk web routes)
         $middleware->validateCsrfTokens(except: [
             'webhooks/*',

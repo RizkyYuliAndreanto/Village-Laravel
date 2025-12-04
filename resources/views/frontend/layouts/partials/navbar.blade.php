@@ -1,5 +1,5 @@
-<nav class="fixed top-0 left-0 right-0 z-50 navbar-bg backdrop-blur-lg shadow-lg border-b border-white/20">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<nav class="fixed top-0 left-0 right-0 z-50 navbar-bg backdrop-blur-lg shadow-lg border-b border-white/20 w-full">
+  <div class="w-full px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center py-2">
       
       <!-- Logo Section -->

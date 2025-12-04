@@ -58,6 +58,26 @@ return [
             ],
         ],
 
+        // Shared Hosting Optimized Storage
+        'public_shared_hosting' => [
+            'driver' => 'local',
+            'root' => env('SHARED_HOSTING_STORAGE_ROOT', public_path('storage')),
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+            'permissions' => [
+                'file' => [
+                    'public' => 0644,
+                    'private' => 0600,
+                ],
+                'dir' => [
+                    'public' => 0755,
+                    'private' => 0700,
+                ],
+            ],
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

@@ -28,14 +28,29 @@
             color: #075985;
         }
         
-        /* Responsive styles for infografis */
-        .margin-top-navbar {
-            margin-top: 80px; /* Space for fixed navbar */
+        /* Navbar full width fix */
+        nav[class*="fixed"] {
+            width: 100vw !important;
+            left: 0 !important;
+            right: 0 !important;
+            margin: 0 !important;
+        }
+        
+        nav[class*="fixed"] > div {
+            max-width: none !important;
+            width: 100% !important;
+            margin: 0 !important;
+        }
+        
+        /* Konsisten dengan layout lainnya */
+        body {
+            padding-top: 80px; /* Space untuk fixed navbar */
+            margin: 0 !important;
         }
         
         @media (max-width: 767px) {
-            .margin-top-navbar {
-                margin-top: 70px; /* Smaller margin for mobile */
+            body {
+                padding-top: 70px; /* Smaller padding for mobile */
             }
         }
         
@@ -286,7 +301,7 @@
         });
     </script>
 </head>
-<body class="bg-gradient-to-br from-slate-50 to-blue-50">
+<body class="main-gradient min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
     @include('frontend.layouts.partials.navbar')
 
     <main>

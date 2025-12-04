@@ -31,6 +31,19 @@ class PopulationValidationService
      */
     public function validatePopulationConsistency(int $tahunId, array $data, string $resourceType): array
     {
+        // Skip population validation for wajib_pilih and perkawinan
+        if (in_array($resourceType, ['wajib_pilih', 'perkawinan'])) {
+            $inputTotal = $this->calculateTotalFromData($data, $resourceType);
+
+            return [
+                'valid' => true, // Always valid for these types
+                'message' => $this->generateValidationMessage($resourceType, $inputTotal, $inputTotal, 0),
+                'expected' => $inputTotal,
+                'actual' => $inputTotal,
+                'difference' => 0
+            ];
+        }
+
         $totalPopulation = $this->getTotalPopulation($tahunId);
 
         if ($totalPopulation === null) {
@@ -62,6 +75,19 @@ class PopulationValidationService
      */
     public function getExistingDataValidation(int $tahunId, string $resourceType): array
     {
+        // Skip population validation for wajib_pilih and perkawinan
+        if (in_array($resourceType, ['wajib_pilih', 'perkawinan'])) {
+            $existingTotal = $this->getExistingDataTotal($tahunId, $resourceType);
+
+            return [
+                'isValid' => true, // Always valid for these types
+                'totalCount' => $existingTotal,
+                'expectedCount' => $existingTotal,
+                'difference' => 0,
+                'message' => 'Data tersedia (tidak divalidasi dengan total populasi)'
+            ];
+        }
+
         $totalPopulation = $this->getTotalPopulation($tahunId);
 
         if ($totalPopulation === null) {
@@ -223,6 +249,11 @@ class PopulationValidationService
 
         $resourceName = $resourceNames[$resourceType] ?? 'Data Statistik';
 
+        // Special message for wajib_pilih and perkawinan (no population validation)
+        if (in_array($resourceType, ['wajib_pilih', 'perkawinan'])) {
+            return "Total {$resourceName} ({$actual} orang) - Data tersimpan tanpa validasi populasi.";
+        }
+
         if ($difference > 0) {
             return "KESALAHAN: Total {$resourceName} ({$actual} orang) JAUH MELEBIHI total penduduk ({$expected} orang) sebanyak {$difference} orang. Form tidak dapat disimpan karena data tidak sesuai dengan total populasi.";
         } elseif ($difference < 0) {
@@ -269,7 +300,8 @@ class PopulationValidationService
                 $validation = $this->validatePopulationConsistency($tahunId, $data, $type);
                 $validations[$type] = $validation;
 
-                if (!$validation['valid']) {
+                // Only count wajib_pilih and perkawinan as invalid if they don't have data
+                if (!in_array($type, ['wajib_pilih', 'perkawinan']) && !$validation['valid']) {
                     $allConsistent = false;
                 }
             } else {

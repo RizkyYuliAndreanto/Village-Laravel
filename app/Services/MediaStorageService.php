@@ -4,14 +4,17 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
+use App\Services\SharedHostingStorageService;
 
 class MediaStorageService
 {
     private string $defaultDisk;
+    private SharedHostingStorageService $sharedHostingSync;
 
     public function __construct()
     {
         $this->defaultDisk = config('media.default_disk', 'public');
+        $this->sharedHostingSync = new SharedHostingStorageService();
     }
 
     /**
@@ -42,7 +45,13 @@ class MediaStorageService
     {
         $disk = $this->getDiskForStorage();
 
-        return $file->store($directory, $disk);
+        // Store file ke storage/app/public
+        $path = $file->store($directory, $disk);
+
+        // Sync ke public_html/storage untuk shared hosting
+        $this->sharedHostingSync->syncFile($path);
+
+        return $path;
     }
 
     /**

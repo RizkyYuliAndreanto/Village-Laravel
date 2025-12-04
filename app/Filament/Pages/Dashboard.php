@@ -19,10 +19,11 @@ class Dashboard extends Page
 
     public function getWidgets(): array
     {
+        // Temporarily disable custom widgets for debugging
         return [
-            YearFilterWidget::class,
-            PopulationValidationChartWidget::class,
-            YearValidationSummaryWidget::class,
+            // YearFilterWidget::class,
+            // PopulationValidationChartWidget::class,
+            // YearValidationSummaryWidget::class,
         ];
     }
 

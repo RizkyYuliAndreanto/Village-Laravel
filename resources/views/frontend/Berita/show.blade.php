@@ -28,10 +28,10 @@
                     
                     <!-- Featured Image -->
                     @if ($berita->image_url)
-                        <div class="relative">
+                        <div class="relative bg-gray-100">
                             <img src="{{ $berita->image_url }}" 
                                  alt="{{ $berita->judul }}"
-                                 class="w-full h-48 md:h-64 lg:h-96 object-cover"
+                                 class="w-full h-48 md:h-64 lg:h-96 object-contain bg-white"
                                  onerror="this.style.display='none'">
                             
                             <!-- Kategori Badge -->
@@ -133,7 +133,7 @@
                                     @if($item->gambar_url)
                                         <img src="{{ $item->image_url }}" 
                                              alt="{{ $item->judul }}"
-                                             class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300">
+                                             class="w-full h-32 object-contain bg-white group-hover:scale-105 transition-transform duration-300">
                                     @else
                                         <div class="w-full h-32 bg-gradient-to-r from-primary-100 to-secondary-100 flex items-center justify-center">
                                             <svg class="w-8 h-8 text-primary-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,7 +175,7 @@
                                         @if($item->gambar_url)
                                             <img src="{{ $item->image_url }}" 
                                                  alt="{{ $item->judul }}"
-                                                 class="w-16 h-16 object-cover rounded-lg flex-shrink-0 group-hover:scale-105 transition-transform">
+                                                 class="w-16 h-16 object-contain bg-white rounded-lg flex-shrink-0 group-hover:scale-105 transition-transform">
                                         @else
                                             <div class="w-16 h-16 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-lg flex-shrink-0 flex items-center justify-center">
                                                 <svg class="w-6 h-6 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -58,9 +58,16 @@ class PopulationValidationWidget extends BaseWidget
             $color = $isValid ? 'success' : 'danger';
             $icon = $isValid ? 'heroicon-m-check-circle' : 'heroicon-m-x-circle';
 
-            $description = $isValid
-                ? 'Data konsisten dengan populasi'
-                : 'Selisih: ' . number_format(abs($difference));
+            // Special handling for wajib_pilih and perkawinan (always show as available if data exists)
+            if (in_array($type, ['wajib_pilih', 'perkawinan']) && $totalCount > 0) {
+                $color = 'info';
+                $icon = 'heroicon-m-information-circle';
+                $description = 'Data tersedia (tidak divalidasi dengan populasi)';
+            } else {
+                $description = $isValid
+                    ? 'Data konsisten dengan populasi'
+                    : 'Selisih: ' . number_format(abs($difference));
+            }
 
             $stats[] = Stat::make($config['name'], number_format($totalCount))
                 ->description($description)

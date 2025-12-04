@@ -1,8 +1,7 @@
     @extends('frontend.layouts.infografis')
 
 @section('content')
-    <div class="margin-top-navbar">
-        <div class="space-y-4 sm:space-y-6 lg:space-y-8">
+    <div class="space-y-4 sm:space-y-6 lg:space-y-8">
             {{-- Section: Statistik Demografi Penduduk --}}
             @include('frontend.infografis.sections.demografi')
 
@@ -26,7 +25,6 @@
 
             {{-- Section: Berdasarkan Dusun --}}
             @include('frontend.infografis.sections.dusun')
-        </div>
     </div>
 @endsection
 

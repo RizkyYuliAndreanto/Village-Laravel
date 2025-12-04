@@ -72,7 +72,7 @@ class PopulationValidationByYearWidget extends BaseWidget
 
         foreach ($statisticTypes as $type => $config) {
             $validationResult = $validationService->getExistingDataValidation($selectedYear, $type);
-
+            
             $isValid = $validationResult['isValid'];
             $totalCount = $validationResult['totalCount'];
             $difference = $validationResult['difference'];
@@ -86,9 +86,16 @@ class PopulationValidationByYearWidget extends BaseWidget
                 $color = $isValid ? 'success' : 'danger';
                 $icon = $isValid ? 'heroicon-m-check-circle' : 'heroicon-m-x-circle';
 
-                $description = $isValid
-                    ? 'Data konsisten dengan populasi'
-                    : 'Selisih: ' . number_format(abs($difference)) . ($difference > 0 ? ' (lebih)' : ' (kurang)');
+                // Special handling for wajib_pilih and perkawinan (always show as available if data exists)
+                if (in_array($type, ['wajib_pilih', 'perkawinan'])) {
+                    $color = 'info';
+                    $icon = 'heroicon-m-information-circle';
+                    $description = 'Data tersedia (tidak divalidasi dengan populasi)';
+                } else {
+                    $description = $isValid
+                        ? 'Data konsisten dengan populasi'
+                        : 'Selisih: ' . number_format(abs($difference)) . ($difference > 0 ? ' (lebih)' : ' (kurang)');
+                }
 
                 $stats[] = Stat::make($config['name'], number_format($totalCount))
                     ->description($description)
@@ -97,7 +104,7 @@ class PopulationValidationByYearWidget extends BaseWidget
             }
         }
 
-        // Overall validation status
+        // Overall validation status (exclude wajib_pilih and perkawinan from validation)
         $allValid = true;
         $totalInconsistencies = 0;
         $totalWithData = 0;
@@ -106,7 +113,8 @@ class PopulationValidationByYearWidget extends BaseWidget
             $result = $validationService->getExistingDataValidation($selectedYear, $type);
             if ($result['totalCount'] > 0) {
                 $totalWithData++;
-                if (!$result['isValid']) {
+                // Only count inconsistency for statistics that are validated against population
+                if (!in_array($type, ['wajib_pilih', 'perkawinan']) && !$result['isValid']) {
                     $allValid = false;
                     $totalInconsistencies++;
                 }
